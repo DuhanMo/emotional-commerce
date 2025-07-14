@@ -86,6 +86,7 @@ subprojects {
         testImplementation("io.kotest:kotest-runner-junit5:${project.properties["kotestVersion"]}")
         testImplementation("io.kotest:kotest-assertions-core:${project.properties["kotestVersion"]}")
         testImplementation("io.kotest:kotest-property:${project.properties["kotestVersion"]}")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:${project.properties["kotestExtensionsSpringVersion"]}")
     }
 
     tasks.withType(Jar::class) { enabled = true }
