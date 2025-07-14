@@ -82,6 +82,10 @@ subprojects {
         testImplementation("org.springframework.boot:spring-boot-testcontainers")
         testImplementation("org.testcontainers:testcontainers")
         testImplementation("org.testcontainers:junit-jupiter")
+        // kotest
+        testImplementation("io.kotest:kotest-runner-junit5:${project.properties["kotestVersion"]}")
+        testImplementation("io.kotest:kotest-assertions-core:${project.properties["kotestVersion"]}")
+        testImplementation("io.kotest:kotest-property:${project.properties["kotestVersion"]}")
     }
 
     tasks.withType(Jar::class) { enabled = true }
