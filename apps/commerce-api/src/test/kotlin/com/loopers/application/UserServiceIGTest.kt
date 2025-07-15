@@ -3,32 +3,28 @@ package com.loopers.application
 import com.loopers.application.user.UserService
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.User
-import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserReader
+import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("test")
 @SpringBootTest
-class UserServiceIGTest @Autowired constructor(
+class UserServiceIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val userJpaRepository: UserJpaRepository,
     private val databaseCleanUp: DatabaseCleanUp,
 ) : BehaviorSpec({
-    extensions(SpringExtension)
-
     afterTest {
         databaseCleanUp.truncateAllTables()
     }

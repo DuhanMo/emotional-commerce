@@ -5,7 +5,6 @@ import com.loopers.interfaces.api.user.UserRegisterRequest
 import com.loopers.interfaces.api.user.UserRegisterResponse
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -21,8 +20,6 @@ class UserV1ApiE2ETest(
     private val testRestTemplate: TestRestTemplate,
     private val databaseCleanUp: DatabaseCleanUp,
 ) : DescribeSpec({
-    extensions(SpringExtension)
-
     afterEach {
         databaseCleanUp.truncateAllTables()
     }
