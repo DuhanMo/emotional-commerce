@@ -20,7 +20,7 @@ data class UserRegisterRequest(
         description = "생년월일 (YYYY-MM-DD 형식)",
         example = "2002-04-28",
         required = true,
-        pattern = "\\d{4}-\\d{2}-\\d{2}"
+        pattern = "\\d{4}-\\d{2}-\\d{2}",
     )
     @field:NotBlank(message = "생년월일은 빈 값일 수 없습니다.")
     val birthDate: String,

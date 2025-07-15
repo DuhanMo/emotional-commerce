@@ -10,5 +10,6 @@ class UserRepositoryImpl(
     private val userJpaRepository: UserJpaRepository,
 ) : UserRepository {
     override fun save(user: User): User = userJpaRepository.save(user)
+
     override fun findByUserId(userId: UserId): User? = userJpaRepository.findByUserId(userId.value)
 }

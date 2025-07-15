@@ -9,4 +9,7 @@ class UserReader(
 ) {
     @Transactional(readOnly = true)
     fun exist(userId: UserId): Boolean = userRepository.findByUserId(userId) != null
+
+    @Transactional(readOnly = true)
+    fun find(userId: UserId): User? = userRepository.findByUserId(userId)
 }

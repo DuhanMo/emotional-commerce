@@ -1,5 +1,6 @@
 package com.loopers.application.user
 
+import com.loopers.domain.user.UserId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
@@ -18,4 +19,6 @@ class UserService(
         }
         return UserOutput.from(userWriter.write(command.toUser()))
     }
+
+    fun findMe(userId: UserId): UserOutput? = userReader.find(userId)?.let { UserOutput.from(it) }
 }
