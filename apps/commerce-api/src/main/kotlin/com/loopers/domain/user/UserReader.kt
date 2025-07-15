@@ -8,5 +8,5 @@ class UserReader(
     private val userRepository: UserRepository,
 ) {
     @Transactional(readOnly = true)
-    fun exist(uid: String): Boolean = userRepository.findByUid(uid) != null
+    fun exist(userId: UserId): Boolean = userRepository.findByUserId(userId) != null
 }

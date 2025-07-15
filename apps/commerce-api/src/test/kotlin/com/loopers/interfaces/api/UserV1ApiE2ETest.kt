@@ -37,7 +37,7 @@ class UserV1ApiE2ETest(
 
             response.statusCode.is2xxSuccessful shouldBe true
             response.body?.data?.id shouldBe 1L
-            response.body?.data?.uid shouldBe "test123"
+            response.body?.data?.userId shouldBe "test123"
             response.body?.data?.email shouldBe "test@email.com"
             response.body?.data?.birthDate shouldBe "2000-01-01"
             response.body?.data?.gender shouldBe Gender.MALE

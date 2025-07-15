@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException
 @Table(name = "users")
 @Entity
 class User(
-    val uid: String,
+    val userId: UserId,
     val email: String,
     val birthDate: String,
     @Enumerated(EnumType.STRING)
@@ -22,7 +22,6 @@ class User(
     }
 
     private fun validate() {
-        require(ID_PATTERN.matches(uid)) { "ID는 영문과 숫자를 모두 포함한 10자 이하여야 합니다." }
         require(EMAIL_PATTERN.matches(email)) { "이메일이 형식에 맞지 않습니다." }
         try {
             BIRTH_DATE_PATTERN.matches(birthDate)
@@ -33,8 +32,18 @@ class User(
     }
 
     companion object {
-        private val ID_PATTERN = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{1,10}$".toRegex()
         private val EMAIL_PATTERN = "^[^@]+@[^@]+\\.[^@]+$".toRegex()
         private val BIRTH_DATE_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$".toRegex()
+    }
+}
+
+@JvmInline
+value class UserId(val value: String) {
+    init {
+        require(ID_PATTERN.matches(value)) { "ID는 영문과 숫자를 모두 포함한 10자 이하여야 합니다." }
+    }
+
+    companion object {
+        private val ID_PATTERN = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{1,10}$".toRegex()
     }
 }

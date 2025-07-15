@@ -12,9 +12,14 @@ class UserTest : StringSpec({
             "aaa",
             "111",
             "12345678901",
-        ).forAll { uid ->
+        ).forAll { invalidValue ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01", gender = Gender.MALE)
+                User(
+                    userId = UserId(invalidValue),
+                    email = "test@test.com",
+                    birthDate = "2000-01-01",
+                    gender = Gender.MALE,
+                )
             }
         }
     }
@@ -24,9 +29,14 @@ class UserTest : StringSpec({
             "a123456789",
             "123456789b",
             "12345abc",
-        ).forAll { uid ->
+        ).forAll { validValue ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01", gender = Gender.MALE)
+                User(
+                    userId = UserId(validValue),
+                    email = "test@test.com",
+                    birthDate = "2000-01-01",
+                    gender = Gender.MALE,
+                )
             }
         }
     }
@@ -37,9 +47,14 @@ class UserTest : StringSpec({
             "invalid@.com",
             "@invalid.com",
             "invalid@domain",
-        ).forAll { email ->
+        ).forAll { invalidEmail ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = "test123", email = email, birthDate = "2000-01-01", gender = Gender.MALE)
+                User(
+                    userId = UserId("test123"),
+                    email = invalidEmail,
+                    birthDate = "2000-01-01",
+                    gender = Gender.MALE,
+                )
             }
         }
     }
@@ -49,9 +64,14 @@ class UserTest : StringSpec({
             "test@test.com",
             "gildong@gmail.com",
             "xx@yy.zz",
-        ).forAll { email ->
+        ).forAll { validEmail ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = "test123", email = email, birthDate = "2000-01-01", gender = Gender.MALE)
+                User(
+                    userId = UserId("test123"),
+                    email = validEmail,
+                    birthDate = "2000-01-01",
+                    gender = Gender.MALE,
+                )
             }
         }
     }
@@ -67,9 +87,14 @@ class UserTest : StringSpec({
             "2025년 1월 1일",
             "invalid-date",
             "2025-02-31",
-        ).forAll { birthDate ->
+        ).forAll { invalidBirthDate ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = "test123", email = "test@test.com", birthDate = birthDate, gender = Gender.MALE)
+                User(
+                    userId = UserId("test123"),
+                    email = "test@test.com",
+                    birthDate = invalidBirthDate,
+                    gender = Gender.MALE,
+                )
             }
         }
     }
@@ -80,9 +105,14 @@ class UserTest : StringSpec({
             "2000-12-31",
             "2023-11-15",
             "2024-02-29",
-        ).forAll { birthDate ->
+        ).forAll { validBirthDate ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = "test123", email = "test@test.com", birthDate = birthDate, gender = Gender.MALE)
+                User(
+                    userId = UserId("test123"),
+                    email = "test@test.com",
+                    birthDate = validBirthDate,
+                    gender = Gender.MALE,
+                )
             }
         }
     }
