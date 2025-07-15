@@ -14,7 +14,7 @@ class UserTest : StringSpec({
             "12345678901",
         ).forAll { uid ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01")
+                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01", gender = Gender.MALE)
             }
         }
     }
@@ -26,7 +26,7 @@ class UserTest : StringSpec({
             "12345abc",
         ).forAll { uid ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01")
+                User(uid = uid, email = "test@test.com", birthDate = "2000-01-01", gender = Gender.MALE)
             }
         }
     }
@@ -39,7 +39,7 @@ class UserTest : StringSpec({
             "invalid@domain",
         ).forAll { email ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = "test123", email = email, birthDate = "2000-01-01")
+                User(uid = "test123", email = email, birthDate = "2000-01-01", gender = Gender.MALE)
             }
         }
     }
@@ -51,7 +51,7 @@ class UserTest : StringSpec({
             "xx@yy.zz",
         ).forAll { email ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = "test123", email = email, birthDate = "2000-01-01")
+                User(uid = "test123", email = email, birthDate = "2000-01-01", gender = Gender.MALE)
             }
         }
     }
@@ -69,7 +69,7 @@ class UserTest : StringSpec({
             "2025-02-31",
         ).forAll { birthDate ->
             shouldThrow<IllegalArgumentException> {
-                User(uid = "test123", email = "test@test.com", birthDate = birthDate)
+                User(uid = "test123", email = "test@test.com", birthDate = birthDate, gender = Gender.MALE)
             }
         }
     }
@@ -82,7 +82,7 @@ class UserTest : StringSpec({
             "2024-02-29",
         ).forAll { birthDate ->
             shouldNotThrow<IllegalArgumentException> {
-                User(uid = "test123", email = "test@test.com", birthDate = birthDate)
+                User(uid = "test123", email = "test@test.com", birthDate = birthDate, gender = Gender.MALE)
             }
         }
     }

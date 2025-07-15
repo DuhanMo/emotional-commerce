@@ -1,8 +1,9 @@
 package com.loopers.application
 
 import com.loopers.application.user.UserService
+import com.loopers.domain.user.Gender
 import com.loopers.domain.user.User
-import com.loopers.domain.user.UserCreateCommand
+import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -54,6 +55,7 @@ class UserServiceIGTest @Autowired constructor(
                 uid = existUid,
                 email = "test@email.com",
                 birthDate = "2020-01-01",
+                gender = Gender.MALE,
             ),
         )
         val command = createUserCreateCommand(uid = existUid)
@@ -73,8 +75,10 @@ private fun createUserCreateCommand(
     uid: String = "test123",
     email: String = "new@email.com",
     birthDate: String = "1999-12-25",
-): UserCreateCommand = UserCreateCommand(
+    gender: Gender = Gender.MALE,
+): UserRegisterCommand = UserRegisterCommand(
     uid = uid,
     email = email,
     birthDate = birthDate,
+    gender = gender,
 )

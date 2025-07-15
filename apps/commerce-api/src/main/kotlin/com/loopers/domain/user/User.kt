@@ -12,6 +12,7 @@ class User(
     val uid: String,
     val email: String,
     val birthDate: String,
+    val gender: Gender,
 ) : BaseEntity() {
     init {
         validate()

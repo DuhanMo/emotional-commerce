@@ -8,7 +8,5 @@ class UserWriter(
     private val userRepository: UserRepository,
 ) {
     @Transactional
-    fun write(user: User) {
-        userRepository.save(user)
-    }
+    fun write(user: User): User = userRepository.save(user)
 }
