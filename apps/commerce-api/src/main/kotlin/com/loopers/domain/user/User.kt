@@ -2,6 +2,8 @@ package com.loopers.domain.user
 
 import com.loopers.domain.BaseEntity
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -12,6 +14,7 @@ class User(
     val uid: String,
     val email: String,
     val birthDate: String,
+    @Enumerated(EnumType.STRING)
     val gender: Gender,
 ) : BaseEntity() {
     init {
