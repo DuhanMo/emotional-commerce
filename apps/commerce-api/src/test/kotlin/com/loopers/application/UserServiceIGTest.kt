@@ -3,14 +3,15 @@ package com.loopers.application
 import com.loopers.application.user.UserService
 import com.loopers.domain.user.User
 import com.loopers.domain.user.UserCreateCommand
+import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.utils.DatabaseCleanUp
-import com.ninjasquad.springmockk.SpykBean
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,10 +21,10 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @SpringBootTest
 class UserServiceIGTest @Autowired constructor(
-    private val userService: UserService,
+    private val userWriter: UserWriter,
+    private val userReader: UserReader,
     private val userJpaRepository: UserJpaRepository,
     private val databaseCleanUp: DatabaseCleanUp,
-    @SpykBean private val userWriter: UserWriter,
 ) : BehaviorSpec({
     extensions(SpringExtension)
 
@@ -32,18 +33,21 @@ class UserServiceIGTest @Autowired constructor(
     }
 
     Given("이미 가입된 ID 가 없는 경우") {
+        val userWriterSpy = spyk(userWriter)
+        val userService = UserService(userWriterSpy, userReader)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
             userService.register(command)
 
             Then("User 저장이 수행된다") {
-                verify(exactly = 1) { userWriter.write(any()) }
+                verify(exactly = 1) { userWriterSpy.write(any()) }
             }
         }
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
+        val userService = UserService(userWriter, userReader)
         val existUid = "test123"
         userJpaRepository.save(
             User(
