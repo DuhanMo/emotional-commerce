@@ -9,17 +9,15 @@ import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
+import com.loopers.support.tests.IntegrationTest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 
-@ActiveProfiles("test")
-@SpringBootTest
+@IntegrationTest
 class UserServiceIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
@@ -63,6 +61,14 @@ class UserServiceIGTest(
                     userService.register(command)
                 }
                 exception.message shouldBe "이미 존재하는 ID 입니다"
+            }
+        }
+    }
+
+    Given("ID가 일치하는 회원이 존재하는 경우") {
+
+        When("회원 정보를 조회하면") {
+            Then("회원 정보를 반환한다") {
             }
         }
     }

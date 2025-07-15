@@ -3,19 +3,17 @@ package com.loopers.interfaces.api
 import com.loopers.domain.user.Gender
 import com.loopers.interfaces.api.user.UserRegisterRequest
 import com.loopers.interfaces.api.user.UserRegisterResponse
+import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.ActiveProfiles
 
-@ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@E2ETest
 class UserV1ApiE2ETest(
     private val testRestTemplate: TestRestTemplate,
     private val databaseCleanUp: DatabaseCleanUp,
