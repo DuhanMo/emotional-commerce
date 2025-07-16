@@ -35,6 +35,7 @@ E2E 테스트
 etc
 
 - [x] 유저 픽스처 이용
+- [x] afterTest를 afterEach로 변경
 - [ ] email 값 객체로 추출
 
 ### 포인트 조회

@@ -24,7 +24,7 @@ class UserServiceIGTest(
     private val userJpaRepository: UserJpaRepository,
     private val databaseCleanUp: DatabaseCleanUp,
 ) : BehaviorSpec({
-    afterTest {
+    afterEach {
         databaseCleanUp.truncateAllTables()
     }
 
