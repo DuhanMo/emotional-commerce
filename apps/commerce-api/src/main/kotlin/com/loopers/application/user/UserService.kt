@@ -20,5 +20,7 @@ class UserService(
         return UserOutput.from(userWriter.write(command.toUser()))
     }
 
-    fun findMe(userId: UserId): UserOutput? = userReader.find(userId)?.let { UserOutput.from(it) }
+    fun getMe(userId: UserId): UserOutput =
+        userReader.find(userId)?.let { UserOutput.from(it) }
+            ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 회원입니다")
 }

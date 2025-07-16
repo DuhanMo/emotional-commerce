@@ -48,7 +48,7 @@ class UserServiceIGTest(
         userJpaRepository.save(
             User(
                 userId = existUserId,
-                email = "test@email.com",
+                email = "test@test.com",
                 birthDate = "2020-01-01",
                 gender = Gender.MALE,
             ),
