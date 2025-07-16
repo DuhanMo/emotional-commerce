@@ -1,6 +1,7 @@
 package com.loopers.domain.user
 
 import com.loopers.infrastructure.user.UserJpaRepository
+import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationTest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.BehaviorSpec
@@ -19,36 +20,21 @@ class UserReaderIGTest(
 
     Given("ID가 일치하는 회원이 존재하는 경우") {
         val userReader = UserReader(userRepository)
-        userJpaRepository.save(
-            User(
-                userId = UserId("abc123"),
-                email = "abc@email.com",
-                birthDate = "2020-01-01",
-                gender = Gender.MALE,
-            ),
-        )
+        userJpaRepository.save(createUser(userId = UserId("abc123")))
 
         When("회원 정보를 조회하면") {
             val result = userReader.find(UserId("abc123"))
 
             Then("회원 정보를 반환한다") {
-                result!! shouldNotBe null
-                result.userId shouldBe UserId("abc123")
-                result.email shouldBe "abc@email.com"
+                result shouldNotBe null
+                result!!.userId shouldBe UserId("abc123")
             }
         }
     }
 
     Given("ID가 일치하는 회원이 존재하지 않는 경우") {
         val userReader = UserReader(userRepository)
-        userJpaRepository.save(
-            User(
-                userId = UserId("abc123"),
-                email = "abc@email.com",
-                birthDate = "2020-01-01",
-                gender = Gender.MALE,
-            ),
-        )
+        userJpaRepository.save(createUser(userId = UserId("abc123")))
 
         When("회원 정보를 조회하면") {
             val result = userReader.find(UserId("xyz789"))

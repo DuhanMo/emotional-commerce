@@ -2,13 +2,13 @@ package com.loopers.application
 
 import com.loopers.application.user.UserService
 import com.loopers.domain.user.Gender
-import com.loopers.domain.user.User
 import com.loopers.domain.user.UserId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
+import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationTest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.BehaviorSpec
@@ -45,14 +45,7 @@ class UserServiceIGTest(
     Given("이미 가입된 ID 가 있는 경우") {
         val userService = UserService(userWriter, userReader)
         val existUserId = UserId("test123")
-        userJpaRepository.save(
-            User(
-                userId = existUserId,
-                email = "test@test.com",
-                birthDate = "2020-01-01",
-                gender = Gender.MALE,
-            ),
-        )
+        userJpaRepository.save(createUser(userId = existUserId))
         val command = createUserCreateCommand(userId = existUserId)
 
         When("회원 가입 하면") {

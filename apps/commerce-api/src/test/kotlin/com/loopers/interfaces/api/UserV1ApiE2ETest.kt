@@ -1,11 +1,11 @@
 package com.loopers.interfaces.api
 
 import com.loopers.domain.user.Gender
-import com.loopers.domain.user.User
 import com.loopers.domain.user.UserId
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.interfaces.api.user.UserRegisterRequest
 import com.loopers.interfaces.api.user.UserResponse
+import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.DescribeSpec
@@ -63,7 +63,7 @@ class UserV1ApiE2ETest(
 
         beforeEach {
             userJpaRepository.save(
-                User(
+                createUser(
                     userId = UserId("test123"),
                     email = "test@test.com",
                     birthDate = "2025-01-01",
