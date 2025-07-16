@@ -2,7 +2,7 @@ package com.loopers.domain.user
 
 data class UserRegisterCommand(
     val userId: UserId,
-    val email: String,
+    val email: Email,
     val birthDate: String,
     val gender: Gender,
 ) {

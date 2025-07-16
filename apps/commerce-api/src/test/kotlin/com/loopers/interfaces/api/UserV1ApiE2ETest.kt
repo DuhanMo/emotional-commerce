@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api
 
+import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.UserId
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -65,7 +66,7 @@ class UserV1ApiE2ETest(
             userJpaRepository.save(
                 createUser(
                     userId = UserId("test123"),
-                    email = "test@test.com",
+                    email = Email("test@test.com"),
                     birthDate = "2025-01-01",
                     gender = Gender.MALE,
                 ),

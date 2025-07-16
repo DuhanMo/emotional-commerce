@@ -1,6 +1,7 @@
 package com.loopers.application
 
 import com.loopers.application.user.UserService
+import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.UserId
 import com.loopers.domain.user.UserReader
@@ -61,7 +62,7 @@ class UserServiceIGTest(
 
 private fun createUserCreateCommand(
     userId: UserId = UserId("test123"),
-    email: String = "new@email.com",
+    email: Email = Email("test@test.com"),
     birthDate: String = "1999-12-25",
     gender: Gender = Gender.MALE,
 ): UserRegisterCommand = UserRegisterCommand(

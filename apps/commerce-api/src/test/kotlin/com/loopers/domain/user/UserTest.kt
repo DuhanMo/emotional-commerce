@@ -16,7 +16,7 @@ class UserTest : StringSpec({
             shouldThrow<IllegalArgumentException> {
                 User(
                     userId = UserId(invalidValue),
-                    email = "test@test.com",
+                    email = Email("test@test.com"),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
                 )
@@ -33,7 +33,7 @@ class UserTest : StringSpec({
             shouldNotThrow<IllegalArgumentException> {
                 User(
                     userId = UserId(validValue),
-                    email = "test@test.com",
+                    email = Email("test@test.com"),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
                 )
@@ -51,7 +51,7 @@ class UserTest : StringSpec({
             shouldThrow<IllegalArgumentException> {
                 User(
                     userId = UserId("test123"),
-                    email = invalidEmail,
+                    email = Email(invalidEmail),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
                 )
@@ -68,7 +68,7 @@ class UserTest : StringSpec({
             shouldNotThrow<IllegalArgumentException> {
                 User(
                     userId = UserId("test123"),
-                    email = validEmail,
+                    email = Email(validEmail),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
                 )
@@ -91,7 +91,7 @@ class UserTest : StringSpec({
             shouldThrow<IllegalArgumentException> {
                 User(
                     userId = UserId("test123"),
-                    email = "test@test.com",
+                    email = Email("test@test.com"),
                     birthDate = invalidBirthDate,
                     gender = Gender.MALE,
                 )
@@ -109,7 +109,7 @@ class UserTest : StringSpec({
             shouldNotThrow<IllegalArgumentException> {
                 User(
                     userId = UserId("test123"),
-                    email = "test@test.com",
+                    email = Email("test@test.com"),
                     birthDate = validBirthDate,
                     gender = Gender.MALE,
                 )

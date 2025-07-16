@@ -21,7 +21,7 @@ data class UserResponse(
         fun from(output: UserOutput): UserResponse = UserResponse(
             id = output.id,
             userId = output.userId.value,
-            email = output.email,
+            email = output.email.value,
             birthDate = output.birthDate,
             gender = output.gender,
         )

@@ -1,5 +1,6 @@
 package com.loopers.application.user
 
+import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.User
 import com.loopers.domain.user.UserId
@@ -7,7 +8,7 @@ import com.loopers.domain.user.UserId
 data class UserOutput(
     val id: Long,
     val userId: UserId,
-    val email: String,
+    val email: Email,
     val birthDate: String,
     val gender: Gender,
 ) {

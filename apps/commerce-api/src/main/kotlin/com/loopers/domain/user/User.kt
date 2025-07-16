@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException
 @Entity
 class User(
     val userId: UserId,
-    val email: String,
+    val email: Email,
     val birthDate: String,
     @Enumerated(EnumType.STRING)
     val gender: Gender,
@@ -22,7 +22,6 @@ class User(
     }
 
     private fun validate() {
-        require(EMAIL_PATTERN.matches(email)) { "이메일이 형식에 맞지 않습니다." }
         try {
             BIRTH_DATE_PATTERN.matches(birthDate)
             LocalDate.parse(birthDate)
@@ -32,7 +31,6 @@ class User(
     }
 
     companion object {
-        private val EMAIL_PATTERN = "^[^@]+@[^@]+\\.[^@]+$".toRegex()
         private val BIRTH_DATE_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$".toRegex()
     }
 }
@@ -45,5 +43,16 @@ value class UserId(val value: String) {
 
     companion object {
         private val ID_PATTERN = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{1,10}$".toRegex()
+    }
+}
+
+@JvmInline
+value class Email(val value: String) {
+    init {
+        require(EMAIL_PATTERN.matches(value)) { "이메일이 형식에 맞지 않습니다." }
+    }
+
+    companion object {
+        private val EMAIL_PATTERN = "^[^@]+@[^@]+\\.[^@]+$".toRegex()
     }
 }
