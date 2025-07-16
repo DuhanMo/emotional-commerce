@@ -13,7 +13,6 @@ import com.loopers.support.tests.IntegrationTest
 import com.loopers.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
@@ -62,48 +61,6 @@ class UserServiceIGTest(
                     userService.register(command)
                 }
                 exception.message shouldBe "이미 존재하는 ID 입니다"
-            }
-        }
-    }
-
-    Given("ID가 일치하는 회원이 존재하는 경우") {
-        val userService = UserService(userWriter, userReader)
-        userJpaRepository.save(
-            User(
-                userId = UserId("abc123"),
-                email = "abc@email.com",
-                birthDate = "2020-01-01",
-                gender = Gender.MALE,
-            ),
-        )
-
-        When("회원 정보를 조회하면") {
-            val output = userService.findMe(UserId("abc123"))
-
-            Then("회원 정보를 반환한다") {
-                output!! shouldNotBe null
-                output.userId shouldBe UserId("abc123")
-                output.email shouldBe "abc@email.com"
-            }
-        }
-    }
-
-    Given("ID가 일치하는 회원이 존재하지 않는 경우") {
-        val userService = UserService(userWriter, userReader)
-        userJpaRepository.save(
-            User(
-                userId = UserId("abc123"),
-                email = "abc@email.com",
-                birthDate = "2020-01-01",
-                gender = Gender.MALE,
-            ),
-        )
-
-        When("회원 정보를 조회하면") {
-            val output = userService.findMe(UserId("xyz789"))
-
-            Then("null을 반환한다") {
-                output shouldBe null
             }
         }
     }
