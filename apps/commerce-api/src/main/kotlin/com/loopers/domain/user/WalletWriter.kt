@@ -8,7 +8,5 @@ class WalletWriter(
     private val walletRepository: WalletRepository,
 ) {
     @Transactional
-    fun write(wallet: Wallet) {
-        walletRepository.save(wallet)
-    }
+    fun write(wallet: Wallet): Wallet = walletRepository.save(wallet)
 }

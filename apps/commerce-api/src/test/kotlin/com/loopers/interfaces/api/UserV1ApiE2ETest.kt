@@ -34,25 +34,30 @@ class UserV1ApiE2ETest(
     describe("POST /api/v1/users") {
         val url = "/api/v1/users"
 
-        it("회원 가입이 성공하는 경우, 생성된 유저 정보를 응답으로 반환한다") {
+        context("회원 가입이 성공하는 경우") {
             val request = UserRegisterRequest("test123", "test@test.com", "2000-01-01", Gender.MALE)
             val responseType = object : ParameterizedTypeReference<ApiResponse<UserResponse>>() {}
-            val response = testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request), responseType)
 
-            response.statusCode.is2xxSuccessful shouldBe true
-            response.body?.data?.id shouldBe 1L
-            response.body?.data?.loginId shouldBe "test123"
-            response.body?.data?.email shouldBe "test@test.com"
-            response.body?.data?.birthDate shouldBe "2000-01-01"
-            response.body?.data?.gender shouldBe Gender.MALE
+            it("생성된 유저 정보를 응답으로 반환한다") {
+                val response = testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request), responseType)
+
+                response.statusCode.is2xxSuccessful shouldBe true
+                response.body?.data?.id shouldBe 1L
+                response.body?.data?.loginId shouldBe "test123"
+                response.body?.data?.email shouldBe "test@test.com"
+                response.body?.data?.birthDate shouldBe "2000-01-01"
+                response.body?.data?.gender shouldBe Gender.MALE
+            }
         }
-
-        it("회원 가입시에 성별이 없는 경우, 400 Bad Request 응답을 반환한다") {
+        context("회원 가입시에 성별이 없는 경우") {
             val request = UserRegisterRequest("test123", "test@test.com", "2000-01-01", gender = null)
             val responseType = object : ParameterizedTypeReference<ApiResponse<UserResponse>>() {}
-            val response = testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request), responseType)
 
-            response.statusCode shouldBe HttpStatus.BAD_REQUEST
+            it("400 Bad Request 응답을 반환한다") {
+                val response = testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request), responseType)
+
+                response.statusCode shouldBe HttpStatus.BAD_REQUEST
+            }
         }
     }
 
@@ -62,7 +67,7 @@ class UserV1ApiE2ETest(
     describe("GET /api/v1/users/me") {
         val url = "/api/v1/users/me"
 
-        beforeEach {
+        context("내 정보가 존재하는 경우") {
             userJpaRepository.save(
                 createUser(
                     loginId = LoginId("test123"),
@@ -71,30 +76,28 @@ class UserV1ApiE2ETest(
                     gender = Gender.MALE,
                 ),
             )
-        }
-
-        it("내 정보 조회에 성공할 경우, 해당하는 유저 정보를 응답으로 반환한다") {
-            val headers = HttpHeaders().apply {
-                set("X-USER-ID", "test123")
-            }
+            val headers = HttpHeaders().apply { set("X-USER-ID", "test123") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<UserResponse>>() {}
-            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
 
-            response.statusCode.is2xxSuccessful shouldBe true
-            response.body?.data?.loginId shouldBe "test123"
-            response.body?.data?.email shouldBe "test@test.com"
-            response.body?.data?.birthDate shouldBe "2025-01-01"
-            response.body?.data?.gender shouldBe Gender.MALE
-        }
+            it("내 정보를 조회하면, 해당하는 유저 정보를 응답으로 반환한다") {
+                val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
 
-        it("존재하지 않는 ID 로 조회할 경우, `404 Not Found` 응답을 반환한다") {
-            val headers = HttpHeaders().apply {
-                set("X-USER-ID", "xyz789")
+                response.statusCode.is2xxSuccessful shouldBe true
+                response.body?.data?.loginId shouldBe "test123"
+                response.body?.data?.email shouldBe "test@test.com"
+                response.body?.data?.birthDate shouldBe "2025-01-01"
+                response.body?.data?.gender shouldBe Gender.MALE
             }
+        }
+        context("내 정보가 존재하지 않는 경우") {
+            val headers = HttpHeaders().apply { set("X-USER-ID", "xyz789") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<UserResponse>>() {}
-            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
 
-            response.statusCode shouldBe HttpStatus.NOT_FOUND
+            it("내 정보를 조회하면, 404 Not Found 응답을 반환한다") {
+                val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
+
+                response.statusCode shouldBe HttpStatus.NOT_FOUND
+            }
         }
     }
 })

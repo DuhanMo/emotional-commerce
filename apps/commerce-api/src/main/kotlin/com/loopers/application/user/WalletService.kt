@@ -14,12 +14,12 @@ class WalletService(
     private val walletWriter: WalletWriter,
 ) {
     @Transactional
-    fun charge(command: ChargePointCommand) {
+    fun charge(command: ChargePointCommand): WalletOutput {
         val user = userReader.getLoginId(command.loginId)
         val wallet = walletReader.getByUserId(user.id)
 
         wallet.charge(command.point)
 
-        walletWriter.write(wallet)
+        return WalletOutput.from(walletWriter.write(wallet))
     }
 }
