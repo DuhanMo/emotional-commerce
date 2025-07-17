@@ -18,6 +18,7 @@ import kotlin.collections.joinToString
 import kotlin.jvm.java
 import kotlin.text.isNotEmpty
 import kotlin.text.toRegex
+import org.springframework.web.bind.MethodArgumentNotValidException
 
 @RestControllerAdvice
 class ApiControllerAdvice {
@@ -43,6 +44,19 @@ class ApiControllerAdvice {
         val name = e.parameterName
         val type = e.parameterType
         val message = "필수 요청 파라미터 '$name' (타입: $type)가 누락되었습니다."
+        return failureResponse(errorType = ErrorType.BAD_REQUEST, errorMessage = message)
+    }
+
+    @ExceptionHandler
+    fun handleValidationErrors(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<*>> {
+        val errors = e.bindingResult.fieldErrors.map { fieldError ->
+            "${fieldError.field}: ${fieldError.defaultMessage}"
+        }
+        val message = if (errors.isNotEmpty()) {
+            "검증 실패: ${errors.joinToString(", ")}"
+        } else {
+            "요청 데이터 검증에 실패했습니다."
+        }
         return failureResponse(errorType = ErrorType.BAD_REQUEST, errorMessage = message)
     }
 
