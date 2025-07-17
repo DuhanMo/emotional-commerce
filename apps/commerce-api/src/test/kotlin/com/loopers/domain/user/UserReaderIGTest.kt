@@ -23,7 +23,7 @@ class UserReaderIGTest(
         userJpaRepository.save(createUser(loginId = LoginId("abc123")))
 
         When("회원 정보를 조회하면") {
-            val result = userReader.find(LoginId("abc123"))
+            val result = userReader.findByLoginId(LoginId("abc123"))
 
             Then("회원 정보를 반환한다") {
                 result shouldNotBe null
@@ -37,7 +37,7 @@ class UserReaderIGTest(
         userJpaRepository.save(createUser(loginId = LoginId("abc123")))
 
         When("회원 정보를 조회하면") {
-            val result = userReader.find(LoginId("xyz789"))
+            val result = userReader.findByLoginId(LoginId("xyz789"))
 
             Then("null을 반환한다") {
                 result shouldBe null

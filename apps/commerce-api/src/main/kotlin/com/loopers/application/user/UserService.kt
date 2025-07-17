@@ -21,6 +21,6 @@ class UserService(
     }
 
     fun getMe(loginId: LoginId): UserOutput =
-        userReader.find(loginId)?.let { UserOutput.from(it) }
+        userReader.findByLoginId(loginId)?.let { UserOutput.from(it) }
             ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 회원입니다")
 }
