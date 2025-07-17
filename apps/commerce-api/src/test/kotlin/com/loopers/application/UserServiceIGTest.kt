@@ -7,6 +7,7 @@ import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
+import com.loopers.domain.user.WalletWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.assertThrows
 class UserServiceIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
+    private val walletWriter: WalletWriter,
     private val userJpaRepository: UserJpaRepository,
     private val databaseCleanUp: DatabaseCleanUp,
 ) : BehaviorSpec({
@@ -31,7 +33,8 @@ class UserServiceIGTest(
 
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userWriter)
-        val userService = UserService(userWriterSpy, userReader)
+        val walletWriterSpy = spyk(walletWriter)
+        val userService = UserService(userWriterSpy, userReader, walletWriterSpy)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
@@ -40,11 +43,15 @@ class UserServiceIGTest(
             Then("User 저장이 수행된다") {
                 verify(exactly = 1) { userWriterSpy.write(any()) }
             }
+
+            Then("Wallet 저장이 수행된다") {
+                verify(exactly = 1) { walletWriterSpy.write(any()) }
+            }
         }
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
-        val userService = UserService(userWriter, userReader)
+        val userService = UserService(userWriter, userReader, walletWriter)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
         val command = createUserCreateCommand(loginId = existLoginId)

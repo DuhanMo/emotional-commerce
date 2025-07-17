@@ -4,20 +4,28 @@ import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
+import com.loopers.domain.user.Wallet
+import com.loopers.domain.user.WalletWriter
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
+    private val walletWriter: WalletWriter,
 ) {
+    @Transactional
     fun register(command: UserRegisterCommand): UserOutput {
         if (userReader.exist(command.loginId)) {
             throw CoreException(ErrorType.CONFLICT, "이미 존재하는 ID 입니다")
         }
-        return UserOutput.from(userWriter.write(command.toUser()))
+        val user = userWriter.write(command.toUser())
+        walletWriter.write(Wallet(user))
+
+        return UserOutput.from(user)
     }
 
     fun getMe(loginId: LoginId): UserOutput =
