@@ -6,6 +6,7 @@ import com.loopers.interfaces.api.example.ExampleV1Dto
 import com.loopers.utils.DatabaseCleanUp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,6 +19,8 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
+@Deprecated("삭제 예정")
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ExampleV1ApiE2ETest @Autowired constructor(
     private val testRestTemplate: TestRestTemplate,
