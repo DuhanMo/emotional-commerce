@@ -1,6 +1,7 @@
 package com.loopers.application.user
 
 import com.loopers.domain.user.ChargePointCommand
+import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.WalletReader
 import com.loopers.domain.user.WalletWriter
 import org.springframework.stereotype.Service
@@ -19,4 +20,6 @@ class WalletService(
 
         return WalletOutput.from(walletWriter.write(wallet))
     }
+
+    fun find(loginId: LoginId): WalletOutput = WalletOutput.from(walletReader.getByLoginId(loginId))
 }

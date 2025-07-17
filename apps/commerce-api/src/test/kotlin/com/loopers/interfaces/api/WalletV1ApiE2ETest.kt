@@ -5,7 +5,7 @@ import com.loopers.domain.user.Wallet
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.infrastructure.user.WalletJpaRepository
 import com.loopers.interfaces.api.wallet.PointChargeRequest
-import com.loopers.interfaces.api.wallet.PointChargeResponse
+import com.loopers.interfaces.api.wallet.WalletResponse
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
@@ -36,17 +36,17 @@ class WalletV1ApiE2ETest(
 
         context("존재하는 유저가 1000원을 충전하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            walletJpaRepository.save(Wallet(user, 2000))
+            walletJpaRepository.save(Wallet(user, 2_000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
-            val request = PointChargeRequest(1000)
-            val responseType = object : ParameterizedTypeReference<ApiResponse<PointChargeResponse>>() {}
+            val request = PointChargeRequest(1_000)
+            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
 
             it("충전된 보유 총량을 응답으로 반환한다") {
                 val response =
                     testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request, headers), responseType)
 
                 response.statusCode.is2xxSuccessful shouldBe true
-                response.body?.data?.point shouldBe 3000
+                response.body?.data?.point shouldBe 3_000
             }
         }
 
@@ -55,13 +55,46 @@ class WalletV1ApiE2ETest(
             walletJpaRepository.save(Wallet(user, 2000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "xyz789") }
             val request = PointChargeRequest(1000)
-            val responseType = object : ParameterizedTypeReference<ApiResponse<PointChargeResponse>>() {}
+            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
 
             it("404 Not Found 응답을 반환한다") {
                 val response =
                     testRestTemplate.exchange(url, HttpMethod.POST, HttpEntity(request, headers), responseType)
 
                 response.statusCode shouldBe HttpStatus.NOT_FOUND
+            }
+        }
+    }
+
+    describe("GET /api/v1/wallets/me") {
+        val url = "/api/v1/wallets/me"
+
+        context("해당 ID 의 회원이 존재할 경우") {
+            val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
+            walletJpaRepository.save(Wallet(user, 500))
+            val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
+            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+
+            it("보유 포인트가 반환된다") {
+                val response =
+                    testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
+
+                response.statusCode.is2xxSuccessful shouldBe true
+                response.body?.data?.point shouldBe 500
+            }
+        }
+
+        context("X-USER-ID 헤더가 없을 경우") {
+            val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
+            walletJpaRepository.save(Wallet(user, 2000))
+            val headers = HttpHeaders()
+            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+
+            it("400 Bad Request 응답을 반환한다") {
+                val response =
+                    testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
+
+                response.statusCode shouldBe HttpStatus.BAD_REQUEST
             }
         }
     }
