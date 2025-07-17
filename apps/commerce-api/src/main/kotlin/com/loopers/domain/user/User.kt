@@ -6,12 +6,11 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
 
 @Table(name = "users")
 @Entity
 class User(
-    val userId: UserId,
+    val loginId: LoginId,
     val email: Email,
     val birthDate: String,
     @Enumerated(EnumType.STRING)
@@ -22,10 +21,10 @@ class User(
     }
 
     private fun validate() {
-        try {
+        runCatching {
             BIRTH_DATE_PATTERN.matches(birthDate)
             LocalDate.parse(birthDate)
-        } catch (e: DateTimeParseException) {
+        }.getOrElse {
             throw IllegalArgumentException("생년월일은 yyyy-MM-dd 형식이어야 합니다.")
         }
     }
@@ -36,7 +35,7 @@ class User(
 }
 
 @JvmInline
-value class UserId(val value: String) {
+value class LoginId(val value: String) {
     init {
         require(ID_PATTERN.matches(value)) { "ID는 영문과 숫자를 모두 포함한 10자 이하여야 합니다." }
     }

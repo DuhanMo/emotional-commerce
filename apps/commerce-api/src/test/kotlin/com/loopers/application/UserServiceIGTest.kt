@@ -3,7 +3,7 @@ package com.loopers.application
 import com.loopers.application.user.UserService
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
-import com.loopers.domain.user.UserId
+import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
@@ -45,9 +45,9 @@ class UserServiceIGTest(
 
     Given("이미 가입된 ID 가 있는 경우") {
         val userService = UserService(userWriter, userReader)
-        val existUserId = UserId("test123")
-        userJpaRepository.save(createUser(userId = existUserId))
-        val command = createUserCreateCommand(userId = existUserId)
+        val existLoginId = LoginId("test123")
+        userJpaRepository.save(createUser(loginId = existLoginId))
+        val command = createUserCreateCommand(loginId = existLoginId)
 
         When("회원 가입 하면") {
             Then("예외 발생한다") {
@@ -61,12 +61,12 @@ class UserServiceIGTest(
 })
 
 private fun createUserCreateCommand(
-    userId: UserId = UserId("test123"),
+    loginId: LoginId = LoginId("test123"),
     email: Email = Email("test@test.com"),
     birthDate: String = "1999-12-25",
     gender: Gender = Gender.MALE,
 ): UserRegisterCommand = UserRegisterCommand(
-    userId = userId,
+    loginId = loginId,
     email = email,
     birthDate = birthDate,
     gender = gender,

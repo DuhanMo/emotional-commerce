@@ -20,24 +20,24 @@ class UserReaderIGTest(
 
     Given("ID가 일치하는 회원이 존재하는 경우") {
         val userReader = UserReader(userRepository)
-        userJpaRepository.save(createUser(userId = UserId("abc123")))
+        userJpaRepository.save(createUser(loginId = LoginId("abc123")))
 
         When("회원 정보를 조회하면") {
-            val result = userReader.find(UserId("abc123"))
+            val result = userReader.find(LoginId("abc123"))
 
             Then("회원 정보를 반환한다") {
                 result shouldNotBe null
-                result!!.userId shouldBe UserId("abc123")
+                result!!.loginId shouldBe LoginId("abc123")
             }
         }
     }
 
     Given("ID가 일치하는 회원이 존재하지 않는 경우") {
         val userReader = UserReader(userRepository)
-        userJpaRepository.save(createUser(userId = UserId("abc123")))
+        userJpaRepository.save(createUser(loginId = LoginId("abc123")))
 
         When("회원 정보를 조회하면") {
-            val result = userReader.find(UserId("xyz789"))
+            val result = userReader.find(LoginId("xyz789"))
 
             Then("null을 반환한다") {
                 result shouldBe null

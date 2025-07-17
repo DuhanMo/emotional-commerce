@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class UserResponse(
     @Schema(description = "식별자", example = "1")
     val id: Long,
-    @Schema(description = "유저 ID", example = "test123")
-    val userId: String,
+    @Schema(description = "로그인 ID", example = "test123")
+    val loginId: String,
     @Schema(description = "이메일 주소", example = "test@test.com")
     val email: String,
     @Schema(description = "생년월일", example = "1995-03-15")
@@ -20,7 +20,7 @@ data class UserResponse(
     companion object {
         fun from(output: UserOutput): UserResponse = UserResponse(
             id = output.id,
-            userId = output.userId.value,
+            loginId = output.loginId.value,
             email = output.email.value,
             birthDate = output.birthDate,
             gender = output.gender,

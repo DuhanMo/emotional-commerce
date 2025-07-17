@@ -15,7 +15,7 @@ class UserTest : StringSpec({
         ).forAll { invalidValue ->
             shouldThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId(invalidValue),
+                    loginId = LoginId(invalidValue),
                     email = Email("test@test.com"),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
@@ -32,7 +32,7 @@ class UserTest : StringSpec({
         ).forAll { validValue ->
             shouldNotThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId(validValue),
+                    loginId = LoginId(validValue),
                     email = Email("test@test.com"),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
@@ -50,7 +50,7 @@ class UserTest : StringSpec({
         ).forAll { invalidEmail ->
             shouldThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId("test123"),
+                    loginId = LoginId("test123"),
                     email = Email(invalidEmail),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
@@ -67,7 +67,7 @@ class UserTest : StringSpec({
         ).forAll { validEmail ->
             shouldNotThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId("test123"),
+                    loginId = LoginId("test123"),
                     email = Email(validEmail),
                     birthDate = "2000-01-01",
                     gender = Gender.MALE,
@@ -90,7 +90,7 @@ class UserTest : StringSpec({
         ).forAll { invalidBirthDate ->
             shouldThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId("test123"),
+                    loginId = LoginId("test123"),
                     email = Email("test@test.com"),
                     birthDate = invalidBirthDate,
                     gender = Gender.MALE,
@@ -108,7 +108,7 @@ class UserTest : StringSpec({
         ).forAll { validBirthDate ->
             shouldNotThrow<IllegalArgumentException> {
                 User(
-                    userId = UserId("test123"),
+                    loginId = LoginId("test123"),
                     email = Email("test@test.com"),
                     birthDate = validBirthDate,
                     gender = Gender.MALE,

@@ -2,7 +2,7 @@ package com.loopers.interfaces.api
 
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
-import com.loopers.domain.user.UserId
+import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.interfaces.api.user.UserRegisterRequest
 import com.loopers.interfaces.api.user.UserResponse
@@ -41,7 +41,7 @@ class UserV1ApiE2ETest(
 
             response.statusCode.is2xxSuccessful shouldBe true
             response.body?.data?.id shouldBe 1L
-            response.body?.data?.userId shouldBe "test123"
+            response.body?.data?.loginId shouldBe "test123"
             response.body?.data?.email shouldBe "test@test.com"
             response.body?.data?.birthDate shouldBe "2000-01-01"
             response.body?.data?.gender shouldBe Gender.MALE
@@ -65,7 +65,7 @@ class UserV1ApiE2ETest(
         beforeEach {
             userJpaRepository.save(
                 createUser(
-                    userId = UserId("test123"),
+                    loginId = LoginId("test123"),
                     email = Email("test@test.com"),
                     birthDate = "2025-01-01",
                     gender = Gender.MALE,
@@ -81,7 +81,7 @@ class UserV1ApiE2ETest(
             val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, headers), responseType)
 
             response.statusCode.is2xxSuccessful shouldBe true
-            response.body?.data?.userId shouldBe "test123"
+            response.body?.data?.loginId shouldBe "test123"
             response.body?.data?.email shouldBe "test@test.com"
             response.body?.data?.birthDate shouldBe "2025-01-01"
             response.body?.data?.gender shouldBe Gender.MALE

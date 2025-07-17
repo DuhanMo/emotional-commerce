@@ -1,6 +1,6 @@
 package com.loopers.application.user
 
-import com.loopers.domain.user.UserId
+import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
@@ -14,13 +14,13 @@ class UserService(
     private val userReader: UserReader,
 ) {
     fun register(command: UserRegisterCommand): UserOutput {
-        if (userReader.exist(command.userId)) {
+        if (userReader.exist(command.loginId)) {
             throw CoreException(ErrorType.CONFLICT, "이미 존재하는 ID 입니다")
         }
         return UserOutput.from(userWriter.write(command.toUser()))
     }
 
-    fun getMe(userId: UserId): UserOutput =
-        userReader.find(userId)?.let { UserOutput.from(it) }
+    fun getMe(loginId: LoginId): UserOutput =
+        userReader.find(loginId)?.let { UserOutput.from(it) }
             ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 회원입니다")
 }

@@ -1,7 +1,7 @@
 package com.loopers.interfaces.api.user
 
 import com.loopers.application.user.UserService
-import com.loopers.domain.user.UserId
+import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,9 +26,9 @@ class UserV1Controller(
 
     @GetMapping("/me")
     override fun getMe(
-        @RequestHeader("X-USER-ID") userId: String,
+        @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<UserResponse> {
-        val response = UserResponse.from(userService.getMe(UserId(userId)))
+        val response = UserResponse.from(userService.getMe(LoginId(loginId)))
         return ApiResponse.success(response)
     }
 }
