@@ -1,4 +1,4 @@
-package com.loopers.interfaces.api.user
+package com.loopers.interfaces.api.wallet
 
 import com.loopers.interfaces.api.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -12,34 +12,24 @@ import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 
-@Tag(name = "User V1 API", description = "유저 관리 API")
-interface UserV1ApiSpec {
+@Tag(name = "Point V1 API", description = "포인트 관리 API")
+interface WalletV1ApiSpec {
 
     @Operation(
-        summary = "회원 가입",
-        description = "새로운 유저를 등록합니다.",
+        summary = "포인트 충전",
+        description = "포인트를 충전합니다.",
     )
     @ApiResponses(
         value = [
-            SwaggerApiResponse(responseCode = "200", description = "회원 가입 성공"),
+            SwaggerApiResponse(responseCode = "200", description = "포인트 충전 성공"),
             SwaggerApiResponse(responseCode = "400", description = "잘못된 요청"),
             SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류"),
         ],
     )
-    fun register(@Valid @RequestBody request: UserRegisterRequest): ApiResponse<UserResponse>
-
-    @Operation(
-        summary = "내 정보 조회",
-        description = "내 정보를 조회합니다.",
-    )
-    @ApiResponses(
-        value = [
-            SwaggerApiResponse(responseCode = "200", description = "내 정보 조회 성공"),
-            SwaggerApiResponse(responseCode = "400", description = "잘못된 요청"),
-            SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류"),
-        ],
-    )
-    fun getMe(
+    fun charge(
+        @Schema(name = "포인트 충전 요청")
+        @Valid
+        @RequestBody request: PointChargeRequest,
         @Parameter(
             name = "X-USER-ID",
             description = "조회할 유저의 ID",
@@ -49,5 +39,28 @@ interface UserV1ApiSpec {
         )
         @Schema(name = "로그인 ID", description = "조회할 유저의 ID")
         @RequestHeader("X-USER-ID") loginId: String,
-    ): ApiResponse<UserResponse>
+        ): ApiResponse<WalletResponse>
+
+    @Operation(
+        summary = "내 포인트 조회",
+        description = "내 포인트를 조회합니다.",
+    )
+    @ApiResponses(
+        value = [
+            SwaggerApiResponse(responseCode = "200", description = "포인트 조회 성공"),
+            SwaggerApiResponse(responseCode = "400", description = "잘못된 요청"),
+            SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류"),
+        ],
+    )
+    fun find(
+        @Parameter(
+            name = "X-USER-ID",
+            description = "조회할 유저의 ID",
+            `in` = ParameterIn.HEADER,
+            required = true,
+            schema = Schema(type = "string"),
+        )
+        @Schema(name = "로그인 ID", description = "조회할 유저의 ID")
+        @RequestHeader("X-USER-ID") loginId: String,
+    ): ApiResponse<WalletResponse>
 }

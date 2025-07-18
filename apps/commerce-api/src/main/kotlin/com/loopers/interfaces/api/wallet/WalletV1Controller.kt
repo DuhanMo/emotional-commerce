@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/points")
 class WalletV1Controller(
     private val walletService: WalletService,
-) {
+) : WalletV1ApiSpec {
     @PostMapping("/charge")
-    fun charge(
+    override fun charge(
         @Valid @RequestBody request: PointChargeRequest,
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<WalletResponse> {
@@ -26,7 +26,7 @@ class WalletV1Controller(
     }
 
     @GetMapping
-    fun find(
+    override fun find(
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<WalletResponse> {
         val response = WalletResponse.from(walletService.find(LoginId(loginId)))
