@@ -30,7 +30,7 @@ interface UserV1ApiSpec {
         description = "내 정보를 조회합니다.",
     )
     fun getMe(
-        @Schema(name = "유저 ID", description = "조회할 유저의 ID")
-        @RequestHeader("X-USER-ID") userId: String,
+        @Schema(name = "로그인 ID", description = "조회할 유저의 ID")
+        @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<UserResponse>
 }

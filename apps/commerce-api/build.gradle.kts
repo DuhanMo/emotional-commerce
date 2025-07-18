@@ -2,6 +2,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa")
 }
 
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
 dependencies {
     // add-ons
     implementation(project(":modules:jpa"))

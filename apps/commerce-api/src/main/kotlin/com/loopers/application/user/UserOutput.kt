@@ -3,11 +3,11 @@ package com.loopers.application.user
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.User
-import com.loopers.domain.user.UserId
+import com.loopers.domain.user.LoginId
 
 data class UserOutput(
     val id: Long,
-    val userId: UserId,
+    val loginId: LoginId,
     val email: Email,
     val birthDate: String,
     val gender: Gender,
@@ -15,7 +15,7 @@ data class UserOutput(
     companion object {
         fun from(user: User): UserOutput = UserOutput(
             id = user.id,
-            userId = user.userId,
+            loginId = user.loginId,
             email = user.email,
             birthDate = user.birthDate,
             gender = user.gender,
