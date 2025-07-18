@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/wallets")
+@RequestMapping("/api/v1/points")
 class WalletV1Controller(
     private val walletService: WalletService,
 ) {
@@ -25,7 +25,7 @@ class WalletV1Controller(
         return ApiResponse.success(response)
     }
 
-    @GetMapping("/me")
+    @GetMapping
     fun find(
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<WalletResponse> {

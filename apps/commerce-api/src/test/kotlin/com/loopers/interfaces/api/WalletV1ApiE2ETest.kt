@@ -29,10 +29,10 @@ class WalletV1ApiE2ETest(
         databaseCleanUp.truncateAllTables()
     }
     /**
-     * @see com.loopers.interfaces.api.wallet.WalletV1Controller.charge
+     * @see com.loopers.interfaces.api.wallet.PointV1Controller.charge
      */
-    describe("POST /api/v1/wallets/charge") {
-        val url = "/api/v1/wallets/charge"
+    describe("POST /api/v1/points/charge") {
+        val url = "/api/v1/points/charge"
 
         context("존재하는 유저가 1000원을 충전하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
@@ -66,8 +66,8 @@ class WalletV1ApiE2ETest(
         }
     }
 
-    describe("GET /api/v1/wallets/me") {
-        val url = "/api/v1/wallets/me"
+    describe("GET /api/v1/points") {
+        val url = "/api/v1/points"
 
         context("해당 ID 의 회원이 존재할 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
