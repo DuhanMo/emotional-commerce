@@ -1,4 +1,4 @@
-package com.loopers.infrastructure.user
+package com.loopers.infrastructure.point
 
 import com.loopers.domain.point.Point
 import com.loopers.domain.point.PointRepository

@@ -3,7 +3,7 @@ package com.loopers.application.point
 import com.loopers.domain.point.ChargePointCommand
 import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
-import com.loopers.infrastructure.user.PointJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser

@@ -2,7 +2,7 @@ package com.loopers.domain.point
 
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.user.UserJpaRepository
-import com.loopers.infrastructure.user.PointJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationTest
 import com.loopers.utils.DatabaseCleanUp

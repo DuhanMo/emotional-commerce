@@ -2,7 +2,7 @@ package com.loopers.interfaces.api.point
 
 import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
-import com.loopers.infrastructure.user.PointJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.interfaces.api.ApiResponse
 import com.loopers.support.fixture.createUser
