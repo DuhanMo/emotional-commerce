@@ -12,4 +12,6 @@ class UserRepositoryImpl(
     override fun save(user: User): User = userJpaRepository.save(user)
 
     override fun findByLoginId(loginId: LoginId): User? = userJpaRepository.findByLoginId(loginId.value)
+
+    override fun existsByLoginId(loginId: LoginId): Boolean = userJpaRepository.existsByLoginId(loginId.value)
 }

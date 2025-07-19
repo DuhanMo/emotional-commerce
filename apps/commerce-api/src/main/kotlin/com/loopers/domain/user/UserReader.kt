@@ -8,7 +8,7 @@ class UserReader(
     private val userRepository: UserRepository,
 ) {
     @Transactional(readOnly = true)
-    fun exist(loginId: LoginId): Boolean = findByLoginId(loginId) != null
+    fun exist(loginId: LoginId): Boolean = userRepository.existsByLoginId(loginId)
 
     @Transactional(readOnly = true)
     fun findByLoginId(loginId: LoginId): User? = userRepository.findByLoginId(loginId)
