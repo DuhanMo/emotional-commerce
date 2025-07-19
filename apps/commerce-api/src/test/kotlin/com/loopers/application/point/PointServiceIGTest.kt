@@ -1,11 +1,10 @@
-package com.loopers.application
+package com.loopers.application.point
 
-import com.loopers.application.user.PointService
-import com.loopers.domain.user.ChargePointCommand
+import com.loopers.domain.point.ChargePointCommand
+import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.Point
-import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.infrastructure.user.PointJpaRepository
+import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationTest

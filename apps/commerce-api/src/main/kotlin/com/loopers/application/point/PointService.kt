@@ -1,9 +1,9 @@
-package com.loopers.application.user
+package com.loopers.application.point
 
-import com.loopers.domain.user.ChargePointCommand
+import com.loopers.domain.point.ChargePointCommand
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.PointReader
-import com.loopers.domain.user.PointWriter
+import com.loopers.domain.point.PointReader
+import com.loopers.domain.point.PointWriter
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

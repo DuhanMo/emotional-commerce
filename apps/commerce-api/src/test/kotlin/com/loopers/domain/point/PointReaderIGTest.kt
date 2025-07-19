@@ -1,5 +1,6 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
+import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.infrastructure.user.PointJpaRepository
 import com.loopers.support.fixture.createUser

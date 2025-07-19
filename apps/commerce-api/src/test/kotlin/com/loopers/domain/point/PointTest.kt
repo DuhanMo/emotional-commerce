@@ -1,5 +1,6 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
+import com.loopers.domain.user.LoginId
 import com.loopers.support.fixture.createUser
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec

@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.point
 
-import com.loopers.application.user.PointOutput
+import com.loopers.application.point.PointOutput
 
 data class PointResponse(
     val point: Int,

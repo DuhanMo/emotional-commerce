@@ -1,11 +1,10 @@
-package com.loopers.interfaces.api
+package com.loopers.interfaces.api.point
 
+import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.Point
-import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.infrastructure.user.PointJpaRepository
-import com.loopers.interfaces.api.point.PointChargeRequest
-import com.loopers.interfaces.api.point.PointResponse
+import com.loopers.infrastructure.user.UserJpaRepository
+import com.loopers.interfaces.api.ApiResponse
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
@@ -29,7 +28,7 @@ class PointV1ApiE2ETest(
         databaseCleanUp.truncateAllTables()
     }
     /**
-     * @see com.loopers.interfaces.api.point.PointV1Controller.charge
+     * @see PointV1Controller.charge
      */
     describe("POST /api/v1/points/charge") {
         val url = "/api/v1/points/charge"

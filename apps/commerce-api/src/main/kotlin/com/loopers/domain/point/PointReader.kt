@@ -1,5 +1,7 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
+import com.loopers.domain.user.LoginId
+import com.loopers.domain.user.UserRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import org.springframework.stereotype.Component

@@ -1,6 +1,7 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.user.User
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn

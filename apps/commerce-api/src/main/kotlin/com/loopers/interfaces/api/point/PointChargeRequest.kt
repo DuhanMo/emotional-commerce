@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.point
 
-import com.loopers.domain.user.ChargePointCommand
+import com.loopers.domain.point.ChargePointCommand
 import com.loopers.domain.user.LoginId
 import jakarta.validation.constraints.Min
 

@@ -1,4 +1,4 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.point
 
-import com.loopers.application.user.PointService
+import com.loopers.application.point.PointService
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid

@@ -1,6 +1,6 @@
-package com.loopers.application.user
+package com.loopers.application.point
 
-import com.loopers.domain.user.Point
+import com.loopers.domain.point.Point
 
 data class PointOutput(
     val point: Int,

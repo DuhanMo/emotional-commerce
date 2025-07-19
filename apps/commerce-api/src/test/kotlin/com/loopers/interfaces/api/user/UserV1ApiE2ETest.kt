@@ -1,11 +1,10 @@
-package com.loopers.interfaces.api
+package com.loopers.interfaces.api.user
 
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.user.UserJpaRepository
-import com.loopers.interfaces.api.user.UserRegisterRequest
-import com.loopers.interfaces.api.user.UserResponse
+import com.loopers.interfaces.api.ApiResponse
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
@@ -29,7 +28,7 @@ class UserV1ApiE2ETest(
     }
 
     /**
-     * @see com.loopers.interfaces.api.user.UserV1Controller.register
+     * @see UserV1Controller.register
      */
     describe("POST /api/v1/users") {
         val url = "/api/v1/users"
@@ -62,7 +61,7 @@ class UserV1ApiE2ETest(
     }
 
     /**
-     * @see com.loopers.interfaces.api.user.UserV1Controller.getMe
+     * @see UserV1Controller.getMe
      */
     describe("GET /api/v1/users/me") {
         val url = "/api/v1/users/me"

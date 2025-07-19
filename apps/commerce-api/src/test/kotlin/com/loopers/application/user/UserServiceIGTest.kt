@@ -1,13 +1,12 @@
-package com.loopers.application
+package com.loopers.application.user
 
-import com.loopers.application.user.UserService
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
-import com.loopers.domain.user.PointWriter
+import com.loopers.domain.point.PointWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser

@@ -1,4 +1,4 @@
-package com.loopers.domain.user
+package com.loopers.domain.point
 
 interface PointRepository {
     fun findByUserId(userId: Long): Point?

@@ -1,7 +1,7 @@
 package com.loopers.infrastructure.user
 
-import com.loopers.domain.user.Point
-import com.loopers.domain.user.PointRepository
+import com.loopers.domain.point.Point
+import com.loopers.domain.point.PointRepository
 import org.springframework.stereotype.Repository
 
 @Repository
