@@ -6,7 +6,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 
 class UserTest : StringSpec({
-    "ID가 영문 및 숫자 10자 이내 형식이 아닌 경우, User 객체 생성에 실패한다" {
+    "ID가 영문 및 숫자 10자 이내 형식이 아닌 경우, 유저 객체 생성에 실패한다" {
         listOf(
             "한글ID",
             "aaa",
@@ -24,7 +24,7 @@ class UserTest : StringSpec({
         }
     }
 
-    "ID가 영문 및 숫자 10자 이내 형식인 경우, User 객체 생성에 성공한다" {
+    "ID가 영문 및 숫자 10자 이내 형식인 경우, 유저 객체 생성에 성공한다" {
         listOf(
             "a123456789",
             "123456789b",
@@ -41,7 +41,7 @@ class UserTest : StringSpec({
         }
     }
 
-    "이메일 형식이 올바르지 않은 경우, User 객체 생성에 실패한다" {
+    "이메일 형식이 올바르지 않은 경우, 유저 객체 생성에 실패한다" {
         listOf(
             "invalidemail",
             "invalid@.com",
@@ -59,7 +59,7 @@ class UserTest : StringSpec({
         }
     }
 
-    "이메일 형식이 올바른 경우, User 객체 생성에 성공한다" {
+    "이메일 형식이 올바른 경우, 유저 객체 생성에 성공한다" {
         listOf(
             "test@test.com",
             "gildong@gmail.com",
@@ -76,7 +76,7 @@ class UserTest : StringSpec({
         }
     }
 
-    "생년월일이 yyyy-MM-dd 형식이 아닌 경우, User 객체 생성에 실패한다" {
+    "생년월일이 yyyy-MM-dd 형식이 아닌 경우, 유저 객체 생성에 실패한다" {
         listOf(
             "2025/01/01",
             "25-01-01",
@@ -99,7 +99,7 @@ class UserTest : StringSpec({
         }
     }
 
-    "생년월일이 yyyy-MM-dd 형식인 경우, User 객체 생성에 성공한다" {
+    "생년월일이 yyyy-MM-dd 형식인 경우, 유저 객체 생성에 성공한다" {
         listOf(
             "2025-01-01",
             "2000-12-31",

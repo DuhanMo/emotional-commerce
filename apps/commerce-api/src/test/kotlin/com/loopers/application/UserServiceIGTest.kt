@@ -40,11 +40,11 @@ class UserServiceIGTest(
         When("회원 가입 하면") {
             userService.register(command)
 
-            Then("User 저장이 수행된다") {
+            Then("유저 저장이 수행된다") {
                 verify(exactly = 1) { userWriterSpy.write(any()) }
             }
 
-            Then("Point 저장이 수행된다") {
+            Then("포인트 저장이 수행된다") {
                 verify(exactly = 1) { pointWriterSpy.write(any()) }
             }
         }
