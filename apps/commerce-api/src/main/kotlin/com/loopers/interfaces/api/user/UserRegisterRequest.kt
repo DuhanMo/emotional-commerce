@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.user
 
+import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
@@ -31,7 +32,7 @@ data class UserRegisterRequest(
     fun toCommand(): UserRegisterCommand = UserRegisterCommand(
         loginId = LoginId(loginId),
         email = Email(email),
-        birthDate = birthDate,
+        birthDate = BirthDate(birthDate),
         gender = gender!!,
     )
 }

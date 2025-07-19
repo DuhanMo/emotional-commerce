@@ -17,7 +17,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId(invalidValue),
                     email = Email("test@test.com"),
-                    birthDate = "2000-01-01",
+                    birthDate = BirthDate("2000-01-01"),
                     gender = Gender.MALE,
                 )
             }
@@ -34,7 +34,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId(validValue),
                     email = Email("test@test.com"),
-                    birthDate = "2000-01-01",
+                    birthDate = BirthDate("2000-01-01"),
                     gender = Gender.MALE,
                 )
             }
@@ -52,7 +52,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId("test123"),
                     email = Email(invalidEmail),
-                    birthDate = "2000-01-01",
+                    birthDate = BirthDate("2000-01-01"),
                     gender = Gender.MALE,
                 )
             }
@@ -69,7 +69,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId("test123"),
                     email = Email(validEmail),
-                    birthDate = "2000-01-01",
+                    birthDate = BirthDate("2000-01-01"),
                     gender = Gender.MALE,
                 )
             }
@@ -92,7 +92,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId("test123"),
                     email = Email("test@test.com"),
-                    birthDate = invalidBirthDate,
+                    birthDate = BirthDate(invalidBirthDate),
                     gender = Gender.MALE,
                 )
             }
@@ -110,7 +110,7 @@ class UserTest : StringSpec({
                 User(
                     loginId = LoginId("test123"),
                     email = Email("test@test.com"),
-                    birthDate = validBirthDate,
+                    birthDate = BirthDate(validBirthDate),
                     gender = Gender.MALE,
                 )
             }

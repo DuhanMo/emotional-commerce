@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.user
 
+import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
@@ -71,7 +72,7 @@ class UserV1ApiE2ETest(
                 createUser(
                     loginId = LoginId("test123"),
                     email = Email("test@test.com"),
-                    birthDate = "2025-01-01",
+                    birthDate = BirthDate("2025-01-01"),
                     gender = Gender.MALE,
                 ),
             )

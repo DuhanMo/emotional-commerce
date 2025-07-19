@@ -5,53 +5,13 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
-import java.time.LocalDate
 
 @Table(name = "users")
 @Entity
 class User(
     val loginId: LoginId,
     val email: Email,
-    val birthDate: String,
+    val birthDate: BirthDate,
     @Enumerated(EnumType.STRING)
     val gender: Gender,
-) : BaseEntity() {
-    init {
-        validate()
-    }
-
-    private fun validate() {
-        runCatching {
-            BIRTH_DATE_PATTERN.matches(birthDate)
-            LocalDate.parse(birthDate)
-        }.getOrElse {
-            throw IllegalArgumentException("생년월일은 yyyy-MM-dd 형식이어야 합니다.")
-        }
-    }
-
-    companion object {
-        private val BIRTH_DATE_PATTERN = "^\\d{4}-\\d{2}-\\d{2}$".toRegex()
-    }
-}
-
-@JvmInline
-value class LoginId(val value: String) {
-    init {
-        require(ID_PATTERN.matches(value)) { "ID는 영문과 숫자를 모두 포함한 10자 이하여야 합니다." }
-    }
-
-    companion object {
-        private val ID_PATTERN = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{1,10}$".toRegex()
-    }
-}
-
-@JvmInline
-value class Email(val value: String) {
-    init {
-        require(EMAIL_PATTERN.matches(value)) { "이메일이 형식에 맞지 않습니다." }
-    }
-
-    companion object {
-        private val EMAIL_PATTERN = "^[^@]+@[^@]+\\.[^@]+$".toRegex()
-    }
-}
+) : BaseEntity()

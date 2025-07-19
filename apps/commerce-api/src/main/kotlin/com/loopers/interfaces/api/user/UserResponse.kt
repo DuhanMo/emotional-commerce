@@ -22,7 +22,7 @@ data class UserResponse(
             id = output.id,
             loginId = output.loginId.value,
             email = output.email.value,
-            birthDate = output.birthDate,
+            birthDate = output.birthDate.value,
             gender = output.gender,
         )
     }

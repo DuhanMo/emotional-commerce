@@ -7,6 +7,7 @@ import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
 import com.loopers.domain.point.PointWriter
+import com.loopers.domain.user.BirthDate
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -69,7 +70,7 @@ class UserServiceIGTest(
 private fun createUserCreateCommand(
     loginId: LoginId = LoginId("test123"),
     email: Email = Email("test@test.com"),
-    birthDate: String = "1999-12-25",
+    birthDate: BirthDate = BirthDate("1999-12-25"),
     gender: Gender = Gender.MALE,
 ): UserRegisterCommand = UserRegisterCommand(
     loginId = loginId,
