@@ -7,16 +7,16 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
-@Table(name = "wallet")
+@Table(name = "point")
 @Entity
-class Wallet(
+class Point(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn("user_id")
     val user: User,
-    var point: Int = 0,
+    var amount: Int = 0,
 ) : BaseEntity() {
-    fun charge(point: Int) {
-        require(point > 0) { "포인트는 0보다 커야 합니다." }
-        this.point += point
+    fun charge(amount: Int) {
+        require(amount > 0) { "포인트는 0보다 커야 합니다." }
+        this.amount += amount
     }
 }

@@ -1,11 +1,11 @@
 package com.loopers.interfaces.api
 
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.Wallet
+import com.loopers.domain.user.Point
 import com.loopers.infrastructure.user.UserJpaRepository
-import com.loopers.infrastructure.user.WalletJpaRepository
-import com.loopers.interfaces.api.wallet.PointChargeRequest
-import com.loopers.interfaces.api.wallet.WalletResponse
+import com.loopers.infrastructure.user.PointJpaRepository
+import com.loopers.interfaces.api.point.PointChargeRequest
+import com.loopers.interfaces.api.point.PointResponse
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ETest
 import com.loopers.utils.DatabaseCleanUp
@@ -19,9 +19,9 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
 @E2ETest
-class WalletV1ApiE2ETest(
+class PointV1ApiE2ETest(
     private val userJpaRepository: UserJpaRepository,
-    private val walletJpaRepository: WalletJpaRepository,
+    private val pointJpaRepository: PointJpaRepository,
     private val testRestTemplate: TestRestTemplate,
     private val databaseCleanUp: DatabaseCleanUp,
 ) : DescribeSpec({
@@ -29,17 +29,17 @@ class WalletV1ApiE2ETest(
         databaseCleanUp.truncateAllTables()
     }
     /**
-     * @see com.loopers.interfaces.api.wallet.PointV1Controller.charge
+     * @see com.loopers.interfaces.api.point.PointV1Controller.charge
      */
     describe("POST /api/v1/points/charge") {
         val url = "/api/v1/points/charge"
 
         context("존재하는 유저가 1000원을 충전하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            walletJpaRepository.save(Wallet(user, 2_000))
+            pointJpaRepository.save(Point(user, 2_000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
             val request = PointChargeRequest(1_000)
-            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 
             it("충전된 보유 총량을 응답으로 반환한다") {
                 val response =
@@ -52,10 +52,10 @@ class WalletV1ApiE2ETest(
 
         context("존재하지 않는 유저로 요청하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            walletJpaRepository.save(Wallet(user, 2000))
+            pointJpaRepository.save(Point(user, 2000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "xyz789") }
             val request = PointChargeRequest(1000)
-            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 
             it("404 Not Found 응답을 반환한다") {
                 val response =
@@ -71,9 +71,9 @@ class WalletV1ApiE2ETest(
 
         context("해당 ID 의 회원이 존재할 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            walletJpaRepository.save(Wallet(user, 500))
+            pointJpaRepository.save(Point(user, 500))
             val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
-            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 
             it("보유 포인트가 반환된다") {
                 val response =
@@ -86,9 +86,9 @@ class WalletV1ApiE2ETest(
 
         context("X-USER-ID 헤더가 없을 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            walletJpaRepository.save(Wallet(user, 2000))
+            pointJpaRepository.save(Point(user, 2000))
             val headers = HttpHeaders()
-            val responseType = object : ParameterizedTypeReference<ApiResponse<WalletResponse>>() {}
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 
             it("400 Bad Request 응답을 반환한다") {
                 val response =

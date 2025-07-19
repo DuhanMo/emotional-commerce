@@ -4,9 +4,9 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class WalletWriter(
-    private val walletRepository: WalletRepository,
+class PointWriter(
+    private val pointRepository: PointRepository,
 ) {
     @Transactional
-    fun write(wallet: Wallet): Wallet = walletRepository.save(wallet)
+    fun write(point: Point): Point = pointRepository.save(point)
 }

@@ -1,4 +1,4 @@
-package com.loopers.interfaces.api.wallet
+package com.loopers.interfaces.api.point
 
 import com.loopers.domain.user.ChargePointCommand
 import com.loopers.domain.user.LoginId

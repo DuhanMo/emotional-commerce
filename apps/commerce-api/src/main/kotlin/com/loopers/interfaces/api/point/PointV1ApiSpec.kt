@@ -1,4 +1,4 @@
-package com.loopers.interfaces.api.wallet
+package com.loopers.interfaces.api.point
 
 import com.loopers.interfaces.api.ApiResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 
 @Tag(name = "Point V1 API", description = "포인트 관리 API")
-interface WalletV1ApiSpec {
+interface PointV1ApiSpec {
 
     @Operation(
         summary = "포인트 충전",
@@ -39,7 +39,7 @@ interface WalletV1ApiSpec {
         )
         @Schema(name = "로그인 ID", description = "조회할 유저의 ID")
         @RequestHeader("X-USER-ID") loginId: String,
-        ): ApiResponse<WalletResponse>
+        ): ApiResponse<PointResponse>
 
     @Operation(
         summary = "내 포인트 조회",
@@ -62,5 +62,5 @@ interface WalletV1ApiSpec {
         )
         @Schema(name = "로그인 ID", description = "조회할 유저의 ID")
         @RequestHeader("X-USER-ID") loginId: String,
-    ): ApiResponse<WalletResponse>
+    ): ApiResponse<PointResponse>
 }

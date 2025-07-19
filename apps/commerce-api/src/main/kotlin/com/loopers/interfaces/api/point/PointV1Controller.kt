@@ -1,6 +1,6 @@
-package com.loopers.interfaces.api.wallet
+package com.loopers.interfaces.api.point
 
-import com.loopers.application.user.WalletService
+import com.loopers.application.user.PointService
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/points")
-class WalletV1Controller(
-    private val walletService: WalletService,
-) : WalletV1ApiSpec {
+class PointV1Controller(
+    private val pointService: PointService,
+) : PointV1ApiSpec {
     @PostMapping("/charge")
     override fun charge(
         @Valid @RequestBody request: PointChargeRequest,
         @RequestHeader("X-USER-ID") loginId: String,
-    ): ApiResponse<WalletResponse> {
-        val response = WalletResponse.from(walletService.charge(request.toCommand(loginId)))
+    ): ApiResponse<PointResponse> {
+        val response = PointResponse.from(pointService.charge(request.toCommand(loginId)))
         return ApiResponse.success(response)
     }
 
     @GetMapping
     override fun find(
         @RequestHeader("X-USER-ID") loginId: String,
-    ): ApiResponse<WalletResponse> {
-        val response = WalletResponse.from(walletService.find(LoginId(loginId)))
+    ): ApiResponse<PointResponse> {
+        val response = PointResponse.from(pointService.find(LoginId(loginId)))
         return ApiResponse.success(response)
     }
 }
