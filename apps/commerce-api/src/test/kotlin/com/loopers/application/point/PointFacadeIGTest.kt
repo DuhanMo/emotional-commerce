@@ -27,7 +27,7 @@ class PointFacadeIGTest(
 
     Given("로그인 ID가 존재하지 않는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-        pointJpaRepository.save(Point(user))
+        pointJpaRepository.save(Point(user.id))
 
         When("포인트를 충전하면") {
             Then("예외 발생한다") {
@@ -40,7 +40,7 @@ class PointFacadeIGTest(
 
     Given("로그인 ID가 존재하는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-        val point = pointJpaRepository.save(Point(user))
+        val point = pointJpaRepository.save(Point(user.id))
 
         When("포인트를 충전하면") {
             pointFacade.charge(ChargePointCommand(LoginId("abc123"), 100))

@@ -35,7 +35,7 @@ class PointV1ApiE2ETest(
 
         context("존재하는 유저가 1000원을 충전하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            pointJpaRepository.save(Point(user, 2_000))
+            pointJpaRepository.save(Point(user.id, 2_000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
             val request = PointChargeRequest(1_000)
             val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
@@ -51,7 +51,7 @@ class PointV1ApiE2ETest(
 
         context("존재하지 않는 유저로 요청하는 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            pointJpaRepository.save(Point(user, 2000))
+            pointJpaRepository.save(Point(user.id, 2000))
             val headers = HttpHeaders().apply { set("X-USER-ID", "xyz789") }
             val request = PointChargeRequest(1000)
             val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
@@ -70,7 +70,7 @@ class PointV1ApiE2ETest(
 
         context("해당 ID 의 회원이 존재할 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            pointJpaRepository.save(Point(user, 500))
+            pointJpaRepository.save(Point(user.id, 500))
             val headers = HttpHeaders().apply { set("X-USER-ID", "abc123") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 
@@ -85,7 +85,7 @@ class PointV1ApiE2ETest(
 
         context("X-USER-ID 헤더가 없을 경우") {
             val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
-            pointJpaRepository.save(Point(user, 2000))
+            pointJpaRepository.save(Point(user.id, 2000))
             val headers = HttpHeaders()
             val responseType = object : ParameterizedTypeReference<ApiResponse<PointResponse>>() {}
 

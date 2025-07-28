@@ -1,19 +1,13 @@
 package com.loopers.domain.point
 
 import com.loopers.domain.BaseEntity
-import com.loopers.domain.user.User
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 
 @Table(name = "point")
 @Entity
 class Point(
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn("user_id")
-    val user: User,
+    val userId: Long,
     var amount: Int = 0,
 ) : BaseEntity() {
     fun charge(amount: Int) {
