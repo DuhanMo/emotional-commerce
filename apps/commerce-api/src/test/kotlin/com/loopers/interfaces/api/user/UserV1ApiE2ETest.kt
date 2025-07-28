@@ -7,9 +7,7 @@ import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.interfaces.api.ApiResponse
 import com.loopers.support.fixture.createUser
-import com.loopers.support.tests.E2ETest
-import com.loopers.utils.DatabaseCleanUp
-import io.kotest.core.spec.style.DescribeSpec
+import com.loopers.support.tests.E2ESpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
@@ -18,16 +16,10 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
-@E2ETest
 class UserV1ApiE2ETest(
     private val userJpaRepository: UserJpaRepository,
     private val testRestTemplate: TestRestTemplate,
-    private val databaseCleanUp: DatabaseCleanUp,
-) : DescribeSpec({
-    afterEach {
-        databaseCleanUp.truncateAllTables()
-    }
-
+) : E2ESpec({
     /**
      * @see UserV1Controller.register
      */
