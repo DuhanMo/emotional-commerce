@@ -71,7 +71,7 @@ sequenceDiagram
 	participant PS as ProductService
 	
 	participant PLR as ProductLikeRepository
-	participant PSR as ProductStatisticRepository
+	participant PSR as ProductSummaryRepository
 
 	U->>PC: POST /api/v1/products/{productId}/likes
 	
@@ -91,7 +91,7 @@ sequenceDiagram
 		PS-->>PC: 400 Bad Request
 	else 이미 등록한 좋아요가 없는 경우
 		PS->>PLR: 좋아요 저장
-		PS->>PLCR: 좋아요 카운트 증가
+		PS->>PSR: 좋아요 카운트 증가
 	end
 ```
 
@@ -105,7 +105,7 @@ sequenceDiagram
 	participant PS as ProductService
 	
 	participant PLR as ProductLikeRepository
-	participant PSR as ProductStatisticRepository
+	participant PSR as ProductSummaryRepository
 
 	U->>PC: DELETE /api/v1/products/{productId}/likes
 	
@@ -125,7 +125,7 @@ sequenceDiagram
 		PS-->>PC: 400 Bad Request
 	else 이미 등록한 좋아요가 있는 경우		
 		PS->>PLR: 좋아요 소프트 딜리트
-		PS->>PLCR: 좋아요 카운트 감소
+		PS->>PSR: 좋아요 카운트 감소
 	end
 
 ```
