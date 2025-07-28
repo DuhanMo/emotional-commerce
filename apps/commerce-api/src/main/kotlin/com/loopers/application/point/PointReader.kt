@@ -1,5 +1,7 @@
-package com.loopers.domain.point
+package com.loopers.application.point
 
+import com.loopers.domain.point.Point
+import com.loopers.domain.point.PointRepository
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserRepository
 import com.loopers.support.error.CoreException

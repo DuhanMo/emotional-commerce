@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.point
 
-import com.loopers.application.point.PointFacade
+import com.loopers.application.point.PointService
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/points")
 class PointV1Controller(
-    private val pointFacade: PointFacade,
+    private val pointService: PointService,
 ) : PointV1ApiSpec {
     @PostMapping("/charge")
     override fun charge(
         @Valid @RequestBody request: PointChargeRequest,
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<PointResponse> {
-        val response = PointResponse.from(pointFacade.charge(request.toCommand(loginId)))
+        val response = PointResponse.from(pointService.charge(request.toCommand(loginId)))
         return ApiResponse.success(response)
     }
 
@@ -29,7 +29,7 @@ class PointV1Controller(
     override fun find(
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<PointResponse> {
-        val response = PointResponse.from(pointFacade.find(LoginId(loginId)))
+        val response = PointResponse.from(pointService.find(LoginId(loginId)))
         return ApiResponse.success(response)
     }
 }

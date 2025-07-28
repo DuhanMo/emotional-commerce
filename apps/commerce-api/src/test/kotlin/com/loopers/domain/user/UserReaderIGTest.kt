@@ -1,5 +1,6 @@
 package com.loopers.domain.user
 
+import com.loopers.application.user.UserReader
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationSpec

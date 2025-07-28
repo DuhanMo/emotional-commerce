@@ -1,5 +1,8 @@
-package com.loopers.domain.user
+package com.loopers.application.user
 
+import com.loopers.domain.user.LoginId
+import com.loopers.domain.user.User
+import com.loopers.domain.user.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

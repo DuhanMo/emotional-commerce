@@ -1,5 +1,6 @@
 package com.loopers.domain.point
 
+import com.loopers.application.point.PointReader
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository

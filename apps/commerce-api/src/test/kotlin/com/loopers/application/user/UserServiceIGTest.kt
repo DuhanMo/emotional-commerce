@@ -1,13 +1,11 @@
 package com.loopers.application.user
 
-import com.loopers.domain.point.PointWriter
+import com.loopers.application.point.PointWriter
 import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
-import com.loopers.domain.user.UserWriter
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -17,7 +15,7 @@ import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 
-class UserFacadeIGTest(
+class UserServiceIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val pointWriter: PointWriter,
@@ -26,11 +24,11 @@ class UserFacadeIGTest(
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userWriter)
         val pointWriterSpy = spyk(pointWriter)
-        val userFacade = UserFacade(userWriterSpy, userReader, pointWriterSpy)
+        val userService = UserService(userWriterSpy, userReader, pointWriterSpy)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
-            userFacade.register(command)
+            userService.register(command)
 
             Then("유저 저장이 수행된다") {
                 verify(exactly = 1) { userWriterSpy.write(any()) }
@@ -43,7 +41,7 @@ class UserFacadeIGTest(
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
-        val userFacade = UserFacade(userWriter, userReader, pointWriter)
+        val userService = UserService(userWriter, userReader, pointWriter)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
         val command = createUserCreateCommand(loginId = existLoginId)
@@ -51,7 +49,7 @@ class UserFacadeIGTest(
         When("회원 가입 하면") {
             Then("예외 발생한다") {
                 val exception = assertThrows<CoreException> {
-                    userFacade.register(command)
+                    userService.register(command)
                 }
                 exception.message shouldBe "이미 존재하는 ID 입니다"
             }

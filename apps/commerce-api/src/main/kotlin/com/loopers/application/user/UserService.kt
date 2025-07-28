@@ -1,18 +1,16 @@
 package com.loopers.application.user
 
 import com.loopers.domain.point.Point
-import com.loopers.domain.point.PointWriter
+import com.loopers.application.point.PointWriter
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
-import com.loopers.domain.user.UserWriter
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserFacade(
+class UserService(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val pointWriter: PointWriter,

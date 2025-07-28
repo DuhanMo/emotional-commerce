@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.user
 
-import com.loopers.application.user.UserFacade
+import com.loopers.application.user.UserService
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/users")
 class UserV1Controller(
-    private val userFacade: UserFacade,
+    private val userService: UserService,
 ) : UserV1ApiSpec {
     @PostMapping
     override fun register(
         @Valid @RequestBody request: UserRegisterRequest,
     ): ApiResponse<UserResponse> {
-        val response = UserResponse.from(userFacade.register(request.toCommand()))
+        val response = UserResponse.from(userService.register(request.toCommand()))
         return ApiResponse.success(response)
     }
 
@@ -28,7 +28,7 @@ class UserV1Controller(
     override fun getMe(
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<UserResponse> {
-        val response = UserResponse.from(userFacade.getMe(LoginId(loginId)))
+        val response = UserResponse.from(userService.getMe(LoginId(loginId)))
         return ApiResponse.success(response)
     }
 }
