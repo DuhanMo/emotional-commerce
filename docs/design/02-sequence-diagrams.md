@@ -9,7 +9,7 @@ sequenceDiagram
 	U->>PC: GET /api/v1/products<br/>(brandId, sortBy: atest/price_asc/like_asc)
 	PC->>PS: 상품 목록 조회 요청 (brandId, sortBy)
 	PS->>PC: 상품 목록 반환
-	PC->>U: 상품 목록 응답
+	PC-->>U: 상품 목록 응답
 	
 	
 	
@@ -26,14 +26,14 @@ sequenceDiagram
 	U->>PC: GET /api/v1/products/{productId}
 	PC->>PS: 상품 상세 조회 요청 (productId)
 	alt 존재하지 않는 상품
-		PS->>PC: 404 Not Found
+		PS-->>PC: 404 Not Found
 	else 판매 중지 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else 삭제된 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else
-		PS->>PC: 상품 상세 정보 반환
-		PC->>U: 상품 상세 정보 응답
+		PS-->>PC: 상품 상세 정보 반환
+		PC-->>U: 상품 상세 정보 응답
 end	
 	
 	
@@ -50,14 +50,14 @@ sequenceDiagram
 	U->>BC: GET /api/v1/brands/{brandId}
 	BC->>BS: 브랜드 상세 조회 요청 (brandId)
 	alt 존재하지 않는 브랜드
-		BS->>BC: 404 Not Found
+		BS-->>BC: 404 Not Found
 	else 퇴점한 브랜드
-		BS->>BC: 400 Bad Request
+		BS-->>BC: 400 Bad Request
 	else 삭제된 브랜드
-		BS->>BC: 400 Bad Request
+		BS-->>BC: 400 Bad Request
 	else
-		BS->>BC: 브랜드 상세 반환
-		BC->>U: 브랜드 상세 응답
+		BS-->>BC: 브랜드 상세 반환
+		BC-->>U: 브랜드 상세 응답
 end
 ```
 
@@ -71,24 +71,24 @@ sequenceDiagram
 	participant PS as ProductService
 	
 	participant PLR as ProductLikeRepository
-	participant PLCR as ProductLikeCountRepository
+	participant PSR as ProductStatisticRepository
 
 	U->>PC: POST /api/v1/products/{productId}/likes
 	
 	PC->>US: 사용자 인증 확인 (X-USER-ID)
 	alt 인증 실패 (사용자 미존재, 헤더 미존재)
-		US->>PC: 401 Unauthorized
+		US-->>PC: 401 Unauthorized
 	else 인증 성공
-		US->>PC: 사용자 정보 반환
+		US-->>PC: 사용자 정보 반환
 	end
 	
 	PC->>PS: 상품 좋아요 등록 요청 (userId, productId)
 	alt 존재하지 않는 상품
-		PS->>PC: 404 Not Found
+		PS-->>PC: 404 Not Found
 	else 삭제된 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else 판매 중지된 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else 이미 등록한 좋아요가 없는 경우
 		PS->>PLR: 좋아요 저장
 		PS->>PLCR: 좋아요 카운트 증가
@@ -105,24 +105,24 @@ sequenceDiagram
 	participant PS as ProductService
 	
 	participant PLR as ProductLikeRepository
-	participant PLCR as ProductLikeCountRepository
+	participant PSR as ProductStatisticRepository
 
 	U->>PC: DELETE /api/v1/products/{productId}/likes
 	
 	PC->>US: 사용자 인증 확인 (X-USER-ID)
 	alt 인증 실패 (사용자 미존재, 헤더 미존재)
-		US->>PC: 401 Unauthorized
+		US-->>PC: 401 Unauthorized
 	else 인증 성공
-		US->>PC: 사용자 정보 반환
+		US-->>PC: 사용자 정보 반환
 	end
 	
 	PC->>PS: 상품 좋아요 취소 요청 (userId, productId)
 	alt 존재하지 않는 상품
-		PS->>PC: 404 Not Found
+		PS-->>PC: 404 Not Found
 	else 삭제된 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else 판매 중지된 상품
-		PS->>PC: 400 Bad Request
+		PS-->>PC: 400 Bad Request
 	else 이미 등록한 좋아요가 있는 경우		
 		PS->>PLR: 좋아요 소프트 딜리트
 		PS->>PLCR: 좋아요 카운트 감소
@@ -147,19 +147,19 @@ sequenceDiagram
 
 	OC->>US: 사용자 인증 확인 (X-USER-ID)
 	alt 인증 실패 (사용자 미존재, 헤더 미존재)
-		US->>OC: 401 Unauthorized
+		US-->>OC: 401 Unauthorized
 	else 인증 성공
-		US->>OC: 사용자 정보 반환
+		US-->>OC: 사용자 정보 반환
 	end
 
 	OC->>OS: 주문 생성 요청
 	OS->>PS: 상품 조회 요청 (productId)
 	alt 배송지 없는 경우
-		PS->>OS: 400 Bad Request
+		PS-->>OS: 400 Bad Request
 	else 상품 조회 실패
-		PS->>OS: 400 Bad Request
+		PS-->>OS: 400 Bad Request
 	else 상품 재고 검증 실패
-		PS->>OS: 400 Bad Request
+		PS-->>OS: 400 Bad Request
 	end
 	
 	OS->>OR: 주문 저장
@@ -185,25 +185,24 @@ sequenceDiagram
 
 	OC->>US: 사용자 인증 확인 (X-USER-ID)
 	alt 인증 실패 (사용자 미존재, 헤더 미존재)
-		US->>OC: 401 Unauthorized
+		US-->>OC: 401 Unauthorized
 	else 인증 성공
-		US->>OC: 사용자 정보 반환
+		US-->>OC: 사용자 정보 반환
 	end
 	
 	OC->>OS: 주문 조회 요청 (orderId)
 	alt 주문 없는 경우
-		OS->>OC: 400 Bad Request
+		OS-->>OC: 400 Bad Request
 	end
 	
 	OS->>PS: 상품 재고 검증 요청
 	alt
-		PS->>OS: 400 Bad Request
+		PS-->>OS: 400 Bad Request
 	end
 	
 	OS->>PAYS: 결제 요청 
 	alt 결제 실패 
-		PAYS->>OS: 400 Bad Request
-		OS->>PS: 재고 복원
+		PAYS-->>OS: 400 Bad Request
 		OS->>OR: 주문상태 실패 업데이트	
 	end
 	
