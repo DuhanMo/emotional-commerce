@@ -15,7 +15,24 @@ classDiagram
         INACTIVE
     }
     
+    class Point {
+        -Long id
+        -Long userId
+        -Int amount
+        +charge()
+    }
+    
+    class PointLog {
+        -Long id
+        -Long userId
+        -Long pointId
+        -Int amount
+    }
+    
     User --> UserStatus : has 
+    Point --> User
+    PointLog --> User
+    PointLog --> Point
 ```
 
 # 상품 도메인
@@ -48,11 +65,10 @@ classDiagram
         -String name
         -String imageUrl
         -ProductStatus status
-	      -Boolean deleted
-	      +increaseStock(quantity)
-	      +decreaseStock(quantity)
+        -Boolean deleted
+        +increaseStock(quantity)
+        +decreaseStock(quantity)
     }
-   
     
     class ProductStatus {
         <<enumeration>>
@@ -70,13 +86,13 @@ classDiagram
         +restore()
     }
     
-    %% 상품 좋아요 카운트 (집계)
-    class ProductLikeCount {
-	      -Long id
+    %% 상품 집계
+    class ProductSummary {
+        -Long id
         -Long productId
         -Int likeCount
-        +increase()
-        +decrease()
+        +increaseLikeCount()
+        +decreaseLikeCount()
     }
     
     %% 관계
@@ -85,7 +101,7 @@ classDiagram
     Brand --> BrandStatus : has
     
     ProductLike --> Product
-    ProductLikeCount --> Product
+    ProductSummary --> Product
 ```
 
 ## 주문 도메인
@@ -100,7 +116,6 @@ classDiagram
         -Address deliveryAddress
         -Int totalAmount
         -LocalDateTime orderedAt
-        +addOrderLine(OrderLine)
     }
     
     %% 주문 상품
@@ -132,7 +147,7 @@ classDiagram
     }
     
     %% 관계
-    Order --> "1..*" OrderLine
+    OrderLine --> Order
     Order --> Address : has
     Order --> OrderStatus : has
 ```
@@ -148,7 +163,8 @@ classDiagram
         -Int amount
         -PaymentStatus status
         -String transactionId
-        -LocalDateTime paidAt    }
+        -LocalDateTime paidAt
+    }
     
     class PaymentMethod {
         <<enumeration>>
@@ -164,19 +180,9 @@ classDiagram
         REFUNDED
     }
     
-    %% 결제 실패 정보
-    class PaymentFailure {
-		    -Long id
-        -Long paymentId
-        -String failureReason
-        -String errorCode
-        -LocalDateTime failedAt
-    }
-    
     %% 관계
-    Payment --> PaymentMethod
-    Payment --> PaymentStatus
-    Payment --> PaymentFailure
+    Payment --> PaymentMethod : has
+    Payment --> PaymentStatus : has
 ```
 
 ## 도메인간 연관관계
@@ -202,7 +208,7 @@ classDiagram
         -Long productId
     }
     
-    class ProductLikeCount {
+    class ProductSummary {
         -Long productId
     }
     
@@ -221,22 +227,17 @@ classDiagram
         -Long userId
     }
     
-    class PaymentFailure {
-        -Long paymentId
-    }
+
+    ProductLike --> User
+    ProductLike --> Product
+    ProductSummary --> Product
     
-    %% 도메인 간 연관관계
-    User --> ProductLike : 좋아요
-    Product --> ProductLike : 좋아요받음
-    Product --> ProductLikeCount : 집계
+    Order --> User
+    OrderLine --> Order
+    OrderLine --> Product
     
-    User --> Order : 주문
-    Order --> OrderLine : 포함
-    Product --> OrderLine : 주문됨
+    Payment --> Order
+    Payment --> User
     
-    User --> Payment : 결제
-    Order --> Payment : 결제됨
-    Payment --> PaymentFailure : 실패정보
-    
-    Brand --> Product : 보유
+    Product --> Brand
 ```
