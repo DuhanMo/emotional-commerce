@@ -8,5 +8,7 @@ class PointWriter(
     private val pointRepository: PointRepository,
 ) {
     @Transactional
-    fun write(point: Point): Point = pointRepository.save(point)
+    fun write(point: Point): Point {
+        return pointRepository.save(point)
+    }
 }

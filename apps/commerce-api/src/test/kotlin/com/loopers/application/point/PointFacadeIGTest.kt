@@ -7,24 +7,16 @@ import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
-import com.loopers.support.tests.IntegrationTest
-import com.loopers.utils.DatabaseCleanUp
+import com.loopers.support.tests.IntegrationSpec
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.data.repository.findByIdOrNull
 
-@IntegrationTest
 class PointFacadeIGTest(
     private val pointFacade: PointFacade,
-    private val databaseCleanUp: DatabaseCleanUp,
     private val userJpaRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
-) : BehaviorSpec({
-    afterEach {
-        databaseCleanUp.truncateAllTables()
-    }
-
+) : IntegrationSpec({
     Given("로그인 ID가 존재하지 않는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
         pointJpaRepository.save(Point(user.id))

@@ -4,23 +4,15 @@ import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.fixture.createUser
-import com.loopers.support.tests.IntegrationTest
-import com.loopers.utils.DatabaseCleanUp
-import io.kotest.core.spec.style.BehaviorSpec
+import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-@IntegrationTest
 class PointReaderIGTest(
     private val pointReader: PointReader,
     private val userJapRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
-    private val databaseCleanUp: DatabaseCleanUp,
-) : BehaviorSpec({
-    afterEach {
-        databaseCleanUp.truncateAllTables()
-    }
-
+) : IntegrationSpec({
     Given("해당 ID 의 회원이 존재하는 경우") {
         val user = userJapRepository.save(createUser(LoginId("abc123")))
         pointJpaRepository.save(Point(user.id, 1000))

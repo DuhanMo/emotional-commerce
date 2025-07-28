@@ -2,22 +2,14 @@ package com.loopers.domain.user
 
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.fixture.createUser
-import com.loopers.support.tests.IntegrationTest
-import com.loopers.utils.DatabaseCleanUp
-import io.kotest.core.spec.style.BehaviorSpec
+import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-@IntegrationTest
 class UserReaderIGTest(
     private val userRepository: UserRepository,
     private val userJpaRepository: UserJpaRepository,
-    private val databaseCleanUp: DatabaseCleanUp,
-) : BehaviorSpec({
-    afterEach {
-        databaseCleanUp.truncateAllTables()
-    }
-
+) : IntegrationSpec({
     Given("ID가 일치하는 회원이 존재하는 경우") {
         val userReader = UserReader(userRepository)
         userJpaRepository.save(createUser(loginId = LoginId("abc123")))

@@ -1,36 +1,28 @@
 package com.loopers.application.user
 
+import com.loopers.domain.point.PointWriter
+import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserReader
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriter
-import com.loopers.domain.point.PointWriter
-import com.loopers.domain.user.BirthDate
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
-import com.loopers.support.tests.IntegrationTest
-import com.loopers.utils.DatabaseCleanUp
-import io.kotest.core.spec.style.BehaviorSpec
+import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 
-@IntegrationTest
 class UserFacadeIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val pointWriter: PointWriter,
     private val userJpaRepository: UserJpaRepository,
-    private val databaseCleanUp: DatabaseCleanUp,
-) : BehaviorSpec({
-    afterEach {
-        databaseCleanUp.truncateAllTables()
-    }
-
+) : IntegrationSpec({
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userWriter)
         val pointWriterSpy = spyk(pointWriter)
