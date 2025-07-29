@@ -1,6 +1,5 @@
 package com.loopers.domain.point
 
-import com.loopers.application.point.PointReader
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -9,8 +8,8 @@ import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-class PointReaderIGTest(
-    private val pointReader: PointReader,
+class PointReadServiceIGTest(
+    private val pointReadService: PointReadService,
     private val userJapRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
 ) : IntegrationSpec({
@@ -19,7 +18,7 @@ class PointReaderIGTest(
         pointJpaRepository.save(Point(user.id, 1000))
 
         When("포인트를 조회하면") {
-            val result = pointReader.findByLoginId(user.loginId)
+            val result = pointReadService.findByLoginId(user.loginId)
 
             Then("포인트를 반환한다") {
                 result shouldNotBe null
@@ -33,7 +32,7 @@ class PointReaderIGTest(
         pointJpaRepository.save(Point(user.id, 1000))
 
         When("포인트를 조회하면") {
-            val result = pointReader.findByLoginId(LoginId("xyz789"))
+            val result = pointReadService.findByLoginId(LoginId("xyz789"))
 
             Then("null 을 반환한다") {
                 result shouldBe null

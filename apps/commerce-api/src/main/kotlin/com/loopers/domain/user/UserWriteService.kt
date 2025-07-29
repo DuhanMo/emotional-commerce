@@ -1,12 +1,10 @@
-package com.loopers.application.user
+package com.loopers.domain.user
 
-import com.loopers.domain.user.User
-import com.loopers.domain.user.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class UserWriter(
+class UserWriteService(
     private val userRepository: UserRepository,
 ) {
     @Transactional

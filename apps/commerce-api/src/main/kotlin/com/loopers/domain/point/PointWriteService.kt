@@ -1,13 +1,9 @@
-package com.loopers.application.point
+package com.loopers.domain.point
 
-import com.loopers.domain.point.Point
-import com.loopers.domain.point.PointLog
-import com.loopers.domain.point.PointLogRepository
-import com.loopers.domain.point.PointRepository
 import org.springframework.stereotype.Component
 
 @Component
-class PointWriter(
+class PointWriteService(
     private val pointRepository: PointRepository,
     private val pointLogRepository: PointLogRepository,
 ) {
