@@ -1,7 +1,9 @@
 package com.loopers.domain.point
 
-interface PointRepository {
-    fun findByUserId(userId: Long): Point?
+import com.loopers.domain.user.LoginId
 
+interface PointRepository {
     fun save(point: Point): Point
+
+    fun findByUserLoginId(loginId: LoginId): Point?
 }

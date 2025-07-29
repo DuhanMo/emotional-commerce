@@ -15,15 +15,21 @@ class PointFacade(
 ) {
     @Transactional
     fun charge(command: ChargePointCommand): PointOutput {
-        val point = pointReadService.getByLoginId(command.loginId)
+        val point = pointReadService.getByUserLoginId(command.loginId)
 
         point.charge(command.point)
 
         pointWriteService.write(point)
-        pointWriteService.writeLog(PointLog(userId = point.userId, pointId = point.id, amount = command.point))
+        pointWriteService.writeLog(
+            PointLog(
+                userId = point.userId,
+                pointId = point.id,
+                amount = command.point
+            )
+        )
 
         return PointOutput.from(pointWriteService.write(point))
     }
 
-    fun find(loginId: LoginId): PointOutput = PointOutput.from(pointReadService.getByLoginId(loginId))
+    fun find(loginId: LoginId): PointOutput = PointOutput.from(pointReadService.getByUserLoginId(loginId))
 }
