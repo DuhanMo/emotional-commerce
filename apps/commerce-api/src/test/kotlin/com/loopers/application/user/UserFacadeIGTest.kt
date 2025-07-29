@@ -5,7 +5,7 @@ import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.UserReadService
+import com.loopers.domain.user.UserQueryService
 import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserWriteService
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -19,14 +19,14 @@ import org.junit.jupiter.api.assertThrows
 
 class UserFacadeIGTest(
     private val userWriteService: UserWriteService,
-    private val userReadService: UserReadService,
+    private val userQueryService: UserQueryService,
     private val pointWriteService: PointWriteService,
     private val userJpaRepository: UserJpaRepository,
 ) : IntegrationSpec({
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userWriteService)
         val pointWriterSpy = spyk(pointWriteService)
-        val userFacade = UserFacade(userWriterSpy, userReadService, pointWriterSpy)
+        val userFacade = UserFacade(userWriterSpy, userQueryService, pointWriterSpy)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
@@ -43,7 +43,7 @@ class UserFacadeIGTest(
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
-        val userFacade = UserFacade(userWriteService, userReadService, pointWriteService)
+        val userFacade = UserFacade(userWriteService, userQueryService, pointWriteService)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
         val command = createUserCreateCommand(loginId = existLoginId)

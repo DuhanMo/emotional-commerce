@@ -6,7 +6,7 @@ import com.loopers.support.error.ErrorType
 import org.springframework.stereotype.Component
 
 @Component
-class PointReadService(
+class PointQueryService(
     private val pointRepository: PointRepository,
 ) {
     fun getByUserLoginId(loginId: LoginId): Point = pointRepository.findByUserLoginId(loginId)
