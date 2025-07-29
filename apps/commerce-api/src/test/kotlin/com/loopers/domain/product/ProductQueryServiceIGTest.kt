@@ -33,15 +33,15 @@ class ProductQueryServiceIGTest(
         )
 
         When("상품 목록을 조회하면") {
-            val products = productQueryService.findProducts(sortBy, PageCriteria(0, 20))
+            val results = productQueryService.findProducts(sortBy, PageCriteria(0, 20))
 
             Then("좋아요 순으로 정렬된다") {
-                products shouldHaveSize 5
-                products[0].id shouldBe product3.id
-                products[1].id shouldBe product5.id
-                products[2].id shouldBe product4.id
-                products[3].id shouldBe product2.id
-                products[4].id shouldBe product1.id
+                results shouldHaveSize 5
+                results[0].product.id shouldBe product3.id
+                results[1].product.id shouldBe product5.id
+                results[2].product.id shouldBe product4.id
+                results[3].product.id shouldBe product2.id
+                results[4].product.id shouldBe product1.id
             }
         }
     }
@@ -57,15 +57,15 @@ class ProductQueryServiceIGTest(
         productJpaRepository.saveAll(listOf(product1, product2, product3, product4, product5))
 
         When("상품 목록을 조회하면") {
-            val products = productQueryService.findProducts(sortBy, PageCriteria(0, 20))
+            val results = productQueryService.findProducts(sortBy, PageCriteria(0, 20))
 
             Then("가격 낮은 순으로 정렬된다") {
-                products shouldHaveSize 5
-                products[0].id shouldBe product5.id
-                products[1].id shouldBe product4.id
-                products[2].id shouldBe product1.id
-                products[3].id shouldBe product3.id
-                products[4].id shouldBe product2.id
+                results shouldHaveSize 5
+                results[0].product.id shouldBe product5.id
+                results[1].product.id shouldBe product4.id
+                results[2].product.id shouldBe product1.id
+                results[3].product.id shouldBe product3.id
+                results[4].product.id shouldBe product2.id
             }
         }
     }
@@ -80,12 +80,12 @@ class ProductQueryServiceIGTest(
 
         When("상품 목록을 조회하면") {
             // 두 번째 페이지, 페이지 사이즈 2
-            val products = productQueryService.findProducts("latest", PageCriteria(1, 2))
+            val results = productQueryService.findProducts("latest", PageCriteria(1, 2))
 
             Then("페이징이 적용된다") {
-                products shouldHaveSize 2
-                products[0].id shouldBe product3.id
-                products[1].id shouldBe product2.id
+                results shouldHaveSize 2
+                results[0].product.id shouldBe product3.id
+                results[1].product.id shouldBe product2.id
             }
         }
     }

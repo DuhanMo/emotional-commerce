@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service
 class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {
-    fun findProducts(sortBy: String, pageCriteria: PageCriteria): List<Product> =
+    fun findProducts(sortBy: String, pageCriteria: PageCriteria): List<ProductQueryResult> =
         productRepository.findProducts(sortBy, pageCriteria.pageable)
 }
