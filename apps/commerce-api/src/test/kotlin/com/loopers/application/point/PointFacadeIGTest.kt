@@ -13,8 +13,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.springframework.data.repository.findByIdOrNull
 
-class PointServiceIGTest(
-    private val pointService: PointService,
+class PointFacadeIGTest(
+    private val pointFacade: PointFacade,
     private val userJpaRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
     private val pointLogJpaRepository: PointLogJpaRepository,
@@ -26,7 +26,7 @@ class PointServiceIGTest(
         When("포인트를 충전하면") {
             Then("예외 발생한다") {
                 shouldThrow<CoreException> {
-                    pointService.charge(ChargePointCommand(LoginId("xyz789"), 100))
+                    pointFacade.charge(ChargePointCommand(LoginId("xyz789"), 100))
                 }
             }
         }
@@ -37,7 +37,7 @@ class PointServiceIGTest(
         val point = pointJpaRepository.save(Point(user.id))
 
         When("포인트를 충전하면") {
-            pointService.charge(ChargePointCommand(LoginId("abc123"), 100))
+            pointFacade.charge(ChargePointCommand(LoginId("abc123"), 100))
 
             Then("포인트가 증가하고 포인트 로그가 적재된다") {
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!

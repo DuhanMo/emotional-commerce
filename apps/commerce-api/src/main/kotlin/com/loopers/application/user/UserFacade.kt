@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserService(
+class UserFacade(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val pointWriter: PointWriter,

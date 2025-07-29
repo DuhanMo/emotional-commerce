@@ -15,7 +15,7 @@ import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 
-class UserServiceIGTest(
+class UserFacadeIGTest(
     private val userWriter: UserWriter,
     private val userReader: UserReader,
     private val pointWriter: PointWriter,
@@ -24,11 +24,11 @@ class UserServiceIGTest(
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userWriter)
         val pointWriterSpy = spyk(pointWriter)
-        val userService = UserService(userWriterSpy, userReader, pointWriterSpy)
+        val userFacade = UserFacade(userWriterSpy, userReader, pointWriterSpy)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
-            userService.register(command)
+            userFacade.register(command)
 
             Then("유저 저장이 수행된다") {
                 verify(exactly = 1) { userWriterSpy.write(any()) }
@@ -41,7 +41,7 @@ class UserServiceIGTest(
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
-        val userService = UserService(userWriter, userReader, pointWriter)
+        val userFacade = UserFacade(userWriter, userReader, pointWriter)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
         val command = createUserCreateCommand(loginId = existLoginId)
@@ -49,7 +49,7 @@ class UserServiceIGTest(
         When("회원 가입 하면") {
             Then("예외 발생한다") {
                 val exception = assertThrows<CoreException> {
-                    userService.register(command)
+                    userFacade.register(command)
                 }
                 exception.message shouldBe "이미 존재하는 ID 입니다"
             }
