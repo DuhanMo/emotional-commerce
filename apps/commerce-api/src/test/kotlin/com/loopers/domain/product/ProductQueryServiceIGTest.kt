@@ -5,6 +5,7 @@ import com.loopers.infrastructure.product.ProductJpaRepository
 import com.loopers.infrastructure.product.ProductSummaryJpaRepository
 import com.loopers.support.fixture.createProduct
 import com.loopers.support.tests.IntegrationSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 
@@ -28,7 +29,11 @@ class ProductQueryServiceIGTest(
         productSummaryJpaRepository.save(ProductSummary(product5.id, 5))
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findProducts(sortBy, PageCriteria(0, 20)).content
+            val result = productQueryService.findProducts(
+                brandId = null,
+                sortBy = sortBy,
+                pageCriteria = PageCriteria(0, 20)
+            ).content
 
             Then("좋아요 순으로 정렬된다") {
                 result shouldHaveSize 5
@@ -51,7 +56,11 @@ class ProductQueryServiceIGTest(
         val product5 = productJpaRepository.save(createProduct(price = 100))
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findProducts(sortBy, PageCriteria(0, 20)).content
+            val result = productQueryService.findProducts(
+                brandId = null,
+                sortBy = sortBy,
+                pageCriteria = PageCriteria(0, 20)
+            ).content
 
             Then("가격 낮은 순으로 정렬된다") {
                 result shouldHaveSize 5
@@ -73,12 +82,37 @@ class ProductQueryServiceIGTest(
 
         When("상품 목록을 조회하면") {
             // 두 번째 페이지, 페이지 사이즈 2
-            val result = productQueryService.findProducts("latest", PageCriteria(1, 2)).content
+            val result = productQueryService.findProducts(
+                brandId = null,
+                sortBy = "latest",
+                pageCriteria = PageCriteria(1, 2)
+            ).content
 
             Then("페이징이 적용된다") {
                 result shouldHaveSize 2
                 result[0].product.id shouldBe product3.id
                 result[1].product.id shouldBe product2.id
+            }
+        }
+    }
+
+    Given("브랜드 식별자로 조회하는 경우") {
+        productJpaRepository.save(createProduct(brandId = 1L))
+        productJpaRepository.save(createProduct(brandId = 1L))
+        productJpaRepository.save(createProduct(brandId = 1L))
+        productJpaRepository.save(createProduct(brandId = 99L))
+        productJpaRepository.save(createProduct(brandId = 99L))
+
+        When("상품 목록을 조회하면") {
+            val result = productQueryService.findProducts(
+                brandId = 99L,
+                sortBy = "latest",
+                pageCriteria = PageCriteria(0, 20)
+            ).content
+
+            Then("해당 브랜드의 상품이 조회된다") {
+                result shouldHaveSize 2
+                result.map { it.product }.forAll { it.brandId shouldBe 99L }
             }
         }
     }

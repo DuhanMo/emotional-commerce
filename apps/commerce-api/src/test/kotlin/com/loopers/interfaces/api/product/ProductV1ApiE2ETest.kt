@@ -8,6 +8,7 @@ import com.loopers.support.fixture.createBrand
 import com.loopers.support.fixture.createProduct
 import com.loopers.support.fixture.createProductSummary
 import com.loopers.support.tests.E2ESpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -200,6 +201,31 @@ class ProductV1ApiE2ETest(
             // Then
             response.statusCode.is2xxSuccessful shouldBe true
             response.body?.data?.products!! shouldHaveSize 1
+        }
+
+        it("브랜드 식별자로 조회하는 경우 - 해당 브랜드의 상품이 반환된다") {
+            // Given
+            val brand1 = brandJpaRepository.save(createBrand(name = "브랜드1"))
+            val brand2 = brandJpaRepository.save(createBrand(name = "브랜드2"))
+            productJpaRepository.save(createProduct(brandId = brand1.id))
+            productJpaRepository.save(createProduct(brandId = brand1.id))
+            productJpaRepository.save(createProduct(brandId = brand2.id))
+            productJpaRepository.save(createProduct(brandId = brand2.id))
+
+            val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
+
+            // When
+            val response = testRestTemplate.exchange(
+                "$url?brandId=${brand2.id}",
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                responseType,
+            )
+
+            // Then
+            response.statusCode.is2xxSuccessful shouldBe true
+            response.body?.data?.products!! shouldHaveSize 2
+            response.body?.data?.products?.forAll { it.brandId shouldBe brand2.id }
         }
     }
 })

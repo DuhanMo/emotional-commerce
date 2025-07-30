@@ -15,11 +15,16 @@ class ProductV1Controller(
 ) : ProductV1ApiSpec {
     @GetMapping
     override fun getProducts(
+        @RequestParam brandId: Long?,
         @RequestParam(defaultValue = "latest") sortBy: String,
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "20") size: Int,
     ): ApiResponse<ProductListResponse> {
-        val output = productQueryFacade.findProducts(sortBy, PageCriteria(page, size))
+        val output = productQueryFacade.findProducts(
+            brandId = brandId,
+            sortBy = sortBy,
+            pageCriteria = PageCriteria(page, size)
+        )
         val response = ProductListResponse.from(output)
         return ApiResponse.success(response)
     }

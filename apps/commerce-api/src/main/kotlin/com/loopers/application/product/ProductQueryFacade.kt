@@ -11,10 +11,15 @@ class ProductQueryFacade(
     private val brandQueryService: BrandQueryService,
 ) {
     fun findProducts(
+        brandId: Long?,
         sortBy: String,
         pageCriteria: PageCriteria,
     ): ProductListOutput {
-        val productPage = productQueryService.findProducts(sortBy, pageCriteria)
+        val productPage = productQueryService.findProducts(
+            brandId = brandId,
+            sortBy = sortBy,
+            pageCriteria = pageCriteria
+        )
 
         val brandIds = productPage.content.map { it.product.brandId }.distinct()
         val brands = brandQueryService.findBrands(brandIds)

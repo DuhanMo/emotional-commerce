@@ -13,7 +13,11 @@ import org.springframework.stereotype.Repository
 class ProductRepositoryImpl(
     private val productJpaRepository: ProductJpaRepository,
 ) : ProductRepository {
-    override fun findProducts(sortBy: String, pageable: Pageable): Page<ProductQueryResult> {
+    override fun findProducts(
+        brandId: Long?,
+        sortBy: String,
+        pageable: Pageable,
+    ): Page<ProductQueryResult> {
         val page = productJpaRepository.findPage(pageable) {
             selectNew<ProductQueryResult>(
                 entity(Product::class),
@@ -21,7 +25,9 @@ class ProductRepositoryImpl(
             ).from(
                 entity(Product::class),
                 leftJoin(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
-            ).orderBy(
+            ).apply {
+                brandId?.let { where(path(Product::brandId).equal(it)) }
+            }.orderBy(
                 when (sortBy) {
                     "likes_desc" -> path(ProductSummary::likeCount).desc()
                     "price_asc" -> path(Product::price).asc()

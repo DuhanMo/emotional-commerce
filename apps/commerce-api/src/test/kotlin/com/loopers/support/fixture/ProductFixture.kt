@@ -6,7 +6,7 @@ fun createProduct(
     brandId: Long = 1L,
     name: String = "테스트 상품",
     description: String = "테스트 상품 설명",
-    price: Int = 10000,
+    price: Int = 10_000,
     stock: Int = 100,
     imageUrl: String? = "/test/image.png",
 ): Product = Product(

@@ -23,6 +23,9 @@ interface ProductV1ApiSpec {
         ],
     )
     fun getProducts(
+        @Parameter(description = "브랜드 식별자", example = "1")
+        @RequestParam brandId: Long?,
+
         @Parameter(description = "정렬 기준 (createdAt, likes_desc, price_asc)", example = "createdAt")
         @RequestParam(defaultValue = "createdAt") sortBy: String,
 
