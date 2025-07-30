@@ -18,7 +18,7 @@ class ProductQueryFacade(
         val productPage = productQueryService.findProducts(
             brandId = brandId,
             sortBy = sortBy,
-            pageCriteria = pageCriteria
+            pageCriteria = pageCriteria,
         )
 
         val brandIds = productPage.content.map { it.product.brandId }.distinct()
@@ -32,6 +32,7 @@ class ProductQueryFacade(
     ): ProductItemOutput {
         val productQueryResult = productQueryService.getById(productId)
         val brand = brandQueryService.getById(productQueryResult.product.brandId)
+
         return ProductItemOutput.from(productQueryResult, brand)
     }
 }

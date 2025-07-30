@@ -32,7 +32,7 @@ class ProductQueryServiceIGTest(
             val result = productQueryService.findProducts(
                 brandId = null,
                 sortBy = sortBy,
-                pageCriteria = PageCriteria(0, 20)
+                pageCriteria = PageCriteria(0, 20),
             ).content
 
             Then("좋아요 순으로 정렬된다") {
@@ -59,7 +59,7 @@ class ProductQueryServiceIGTest(
             val result = productQueryService.findProducts(
                 brandId = null,
                 sortBy = sortBy,
-                pageCriteria = PageCriteria(0, 20)
+                pageCriteria = PageCriteria(0, 20),
             ).content
 
             Then("가격 낮은 순으로 정렬된다") {
@@ -85,7 +85,7 @@ class ProductQueryServiceIGTest(
             val result = productQueryService.findProducts(
                 brandId = null,
                 sortBy = "latest",
-                pageCriteria = PageCriteria(1, 2)
+                pageCriteria = PageCriteria(1, 2),
             ).content
 
             Then("페이징이 적용된다") {
@@ -107,7 +107,7 @@ class ProductQueryServiceIGTest(
             val result = productQueryService.findProducts(
                 brandId = 99L,
                 sortBy = "latest",
-                pageCriteria = PageCriteria(0, 20)
+                pageCriteria = PageCriteria(0, 20),
             ).content
 
             Then("해당 브랜드의 상품이 조회된다") {

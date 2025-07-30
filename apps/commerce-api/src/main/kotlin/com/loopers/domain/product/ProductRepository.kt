@@ -7,10 +7,10 @@ interface ProductRepository {
     fun findProducts(
         brandId: Long?,
         sortBy: String,
-        pageable: Pageable
+        pageable: Pageable,
     ): Page<ProductQueryResult>
 
     fun getById(
-        productId: Long
+        productId: Long,
     ): ProductQueryResult
 }

@@ -23,10 +23,10 @@ class ProductQueryFacadeIGTest(
     Given("브랜드 정보와 상품 정보가 모두 존재하는 경우") {
         val brand1 = brandJpaRepository.save(createBrand(name = "브랜드1", description = "브랜드1 설명"))
         val brand2 = brandJpaRepository.save(createBrand(name = "브랜드2", description = "브랜드2 설명"))
-        
-        val product1 = productJpaRepository.save(createProduct(brandId = brand1.id,name = "상품1"))
+
+        val product1 = productJpaRepository.save(createProduct(brandId = brand1.id, name = "상품1"))
         val product2 = productJpaRepository.save(createProduct(brandId = brand2.id, name = "상품2"))
-        
+
         productSummaryJpaRepository.save(createProductSummary(product1.id, likeCount = 100))
         productSummaryJpaRepository.save(createProductSummary(product2.id, likeCount = 200))
 
@@ -34,7 +34,7 @@ class ProductQueryFacadeIGTest(
             val result = productQueryFacade.findProducts(
                 brandId = null,
                 sortBy = "latest",
-                pageCriteria = PageCriteria(0, 10)
+                pageCriteria = PageCriteria(0, 10),
             )
 
             Then("상품 정보와 브랜드 정보가 모두 포함된 응답을 반환한다") {
@@ -76,7 +76,7 @@ class ProductQueryFacadeIGTest(
                     productQueryFacade.findProducts(
                         brandId = null,
                         sortBy = "latest",
-                        pageCriteria = PageCriteria(0, 10)
+                        pageCriteria = PageCriteria(0, 10),
                     )
                 }
             }

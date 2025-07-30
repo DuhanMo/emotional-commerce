@@ -24,7 +24,7 @@ class ProductV1Controller(
         val output = productQueryFacade.findProducts(
             brandId = brandId,
             sortBy = sortBy,
-            pageCriteria = PageCriteria(page, size)
+            pageCriteria = PageCriteria(page, size),
         )
         val response = ProductListResponse.from(output)
         return ApiResponse.success(response)
