@@ -4,8 +4,8 @@ import com.loopers.domain.product.ProductSummary
 
 fun createProductSummary(
     productId: Long,
-    likeCount: Int = 100
+    likeCount: Int = 100,
 ): ProductSummary = ProductSummary(
     productId = productId,
-    likeCount = likeCount
+    likeCount = likeCount,
 )

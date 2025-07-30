@@ -8,12 +8,12 @@ fun createProduct(
     description: String = "테스트 상품 설명",
     price: Int = 10000,
     stock: Int = 100,
-    imageUrl: String? = "/test/image.png"
+    imageUrl: String? = "/test/image.png",
 ): Product = Product(
     brandId = brandId,
     name = name,
     description = description,
     price = price,
     stock = stock,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
 )
