@@ -28,7 +28,7 @@ class ProductRepositoryImpl(
                 entity(ProductSummary::class),
             ).from(
                 entity(Product::class),
-                leftJoin(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
+                join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
             ).apply {
                 brandId?.let { where(path(Product::brandId).equal(it)) }
             }.orderBy(
@@ -48,6 +48,7 @@ class ProductRepositoryImpl(
         val product = productJpaRepository.findByIdOrNull(productId)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $productId)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $productId)")
 
         return ProductQueryResult(product, summary)
     }

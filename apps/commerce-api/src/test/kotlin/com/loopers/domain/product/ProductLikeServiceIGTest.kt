@@ -11,10 +11,9 @@ class ProductLikeServiceIGTest(
     private val productLikeService: ProductLikeService,
     private val productLikeJpaRepository: ProductLikeJpaRepository,
 ) : IntegrationSpec({
-    Given("상품 좋아요가 존재하는 경우") {
-        beforeEach {
-            productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L))
-        }
+    Given("상품 좋아요 등록하는 경우") {
+        productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L))
+
         When("좋아요를 등록하면") {
             productLikeService.likeProduct(productId = 1L, userId = 99L)
 
@@ -25,6 +24,11 @@ class ProductLikeServiceIGTest(
                 foundProductLike.status shouldBe ACTIVE
             }
         }
+    }
+
+    Given("상품 좋아요 취소하는 경우") {
+        productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L))
+
         When("좋아요를 취소하면") {
             productLikeService.unlikeProduct(productId = 1L, userId = 99L)
 

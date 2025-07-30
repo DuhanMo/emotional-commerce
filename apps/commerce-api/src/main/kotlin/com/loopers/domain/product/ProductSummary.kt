@@ -8,5 +8,14 @@ import jakarta.persistence.Table
 @Entity
 class ProductSummary(
     val productId: Long,
-    val likeCount: Int,
-) : BaseEntity()
+    var likeCount: Long = 0,
+) : BaseEntity() {
+    fun increaseLikeCount() {
+        this.likeCount += 1
+    }
+
+    fun decreaseLikeCount() {
+        require(likeCount > 0) { "좋아요 수는 음수가 될 수 없습니다." }
+        this.likeCount -= 1
+    }
+}

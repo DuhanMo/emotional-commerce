@@ -87,7 +87,7 @@ class ProductV1ApiE2ETest(
                         price = (index + 1) * 1000,
                     ),
                 )
-                productSummaryJpaRepository.save(createProductSummary(product.id, likeCount = (index + 1) * 10))
+                productSummaryJpaRepository.save(createProductSummary(product.id, likeCount = (index + 1L) * 10))
             }
 
             val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
@@ -208,10 +208,15 @@ class ProductV1ApiE2ETest(
             // Given
             val brand1 = brandJpaRepository.save(createBrand(name = "브랜드1"))
             val brand2 = brandJpaRepository.save(createBrand(name = "브랜드2"))
-            productJpaRepository.save(createProduct(brandId = brand1.id))
-            productJpaRepository.save(createProduct(brandId = brand1.id))
-            productJpaRepository.save(createProduct(brandId = brand2.id))
-            productJpaRepository.save(createProduct(brandId = brand2.id))
+            val product1 = productJpaRepository.save(createProduct(brandId = brand1.id))
+            val product2 = productJpaRepository.save(createProduct(brandId = brand1.id))
+            val product3 = productJpaRepository.save(createProduct(brandId = brand2.id))
+            val product4 = productJpaRepository.save(createProduct(brandId = brand2.id))
+            productSummaryJpaRepository.save(createProductSummary(product1.id, likeCount = 150))
+            productSummaryJpaRepository.save(createProductSummary(product2.id, likeCount = 150))
+            productSummaryJpaRepository.save(createProductSummary(product3.id, likeCount = 150))
+            productSummaryJpaRepository.save(createProductSummary(product4.id, likeCount = 150))
+
 
             val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
 
