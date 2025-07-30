@@ -3,7 +3,7 @@ package com.loopers.infrastructure.product
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
 import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
 import com.loopers.domain.product.Product
-import com.loopers.domain.product.ProductQueryResult
+import com.loopers.domain.product.ProductInfo
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
 import com.loopers.support.error.CoreException
@@ -23,9 +23,9 @@ class ProductRepositoryImpl(
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductQueryResult> {
+    ): Page<ProductInfo> {
         val page = productJpaRepository.findPage(pageable) {
-            selectNew<ProductQueryResult>(
+            selectNew<ProductInfo>(
                 entity(Product::class),
                 entity(ProductSummary::class),
             ).from(
@@ -48,12 +48,25 @@ class ProductRepositoryImpl(
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
-    override fun getById(productId: Long): ProductQueryResult {
+    override fun getById(productId: Long): ProductInfo {
         val product = productJpaRepository.findByIdOrNull(productId)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $productId)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $productId)")
 
-        return ProductQueryResult(product, summary)
+        return ProductInfo(product, summary)
     }
+
+    override fun findAllById(productIds: List<Long>): List<ProductInfo> =
+        productJpaRepository.findAll {
+            selectNew<ProductInfo>(
+                entity(Product::class),
+                entity(ProductSummary::class),
+            ).from(
+                entity(Product::class),
+                join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
+            ).where(
+                path(Product::id).`in`(productIds),
+            )
+        }.filterNotNull()
 }

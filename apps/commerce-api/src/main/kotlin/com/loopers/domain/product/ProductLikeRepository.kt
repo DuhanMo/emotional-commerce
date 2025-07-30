@@ -7,4 +7,6 @@ interface ProductLikeRepository {
     ): ProductLike?
 
     fun save(productLike: ProductLike): ProductLike
+
+    fun findAllByUserId(userId: Long): List<ProductLike>
 }

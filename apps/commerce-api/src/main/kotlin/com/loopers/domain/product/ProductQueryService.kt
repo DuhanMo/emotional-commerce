@@ -12,12 +12,15 @@ class ProductQueryService(
         brandId: Long?,
         sortBy: String,
         pageCriteria: PageCriteria,
-    ): Page<ProductQueryResult> =
+    ): Page<ProductInfo> =
         productRepository.findProducts(
             brandId = brandId,
             sortBy = sortBy,
             pageable = pageCriteria.pageable,
         )
 
-    fun getById(productId: Long): ProductQueryResult = productRepository.getById(productId)
+    fun getById(productId: Long): ProductInfo = productRepository.getById(productId)
+
+    fun findAllById(productIds: List<Long>): List<ProductInfo> =
+        productRepository.findAllById(productIds)
 }

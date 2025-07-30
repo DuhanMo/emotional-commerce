@@ -2,7 +2,7 @@ package com.loopers.application.product
 
 import com.loopers.application.brand.BrandOutput
 import com.loopers.domain.brand.Brand
-import com.loopers.domain.product.ProductQueryResult
+import com.loopers.domain.product.ProductInfo
 
 data class ProductItemOutput(
     val id: Long,
@@ -16,8 +16,8 @@ data class ProductItemOutput(
     val summary: ProductSummaryOutput,
 ) {
     companion object {
-        fun from(queryResult: ProductQueryResult, brand: Brand): ProductItemOutput {
-            val product = queryResult.product
+        fun from(info: ProductInfo, brand: Brand): ProductItemOutput {
+            val product = info.product
             return ProductItemOutput(
                 id = product.id,
                 brandId = product.brandId,
@@ -27,7 +27,7 @@ data class ProductItemOutput(
                 stock = product.stock,
                 imageUrl = product.imageUrl,
                 brand = BrandOutput.from(brand),
-                summary = ProductSummaryOutput.from(queryResult.summary),
+                summary = ProductSummaryOutput.from(info.summary),
             )
         }
     }

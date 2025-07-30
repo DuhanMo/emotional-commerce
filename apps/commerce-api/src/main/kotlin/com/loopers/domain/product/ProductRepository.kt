@@ -8,9 +8,13 @@ interface ProductRepository {
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductQueryResult>
+    ): Page<ProductInfo>
 
     fun getById(
         productId: Long,
-    ): ProductQueryResult
+    ): ProductInfo
+
+    fun findAllById(
+        productIds: List<Long>,
+    ): List<ProductInfo>
 }

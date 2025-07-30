@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 class ProductLikeService(
     private val productLikeRepository: ProductLikeRepository,
 ) {
+    @Transactional
     fun likeProduct(
         productId: Long,
         userId: Long,
