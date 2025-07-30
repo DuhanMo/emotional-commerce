@@ -29,9 +29,9 @@ class ProductRepositoryImpl(
             ).from(
                 entity(Product::class),
                 join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
-            ).apply {
-                brandId?.let { where(path(Product::brandId).equal(it)) }
-            }.orderBy(
+            ).where(
+                brandId?.let { (path(Product::brandId).equal(it)) },
+            ).orderBy(
                 when (sortBy) {
                     "likes_desc" -> path(ProductSummary::likeCount).desc()
                     "price_asc" -> path(Product::price).asc()

@@ -217,7 +217,6 @@ class ProductV1ApiE2ETest(
             productSummaryJpaRepository.save(createProductSummary(product3.id, likeCount = 150))
             productSummaryJpaRepository.save(createProductSummary(product4.id, likeCount = 150))
 
-
             val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
 
             // When
