@@ -28,7 +28,5 @@ class UserFacade(
         return UserOutput.from(user)
     }
 
-    fun getMe(loginId: LoginId): UserOutput =
-        userQueryService.findByLoginId(loginId)?.let { UserOutput.from(it) }
-            ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 회원입니다")
+    fun getMe(loginId: LoginId): UserOutput = userQueryService.getByLoginId(loginId).let { UserOutput.from(it) }
 }

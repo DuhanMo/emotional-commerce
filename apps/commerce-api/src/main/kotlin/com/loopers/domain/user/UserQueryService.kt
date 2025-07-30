@@ -11,5 +11,5 @@ class UserQueryService(
     fun exist(loginId: LoginId): Boolean = userRepository.existsByLoginId(loginId)
 
     @Transactional(readOnly = true)
-    fun findByLoginId(loginId: LoginId): User? = userRepository.findByLoginId(loginId)
+    fun getByLoginId(loginId: LoginId): User = userRepository.getByLoginId(loginId)
 }
