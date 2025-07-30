@@ -25,7 +25,6 @@ dependencies {
     implementation("com.linecorp.kotlin-jdsl:jpql-render:3.5.5")
     implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:3.5.5")
 
-
     // test-fixtures
     testImplementation(testFixtures(project(":modules:jpa")))
 }

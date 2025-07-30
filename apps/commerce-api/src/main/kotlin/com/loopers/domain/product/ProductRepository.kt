@@ -1,7 +1,8 @@
 package com.loopers.domain.product
 
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface ProductRepository {
-    fun findProducts(sortBy: String, pageable: Pageable): List<ProductListQueryResult>
+    fun findProducts(sortBy: String, pageable: Pageable): Page<ProductQueryResult>
 }

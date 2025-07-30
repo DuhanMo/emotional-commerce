@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 
 @IntegrationTest
 abstract class IntegrationSpec(
-    body: BehaviorSpec.() -> Unit = {}
+    body: BehaviorSpec.() -> Unit = {},
 ) : BehaviorSpec(body) {
     @Autowired
     private lateinit var databaseCleanUp: DatabaseCleanUp

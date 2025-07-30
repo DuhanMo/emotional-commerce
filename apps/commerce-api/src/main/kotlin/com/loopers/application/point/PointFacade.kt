@@ -24,8 +24,8 @@ class PointFacade(
             PointLog(
                 userId = point.userId,
                 pointId = point.id,
-                amount = command.point
-            )
+                amount = command.point,
+            ),
         )
 
         return PointOutput.from(pointWriteService.write(point))

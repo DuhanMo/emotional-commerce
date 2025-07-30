@@ -7,9 +7,6 @@ import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.interfaces.api.ApiResponse
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.E2ESpec
-import com.loopers.support.tests.E2ETest
-import com.loopers.utils.DatabaseCleanUp
-import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
