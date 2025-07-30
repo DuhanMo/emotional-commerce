@@ -1,5 +1,7 @@
 package com.loopers.infrastructure.product
 
+import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
+import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
 import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductQueryResult
 import com.loopers.domain.product.ProductRepository
@@ -30,7 +32,7 @@ class ProductRepositoryImpl(
                 entity(Product::class),
                 join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
             ).where(
-                brandId?.let { (path(Product::brandId).equal(it)) },
+                eqBrandId(brandId),
             ).orderBy(
                 when (sortBy) {
                     "likes_desc" -> path(ProductSummary::likeCount).desc()
@@ -43,6 +45,8 @@ class ProductRepositoryImpl(
         val filteredContent = page.content.filterNotNull()
         return PageImpl(filteredContent, pageable, page.totalElements)
     }
+
+    private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
     override fun getById(productId: Long): ProductQueryResult {
         val product = productJpaRepository.findByIdOrNull(productId)
