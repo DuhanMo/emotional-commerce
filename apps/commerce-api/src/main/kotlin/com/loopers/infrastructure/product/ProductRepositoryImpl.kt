@@ -1,7 +1,7 @@
 package com.loopers.infrastructure.product
 
 import com.loopers.domain.product.Product
-import com.loopers.domain.product.ProductQueryResult
+import com.loopers.domain.product.ProductListQueryResult
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
 import org.springframework.data.domain.Pageable
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository
 class ProductRepositoryImpl(
     private val productJpaRepository: ProductJpaRepository,
 ) : ProductRepository {
-    override fun findProducts(sortBy: String, pageable: Pageable): List<ProductQueryResult> =
+    override fun findProducts(sortBy: String, pageable: Pageable): List<ProductListQueryResult> =
         productJpaRepository.findPage(pageable) {
-            selectNew<ProductQueryResult>(
+            selectNew<ProductListQueryResult>(
                 entity(Product::class),
                 entity(ProductSummary::class)
             ).from(
