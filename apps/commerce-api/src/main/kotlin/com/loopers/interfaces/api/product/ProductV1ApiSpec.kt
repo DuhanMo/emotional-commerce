@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse as SwaggerApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "Product V1 API", description = "상품 관리 API")
@@ -22,7 +23,7 @@ interface ProductV1ApiSpec {
             SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류"),
         ],
     )
-    fun getProducts(
+    fun findProducts(
         @Parameter(description = "브랜드 식별자", example = "1")
         @RequestParam brandId: Long?,
 
@@ -35,4 +36,19 @@ interface ProductV1ApiSpec {
         @Parameter(description = "페이지 크기", example = "20")
         @RequestParam(defaultValue = "20") size: Int,
     ): ApiResponse<ProductListResponse>
+
+    @Operation(
+        summary = "상품 상세 조회",
+        description = "상품 상세 정보를 조회합니다.",
+    )
+    @ApiResponses(
+        value = [
+            SwaggerApiResponse(responseCode = "200", description = "상품 목록 조회 성공"),
+            SwaggerApiResponse(responseCode = "400", description = "잘못된 요청"),
+            SwaggerApiResponse(responseCode = "500", description = "서버 내부 오류"),
+        ],
+    )
+    fun get(
+        @PathVariable productId: Long,
+    ): ApiResponse<ProductItemResponse>
 }

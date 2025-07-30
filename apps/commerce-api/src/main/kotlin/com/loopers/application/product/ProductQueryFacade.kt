@@ -26,4 +26,12 @@ class ProductQueryFacade(
 
         return ProductListOutput.from(productPage, brands)
     }
+
+    fun get(
+        productId: Long,
+    ): ProductItemOutput {
+        val productQueryResult = productQueryService.getById(productId)
+        val brand = brandQueryService.getById(productQueryResult.product.brandId)
+        return ProductItemOutput.from(productQueryResult, brand)
+    }
 }

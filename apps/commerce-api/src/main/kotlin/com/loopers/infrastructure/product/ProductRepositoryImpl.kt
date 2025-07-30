@@ -4,14 +4,18 @@ import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductQueryResult
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
+import com.loopers.support.error.CoreException
+import com.loopers.support.error.ErrorType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class ProductRepositoryImpl(
     private val productJpaRepository: ProductJpaRepository,
+    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
 ) : ProductRepository {
     override fun findProducts(
         brandId: Long?,
@@ -38,5 +42,13 @@ class ProductRepositoryImpl(
 
         val filteredContent = page.content.filterNotNull()
         return PageImpl(filteredContent, pageable, page.totalElements)
+    }
+
+    override fun getById(productId: Long): ProductQueryResult {
+        val product = productJpaRepository.findByIdOrNull(productId)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $productId)")
+        val summary = productSummaryJpaRepository.findByProductId(product.id)
+
+        return ProductQueryResult(product, summary)
     }
 }

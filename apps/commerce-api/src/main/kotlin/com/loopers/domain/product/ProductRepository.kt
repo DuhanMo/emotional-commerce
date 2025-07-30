@@ -9,4 +9,8 @@ interface ProductRepository {
         sortBy: String,
         pageable: Pageable
     ): Page<ProductQueryResult>
+
+    fun getById(
+        productId: Long
+    ): ProductQueryResult
 }

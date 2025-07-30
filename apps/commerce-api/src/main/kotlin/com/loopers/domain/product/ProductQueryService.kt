@@ -18,4 +18,6 @@ class ProductQueryService(
             sortBy = sortBy,
             pageable = pageCriteria.pageable
         )
+
+    fun getById(productId: Long): ProductQueryResult = productRepository.getById(productId)
 }

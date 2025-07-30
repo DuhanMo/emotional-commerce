@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 
 class ProductV1ApiE2ETest(
     private val brandJpaRepository: BrandJpaRepository,
@@ -23,7 +24,7 @@ class ProductV1ApiE2ETest(
     private val testRestTemplate: TestRestTemplate,
 ) : E2ESpec({
     /**
-     * @see ProductV1Controller.getProducts
+     * @see ProductV1Controller.findProducts
      */
     describe("GET /api/v1/products") {
         val url = "/api/v1/products"
@@ -226,6 +227,87 @@ class ProductV1ApiE2ETest(
             response.statusCode.is2xxSuccessful shouldBe true
             response.body?.data?.products!! shouldHaveSize 2
             response.body?.data?.products?.forAll { it.brandId shouldBe brand2.id }
+        }
+    }
+
+    /**
+     * @see ProductV1Controller.get
+     */
+    describe("GET /api/v1/products/{productId}") {
+
+        it("존재하는 상품을 조회하는 경우 - 상품 상세 정보가 반환된다") {
+            // Given
+            val brand = brandJpaRepository.save(createBrand(name = "테스트 브랜드", description = "브랜드 설명"))
+            val product = productJpaRepository.save(createProduct(brandId = brand.id, name = "테스트 상품", price = 5_000))
+            productSummaryJpaRepository.save(createProductSummary(product.id, likeCount = 150))
+
+            val url = "/api/v1/products/${product.id}"
+            val responseType = object : ParameterizedTypeReference<ApiResponse<ProductItemResponse>>() {}
+
+            // When
+            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, responseType)
+
+            // Then
+            response.statusCode.is2xxSuccessful shouldBe true
+            val productData = response.body?.data!!
+
+            productData.id shouldBe product.id
+            productData.brandId shouldBe brand.id
+            productData.name shouldBe "테스트 상품"
+            productData.price shouldBe 5_000
+
+            // 브랜드 정보 검증
+            productData.brand.id shouldBe brand.id
+            productData.brand.name shouldBe "테스트 브랜드"
+            productData.brand.description shouldBe "브랜드 설명"
+
+            // 요약 정보 검증
+            productData.summary.likeCount shouldBe 150
+        }
+
+        it("존재하지 않는 상품을 조회하는 경우 - 404 Not Found가 반환된다") {
+            // Given
+            val nonExistentProductId = 999999L
+            val url = "/api/v1/products/$nonExistentProductId"
+            val responseType = object : ParameterizedTypeReference<ApiResponse<ProductItemResponse>>() {}
+
+            // When
+            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, responseType)
+
+            // Then
+            response.statusCode shouldBe HttpStatus.NOT_FOUND
+        }
+
+        it("잘못된 상품 ID 형식을 사용하는 경우 - 400 Bad Request가 반환된다") {
+            // Given
+            val invalidProductId = "invalid"
+            val url = "/api/v1/products/$invalidProductId"
+            val responseType = object : ParameterizedTypeReference<ApiResponse<ProductItemResponse>>() {}
+
+            // When
+            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, responseType)
+
+            // Then
+            response.statusCode shouldBe HttpStatus.BAD_REQUEST
+        }
+
+        it("상품은 존재하지만 브랜드가 삭제된 경우 - 404 Not Found가 반환된다") {
+            // Given
+            val brand = brandJpaRepository.save(createBrand(name = "삭제될 브랜드"))
+            val product = productJpaRepository.save(createProduct(brandId = brand.id, name = "고아 상품"))
+            productSummaryJpaRepository.save(createProductSummary(product.id))
+
+            // 브랜드 삭제 (실제로는 soft delete 등을 시뮬레이션)
+            brandJpaRepository.delete(brand)
+
+            val url = "/api/v1/products/${product.id}"
+            val responseType = object : ParameterizedTypeReference<ApiResponse<ProductItemResponse>>() {}
+
+            // When
+            val response = testRestTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, responseType)
+
+            // Then
+            response.statusCode shouldBe HttpStatus.NOT_FOUND
         }
     }
 })

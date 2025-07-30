@@ -7,4 +7,6 @@ class BrandQueryService(
     private val brandRepository: BrandRepository,
 ) {
     fun findBrands(brandIds: List<Long>): List<Brand> = brandRepository.findAllByIds(brandIds)
+
+    fun getById(brandId: Long): Brand = brandRepository.getById(brandId)
 }
