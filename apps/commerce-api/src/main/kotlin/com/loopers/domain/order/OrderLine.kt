@@ -15,7 +15,7 @@ class OrderLine(
     val unitPrice: Int,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    val order: Order? = null,
+    var order: Order? = null,
 ) : BaseEntity() {
     val lineAmount: Int
         get() = quantity * unitPrice
@@ -26,9 +26,8 @@ class OrderLine(
         require(unitPrice >= 0) { "단가는 0 이상이어야 합니다." }
     }
 
-    override fun guard() {
-        require(productId > 0) { "상품 ID는 양수여야 합니다." }
-        require(quantity > 0) { "수량은 0보다 커야 합니다." }
-        require(unitPrice >= 0) { "단가는 0 이상이어야 합니다." }
+    fun setOrder(order: Order): OrderLine {
+        this.order = order
+        return this
     }
 }

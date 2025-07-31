@@ -6,45 +6,36 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class OrderTest : StringSpec({
-    "주문 상품이 비어있는 경우, 주문 객체 생성에 실패한다" {
+    "주문 상품이 비어있는 경우, 주문 상품을 더하면 실패한다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
         val emptyOrderLines = emptyList<OrderLine>()
 
         shouldThrow<IllegalArgumentException> {
-            Order(
+            val order = Order(
                 userId = 1L,
                 deliveryAddress = address,
-                orderLines = emptyOrderLines,
             )
+            order.addOrderLines(emptyOrderLines)
         }
     }
 
     "올바른 값으로 주문 객체를 생성할 수 있다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-            OrderLine(productId = 2L, quantity = 1, unitPrice = 5000),
-        )
 
         shouldNotThrow<IllegalArgumentException> {
             Order(
                 userId = 1L,
                 deliveryAddress = address,
-                orderLines = orderLines,
             )
         }
     }
 
     "새로 생성된 주문의 초기 상태는 PENDING이다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
 
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.status shouldBe OrderStatus.PENDING
@@ -67,22 +58,17 @@ class OrderTest : StringSpec({
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
+        order.addOrderLines(orderLines)
 
         order.totalAmount shouldBe 34000
     }
 
     "PENDING 상태에서 결제 완료로 상태를 변경할 수 있다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
-
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paid()
@@ -95,14 +81,9 @@ class OrderTest : StringSpec({
 
     "PENDING 상태에서 결제 실패로 상태를 변경할 수 있다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
-
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paymentFailed()
@@ -115,14 +96,10 @@ class OrderTest : StringSpec({
 
     "PAID 상태에서는 결제 완료로 상태 변경을 시도할 수 없다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
 
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paid()
@@ -134,14 +111,10 @@ class OrderTest : StringSpec({
 
     "PAID 상태에서는 결제 실패로 상태 변경을 시도할 수 없다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
 
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paid()
@@ -153,14 +126,10 @@ class OrderTest : StringSpec({
 
     "PAYMENT_FAILED 상태에서는 결제 완료로 상태 변경을 시도할 수 없다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
 
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paymentFailed()
@@ -172,63 +141,15 @@ class OrderTest : StringSpec({
 
     "PAYMENT_FAILED 상태에서는 결제 실패로 상태 변경을 시도할 수 없다" {
         val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
-
         val order = Order(
             userId = 1L,
             deliveryAddress = address,
-            orderLines = orderLines,
         )
 
         order.paymentFailed()
 
         shouldThrow<IllegalArgumentException> {
             order.paymentFailed()
-        }
-    }
-
-    "PENDING 상태에서만 주문 상품을 추가할 수 있다" {
-        val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
-
-        val order = Order(
-            userId = 1L,
-            deliveryAddress = address,
-            orderLines = orderLines,
-        )
-
-        val newOrderLine = OrderLine(productId = 2L, quantity = 1, unitPrice = 5000)
-
-        shouldNotThrow<IllegalArgumentException> {
-            order.addOrderLine(newOrderLine)
-        }
-
-        order.orderLines.size shouldBe 2
-        order.totalAmount shouldBe 25000
-    }
-
-    "PAID 상태에서는 주문 상품을 추가할 수 없다" {
-        val address = Address("강남대로", "서울시", "12345", "상세주소")
-        val orderLines = listOf(
-            OrderLine(productId = 1L, quantity = 2, unitPrice = 10000),
-        )
-
-        val order = Order(
-            userId = 1L,
-            deliveryAddress = address,
-            orderLines = orderLines,
-        )
-
-        order.paid()
-
-        val newOrderLine = OrderLine(productId = 2L, quantity = 1, unitPrice = 5000)
-
-        shouldThrow<IllegalArgumentException> {
-            order.addOrderLine(newOrderLine)
         }
     }
 })

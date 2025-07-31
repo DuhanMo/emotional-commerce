@@ -27,7 +27,8 @@ data class CreateOrderCommand(
         return Order(
             userId = userId,
             deliveryAddress = deliveryAddress,
-            orderLines = orderLines,
-        )
+        ).apply {
+            addOrderLines(orderLines)
+        }
     }
 }
