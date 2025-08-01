@@ -12,12 +12,12 @@ import jakarta.persistence.Table
 class OrderLine(
     val productId: Long,
     val quantity: Int,
-    val unitPrice: Int,
+    val unitPrice: Long,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     var order: Order? = null,
 ) : BaseEntity() {
-    val lineAmount: Int
+    val lineAmount: Long
         get() = quantity * unitPrice
 
     init {

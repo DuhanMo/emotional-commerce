@@ -1,5 +1,6 @@
 package com.loopers.domain.order
 
+import com.loopers.domain.order.OrderInfo.OrderLineInfo
 import com.loopers.domain.product.ProductSummary
 import com.loopers.infrastructure.order.OrderJpaRepository
 import com.loopers.infrastructure.product.ProductJpaRepository
@@ -25,9 +26,9 @@ class OrderServiceIGTest(
 
         val command = createOrderCommand(
             userId = 1L,
-            orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 2, unitPrice = 10_000),
-                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 1, unitPrice = 5_000),
+            orderLines = listOf(
+                OrderLineInfo(productId = product1.id, quantity = 2, unitPrice = 10_000),
+                OrderLineInfo(productId = product2.id, quantity = 1, unitPrice = 5_000),
             ),
         )
 
@@ -40,7 +41,7 @@ class OrderServiceIGTest(
                 result.id shouldNotBe 0L
                 result.userId shouldBe 1L
                 result.status shouldBe OrderStatus.PENDING
-                result.orderLines.size shouldBe 2
+                result.orderLineInfos.size shouldBe 2
                 result.totalAmount shouldBe 25000
 
                 // 데이터베이스 저장 검증
@@ -60,8 +61,8 @@ class OrderServiceIGTest(
 
         val command = createOrderCommand(
             userId = 99L,
-            orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = product.id, quantity = 3, unitPrice = 10_000),
+            orderLines = listOf(
+                OrderLineInfo(productId = product.id, quantity = 3, unitPrice = 10_000),
             ),
         )
 
@@ -71,11 +72,11 @@ class OrderServiceIGTest(
             Then("주문이 올바르게 생성된다") {
                 result.userId shouldBe 99L
                 result.status shouldBe OrderStatus.PENDING
-                result.orderLines.size shouldBe 1
-                result.orderLines[0].productId shouldBe product.id
-                result.orderLines[0].quantity shouldBe 3
-                result.orderLines[0].unitPrice shouldBe 10_000
-                result.orderLines[0].lineAmount shouldBe 30_000
+                result.orderLineInfos.size shouldBe 1
+                result.orderLineInfos[0].productId shouldBe product.id
+                result.orderLineInfos[0].quantity shouldBe 3
+                result.orderLineInfos[0].unitPrice shouldBe 10_000
+                result.orderLineInfos[0].lineAmount shouldBe 30_000
                 result.totalAmount shouldBe 30_000
             }
         }
@@ -91,10 +92,10 @@ class OrderServiceIGTest(
 
         val command = createOrderCommand(
             userId = 2L,
-            orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 1, unitPrice = 20000),
-                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 2, unitPrice = 15000),
-                CreateOrderCommand.OrderItem(productId = product3.id, quantity = 3, unitPrice = 10000),
+            orderLines = listOf(
+                OrderLineInfo(productId = product1.id, quantity = 1, unitPrice = 20000),
+                OrderLineInfo(productId = product2.id, quantity = 2, unitPrice = 15000),
+                OrderLineInfo(productId = product3.id, quantity = 3, unitPrice = 10000),
             ),
         )
 
@@ -102,16 +103,16 @@ class OrderServiceIGTest(
             val result = orderService.createOrder(command)
 
             Then("모든 상품이 올바르게 주문에 포함된다") {
-                result.orderLines.size shouldBe 3
+                result.orderLineInfos.size shouldBe 3
                 result.totalAmount shouldBe 80000 // 20000 + 30000 + 30000
 
-                val orderLine1 = result.orderLines.find { it.productId == product1.id }!!
+                val orderLine1 = result.orderLineInfos.find { it.productId == product1.id }!!
                 orderLine1.lineAmount shouldBe 20000
 
-                val orderLine2 = result.orderLines.find { it.productId == product2.id }!!
+                val orderLine2 = result.orderLineInfos.find { it.productId == product2.id }!!
                 orderLine2.lineAmount shouldBe 30000
 
-                val orderLine3 = result.orderLines.find { it.productId == product3.id }!!
+                val orderLine3 = result.orderLineInfos.find { it.productId == product3.id }!!
                 orderLine3.lineAmount shouldBe 30000
             }
         }
@@ -125,9 +126,9 @@ class OrderServiceIGTest(
 
         val command = createOrderCommand(
             userId = 2L,
-            orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 1, unitPrice = 10_000),
-                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 2, unitPrice = 10_000),
+            orderLines = listOf(
+                OrderLineInfo(productId = product1.id, quantity = 1, unitPrice = 10_000),
+                OrderLineInfo(productId = product2.id, quantity = 2, unitPrice = 10_000),
             ),
         )
 

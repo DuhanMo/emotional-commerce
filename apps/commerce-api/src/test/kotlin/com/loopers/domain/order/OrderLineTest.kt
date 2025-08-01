@@ -32,7 +32,7 @@ class OrderLineTest : StringSpec({
     }
 
     "단가가 음수인 경우, 주문 상품 객체 생성에 실패한다" {
-        listOf(-1, -100, -10000).forEach { invalidUnitPrice ->
+        listOf(-1L, -100L, -10000L).forEach { invalidUnitPrice ->
             shouldThrow<IllegalArgumentException> {
                 OrderLine(
                     productId = 1L,
