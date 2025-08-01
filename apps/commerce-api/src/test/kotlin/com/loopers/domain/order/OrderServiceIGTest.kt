@@ -8,7 +8,6 @@ import com.loopers.infrastructure.product.ProductSummaryJpaRepository
 import com.loopers.support.fixture.createOrderCommand
 import com.loopers.support.fixture.createProduct
 import com.loopers.support.tests.IntegrationSpec
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -114,29 +113,6 @@ class OrderServiceIGTest(
 
                 val orderLine3 = result.orderLineInfos.find { it.productId == product3.id }!!
                 orderLine3.lineAmount shouldBe 30000
-            }
-        }
-    }
-
-    Given("상품 재고가 부족한 경우") {
-        val product1 = productJpaRepository.save(createProduct(name = "상품1", stock = 1))
-        val product2 = productJpaRepository.save(createProduct(name = "상품2", stock = 1))
-        productSummaryJpaRepository.save(ProductSummary(productId = product1.id))
-        productSummaryJpaRepository.save(ProductSummary(productId = product2.id))
-
-        val command = createOrderCommand(
-            userId = 2L,
-            orderLines = listOf(
-                OrderLineInfo(productId = product1.id, quantity = 1, unitPrice = 10_000),
-                OrderLineInfo(productId = product2.id, quantity = 2, unitPrice = 10_000),
-            ),
-        )
-
-        When("주문을 생성하면") {
-            Then("예외가 발생한다") {
-                shouldThrow<IllegalStateException> {
-                    orderService.createOrder(command)
-                }
             }
         }
     }

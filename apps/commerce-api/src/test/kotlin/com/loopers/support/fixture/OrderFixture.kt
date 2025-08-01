@@ -2,7 +2,10 @@ package com.loopers.support.fixture
 
 import com.loopers.domain.order.Address
 import com.loopers.domain.order.CreateOrderCommand
+import com.loopers.domain.order.Order
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
+import com.loopers.domain.order.OrderLine
+import com.loopers.domain.order.OrderStatus
 import com.loopers.domain.order.PayMethod
 
 private val TEST_ADDRESS = Address(
@@ -26,3 +29,27 @@ fun createOrderCommand(
     payMethod = payMethod,
     orderLines = orderLines,
 )
+
+fun createOrder(
+    userId: Long = 1L,
+    deliveryAddress: Address = TEST_ADDRESS,
+    payMethod: PayMethod = PayMethod.POINT,
+    status: OrderStatus = OrderStatus.PENDING,
+) = Order(
+    userId = userId,
+    deliveryAddress = deliveryAddress,
+    payMethod = payMethod,
+    status = status,
+)
+
+fun createOrderLine(
+    productId: Long = 1L,
+    quantity: Int = 1,
+    unitPrice: Long = 10_000L,
+): OrderLine {
+    return OrderLine(
+        productId = productId,
+        quantity = quantity,
+        unitPrice = unitPrice,
+    )
+}

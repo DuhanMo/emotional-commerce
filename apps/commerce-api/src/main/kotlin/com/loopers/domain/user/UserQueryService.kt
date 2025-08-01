@@ -1,9 +1,9 @@
 package com.loopers.domain.user
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+@Service
 class UserQueryService(
     private val userRepository: UserRepository,
 ) {

@@ -13,8 +13,6 @@ class OrderRepositoryImpl(
 ) : OrderRepository {
     override fun save(order: Order): Order = orderJpaRepository.save(order)
 
-    override fun findById(orderId: Long): Order? = orderJpaRepository.findByIdOrNull(orderId)
-
     override fun getById(orderId: Long): Order = orderJpaRepository.findByIdOrNull(orderId)
         ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 주문입니다.")
 

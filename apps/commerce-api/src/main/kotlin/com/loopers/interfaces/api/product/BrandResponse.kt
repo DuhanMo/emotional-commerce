@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "브랜드 정보")
 data class BrandResponse(
-    @Schema(description = "브랜드 ID", example = "14703")
+    @Schema(description = "브랜드 식별자", example = "14703")
     val id: Long,
 
     @Schema(description = "브랜드명", example = "핀카")

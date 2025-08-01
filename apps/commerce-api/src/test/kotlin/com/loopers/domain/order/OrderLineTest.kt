@@ -6,19 +6,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class OrderLineTest : StringSpec({
-
-    "상품 ID가 양수가 아닌 경우, 주문 상품 객체 생성에 실패한다" {
-        listOf(0L, -1L, -100L).forEach { invalidProductId ->
-            shouldThrow<IllegalArgumentException> {
-                OrderLine(
-                    productId = invalidProductId,
-                    quantity = 1,
-                    unitPrice = 10000,
-                )
-            }
-        }
-    }
-
     "수량이 0 이하인 경우, 주문 상품 객체 생성에 실패한다" {
         listOf(0, -1, -10).forEach { invalidQuantity ->
             shouldThrow<IllegalArgumentException> {

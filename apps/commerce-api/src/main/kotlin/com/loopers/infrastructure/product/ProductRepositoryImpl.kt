@@ -69,4 +69,6 @@ class ProductRepositoryImpl(
                 path(Product::id).`in`(productIds),
             )
         }.filterNotNull()
+
+    override fun save(product: Product): Product = productJpaRepository.save(product)
 }

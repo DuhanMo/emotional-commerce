@@ -14,8 +14,15 @@ class Product(
     var stock: Int,
     val imageUrl: String? = null,
 ) : BaseEntity() {
-    fun deductStock(stock: Int) {
-        require(stock <= this.stock) { "재고를 초과하여 재고 차감할 수 없습니다." }
-        this.stock -= stock
+    fun deductStock(quantity: Int) {
+        validateStock(quantity)
+        this.stock -= quantity
+    }
+
+    private fun validateStock(requestedQuantity: Int) {
+        require(requestedQuantity > 0) { "요청 수량은 0보다 커야 합니다." }
+        require(this.stock >= requestedQuantity) {
+            "상품 '${this.name}'의 재고가 부족합니다. (요청: $requestedQuantity, 재고: $stock)"
+        }
     }
 }

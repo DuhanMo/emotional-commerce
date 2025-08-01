@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "상품 정보")
 data class ProductItemResponse(
-    @Schema(description = "상품 ID", example = "1")
+    @Schema(description = "상품 식별자", example = "1")
     val id: Long,
 
-    @Schema(description = "브랜드 ID", example = "14703")
+    @Schema(description = "브랜드 식별자", example = "14703")
     val brandId: Long,
 
     @Schema(description = "상품명", example = "시티워커 나일론스판 쇼츠")
