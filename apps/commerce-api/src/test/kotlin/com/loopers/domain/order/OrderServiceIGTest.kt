@@ -1,22 +1,34 @@
 package com.loopers.domain.order
 
+import com.loopers.domain.product.ProductSummary
 import com.loopers.infrastructure.order.OrderJpaRepository
+import com.loopers.infrastructure.product.ProductJpaRepository
+import com.loopers.infrastructure.product.ProductSummaryJpaRepository
 import com.loopers.support.fixture.createOrderCommand
+import com.loopers.support.fixture.createProduct
 import com.loopers.support.tests.IntegrationSpec
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 class OrderServiceIGTest(
     private val orderService: OrderService,
     private val orderJpaRepository: OrderJpaRepository,
+    private val productJpaRepository: ProductJpaRepository,
+    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
 ) : IntegrationSpec({
     Given("유효한 주문 생성 명령이 주어진 경우") {
+        val product1 = productJpaRepository.save(createProduct(name = "상품1", stock = 10))
+        val product2 = productJpaRepository.save(createProduct(name = "상품2", stock = 10))
+        productSummaryJpaRepository.save(ProductSummary(productId = product1.id))
+        productSummaryJpaRepository.save(ProductSummary(productId = product2.id))
+
         val command = createOrderCommand(
             userId = 1L,
             orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = 1L, quantity = 2, unitPrice = 10000),
-                CreateOrderCommand.OrderItem(productId = 2L, quantity = 1, unitPrice = 5000)
-            )
+                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 2, unitPrice = 10_000),
+                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 1, unitPrice = 5_000),
+            ),
         )
 
         When("주문을 생성하면") {
@@ -43,11 +55,14 @@ class OrderServiceIGTest(
     }
 
     Given("단일 상품으로 주문을 생성하는 경우") {
+        val product = productJpaRepository.save(createProduct(name = "상품1", stock = 5))
+        productSummaryJpaRepository.save(ProductSummary(productId = product.id))
+
         val command = createOrderCommand(
             userId = 99L,
             orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = 10L, quantity = 3, unitPrice = 15000)
-            )
+                CreateOrderCommand.OrderItem(productId = product.id, quantity = 3, unitPrice = 10_000),
+            ),
         )
 
         When("주문을 생성하면") {
@@ -57,23 +72,30 @@ class OrderServiceIGTest(
                 result.userId shouldBe 99L
                 result.status shouldBe OrderStatus.PENDING
                 result.orderLines.size shouldBe 1
-                result.orderLines[0].productId shouldBe 10L
+                result.orderLines[0].productId shouldBe product.id
                 result.orderLines[0].quantity shouldBe 3
-                result.orderLines[0].unitPrice shouldBe 15000
-                result.orderLines[0].lineAmount shouldBe 45000
-                result.totalAmount shouldBe 45000
+                result.orderLines[0].unitPrice shouldBe 10_000
+                result.orderLines[0].lineAmount shouldBe 30_000
+                result.totalAmount shouldBe 30_000
             }
         }
     }
 
     Given("여러 상품으로 주문을 생성하는 경우") {
+        val product1 = productJpaRepository.save(createProduct(name = "상품1", stock = 20))
+        val product2 = productJpaRepository.save(createProduct(name = "상품2", stock = 20))
+        val product3 = productJpaRepository.save(createProduct(name = "상품3", stock = 20))
+        productSummaryJpaRepository.save(ProductSummary(productId = product1.id))
+        productSummaryJpaRepository.save(ProductSummary(productId = product2.id))
+        productSummaryJpaRepository.save(ProductSummary(productId = product3.id))
+
         val command = createOrderCommand(
             userId = 2L,
             orderItems = listOf(
-                CreateOrderCommand.OrderItem(productId = 1L, quantity = 1, unitPrice = 20000),
-                CreateOrderCommand.OrderItem(productId = 2L, quantity = 2, unitPrice = 15000),
-                CreateOrderCommand.OrderItem(productId = 3L, quantity = 3, unitPrice = 10000)
-            )
+                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 1, unitPrice = 20000),
+                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 2, unitPrice = 15000),
+                CreateOrderCommand.OrderItem(productId = product3.id, quantity = 3, unitPrice = 10000),
+            ),
         )
 
         When("주문을 생성하면") {
@@ -83,14 +105,37 @@ class OrderServiceIGTest(
                 result.orderLines.size shouldBe 3
                 result.totalAmount shouldBe 80000 // 20000 + 30000 + 30000
 
-                val orderLine1 = result.orderLines.find { it.productId == 1L }!!
+                val orderLine1 = result.orderLines.find { it.productId == product1.id }!!
                 orderLine1.lineAmount shouldBe 20000
 
-                val orderLine2 = result.orderLines.find { it.productId == 2L }!!
+                val orderLine2 = result.orderLines.find { it.productId == product2.id }!!
                 orderLine2.lineAmount shouldBe 30000
 
-                val orderLine3 = result.orderLines.find { it.productId == 3L }!!
+                val orderLine3 = result.orderLines.find { it.productId == product3.id }!!
                 orderLine3.lineAmount shouldBe 30000
+            }
+        }
+    }
+
+    Given("상품 재고가 부족한 경우") {
+        val product1 = productJpaRepository.save(createProduct(name = "상품1", stock = 1))
+        val product2 = productJpaRepository.save(createProduct(name = "상품2", stock = 1))
+        productSummaryJpaRepository.save(ProductSummary(productId = product1.id))
+        productSummaryJpaRepository.save(ProductSummary(productId = product2.id))
+
+        val command = createOrderCommand(
+            userId = 2L,
+            orderItems = listOf(
+                CreateOrderCommand.OrderItem(productId = product1.id, quantity = 1, unitPrice = 10_000),
+                CreateOrderCommand.OrderItem(productId = product2.id, quantity = 2, unitPrice = 10_000),
+            ),
+        )
+
+        When("주문을 생성하면") {
+            Then("예외가 발생한다") {
+                shouldThrow<IllegalStateException> {
+                    orderService.createOrder(command)
+                }
             }
         }
     }
