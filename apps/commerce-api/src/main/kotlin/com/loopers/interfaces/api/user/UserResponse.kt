@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 data class UserResponse(
     @Schema(description = "식별자", example = "1")
     val id: Long,
-    @Schema(description = "로그인 ID", example = "test123")
+    @Schema(description = "로그인 아이디", example = "test123")
     val loginId: String,
     @Schema(description = "이메일 주소", example = "test@test.com")
     val email: String,

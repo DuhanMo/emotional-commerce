@@ -9,5 +9,5 @@ import jakarta.persistence.Table
 class PointLog(
     val userId: Long,
     val pointId: Long,
-    val amount: Int,
+    val amount: Long,
 ) : BaseEntity()

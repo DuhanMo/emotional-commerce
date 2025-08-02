@@ -10,8 +10,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-class PointReadServiceIGTest(
-    private val pointReadService: PointReadService,
+class PointQueryServiceIGTest(
+    private val pointQueryService: PointQueryService,
     private val userJapRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
 ) : IntegrationSpec({
@@ -20,7 +20,7 @@ class PointReadServiceIGTest(
         pointJpaRepository.save(Point(user.id, 1000))
 
         When("포인트를 조회하면") {
-            val result = pointReadService.getByUserLoginId(user.loginId)
+            val result = pointQueryService.getByUserLoginId(user.loginId)
 
             Then("포인트를 반환한다") {
                 result shouldNotBe null
@@ -35,7 +35,7 @@ class PointReadServiceIGTest(
 
         When("포인트를 조회하면") {
             Then("예외를 반환한다") {
-                shouldThrow<CoreException> { pointReadService.getByUserLoginId(LoginId("xyz789")) }
+                shouldThrow<CoreException> { pointQueryService.getByUserLoginId(LoginId("xyz789")) }
             }
         }
     }

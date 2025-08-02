@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 
 @E2ETest
 abstract class E2ESpec(
-    body: DescribeSpec.() -> Unit = {}
+    body: DescribeSpec.() -> Unit = {},
 ) : DescribeSpec(body) {
     @Autowired
     private lateinit var databaseCleanUp: DatabaseCleanUp
