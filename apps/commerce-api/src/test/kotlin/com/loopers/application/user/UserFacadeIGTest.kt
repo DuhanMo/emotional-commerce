@@ -1,13 +1,12 @@
 package com.loopers.application.user
 
-import com.loopers.domain.point.PointWriteService
 import com.loopers.domain.user.BirthDate
 import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.UserReadService
+import com.loopers.domain.user.UserQueryService
 import com.loopers.domain.user.UserRegisterCommand
-import com.loopers.domain.user.UserWriteService
+import com.loopers.domain.user.UserService
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -18,32 +17,26 @@ import io.mockk.verify
 import org.junit.jupiter.api.assertThrows
 
 class UserFacadeIGTest(
-    private val userWriteService: UserWriteService,
-    private val userReadService: UserReadService,
-    private val pointWriteService: PointWriteService,
+    private val userService: UserService,
+    private val userQueryService: UserQueryService,
     private val userJpaRepository: UserJpaRepository,
 ) : IntegrationSpec({
     Given("이미 가입된 ID 가 없는 경우") {
-        val userWriterSpy = spyk(userWriteService)
-        val pointWriterSpy = spyk(pointWriteService)
-        val userFacade = UserFacade(userWriterSpy, userReadService, pointWriterSpy)
+        val userWriterSpy = spyk(userService)
+        val userFacade = UserFacade(userWriterSpy, userQueryService)
         val command = createUserCreateCommand()
 
         When("회원 가입 하면") {
             userFacade.register(command)
 
             Then("유저 저장이 수행된다") {
-                verify(exactly = 1) { userWriterSpy.write(any()) }
-            }
-
-            Then("포인트 저장이 수행된다") {
-                verify(exactly = 1) { pointWriterSpy.write(any()) }
+                verify(exactly = 1) { userWriterSpy.createUser(any()) }
             }
         }
     }
 
     Given("이미 가입된 ID 가 있는 경우") {
-        val userFacade = UserFacade(userWriteService, userReadService, pointWriteService)
+        val userFacade = UserFacade(userService, userQueryService)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
         val command = createUserCreateCommand(loginId = existLoginId)

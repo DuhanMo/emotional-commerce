@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull
 
 @Schema(description = "회원 가입 요청")
 data class UserRegisterRequest(
-    @Schema(description = "로그인 ID", example = "test123", required = true)
+    @Schema(description = "로그인 아이디", example = "test123", required = true)
     @field:NotBlank(message = "로그인 ID 는 빈 값일 수 없습니다.")
     val loginId: String,
     @Schema(description = "이메일 주소", example = "test@test.com", required = true)

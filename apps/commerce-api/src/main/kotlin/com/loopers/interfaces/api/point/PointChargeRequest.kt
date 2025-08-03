@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min
 
 data class PointChargeRequest(
     @field:Min(value = 1, message = "충전 금액은 1원 이상이어야 합니다.")
-    val point: Int?,
+    val point: Long?,
 ) {
     fun toCommand(loginId: String): ChargePointCommand = ChargePointCommand(
         loginId = LoginId(loginId),
