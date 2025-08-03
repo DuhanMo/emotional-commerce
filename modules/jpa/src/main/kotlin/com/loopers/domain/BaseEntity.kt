@@ -19,11 +19,11 @@ import java.time.ZonedDateTime
  * @property deletedAt 삭제 시점
  */
 @MappedSuperclass
-abstract class BaseEntity {
+abstract class BaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
-
+) {
     @Column(name = "created_at", nullable = false, updatable = false)
     lateinit var createdAt: ZonedDateTime
         protected set

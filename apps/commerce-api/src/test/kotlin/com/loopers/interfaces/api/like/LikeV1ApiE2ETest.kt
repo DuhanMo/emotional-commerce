@@ -93,9 +93,9 @@ class LikeV1ApiE2ETest(
                 .first { it.productId == product.id && it.userId == user.id }
             productLike.status shouldBe ProductLikeStatus.ACTIVE
 
-            // 집계 데이터는 증가
+            // 집계 데이터는 증가하지 않음
             val productSummary = productSummaryJpaRepository.findByProductId(product.id)!!
-            productSummary.likeCount shouldBe 11L
+            productSummary.likeCount shouldBe 10L
         }
 
         it("취소했던 상품을 다시 좋아요하는 경우 - 성공 응답을 반환한다") {
@@ -224,9 +224,9 @@ class LikeV1ApiE2ETest(
                 .first { it.productId == product.id && it.userId == user.id }
             productLike.status shouldBe ProductLikeStatus.DELETED
 
-            // 집계 데이터는 감소
+            // 집계 데이터는 감소하지 않음
             val productSummary = productSummaryJpaRepository.findByProductId(product.id)!!
-            productSummary.likeCount shouldBe 4L
+            productSummary.likeCount shouldBe 5L
         }
 
         it("X-USER-ID 헤더가 없는 경우 - 400 Bad Request 응답을 반환한다") {

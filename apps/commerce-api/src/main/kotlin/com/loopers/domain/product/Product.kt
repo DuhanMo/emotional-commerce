@@ -13,7 +13,8 @@ class Product(
     val price: Int,
     var stock: Int,
     val imageUrl: String? = null,
-) : BaseEntity() {
+    id: Long = 0L,
+) : BaseEntity(id) {
     fun deductStock(quantity: Int) {
         validateStock(quantity)
         this.stock -= quantity

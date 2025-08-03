@@ -6,16 +6,24 @@ import org.springframework.stereotype.Service
 class ProductSummaryService(
     private val productSummaryRepository: ProductSummaryRepository,
 ) {
-    fun increaseLikeCount(productId: Long) {
-        val productSummary = productSummaryRepository.getByProductId(productId)
+    fun increaseLikeCount(productLike: ProductLike?) {
+        if (productLike == null) {
+            return
+        }
+
+        val productSummary = productSummaryRepository.getByProductId(productLike.productId)
 
         productSummary.increaseLikeCount()
 
         productSummaryRepository.save(productSummary)
     }
 
-    fun decreaseLikeCount(productId: Long) {
-        val productSummary = productSummaryRepository.getByProductId(productId)
+    fun decreaseLikeCount(productLike: ProductLike?) {
+        if (productLike == null) {
+            return
+        }
+
+        val productSummary = productSummaryRepository.getByProductId(productLike.productId)
 
         productSummary.decreaseLikeCount()
 

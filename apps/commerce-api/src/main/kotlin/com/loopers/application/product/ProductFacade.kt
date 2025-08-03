@@ -13,13 +13,13 @@ class ProductFacade(
 ) {
     fun likeProduct(input: LikeProductInput) {
         val user = userQueryService.getByLoginId(input.loginId)
-        productLikeService.likeProduct(productId = input.productId, userId = user.id)
-        productSummaryService.increaseLikeCount(productId = input.productId)
+        val productLike = productLikeService.likeProduct(productId = input.productId, userId = user.id)
+        productSummaryService.increaseLikeCount(productLike)
     }
 
     fun unlikeProduct(input: UnlikeProductInput) {
         val user = userQueryService.getByLoginId(input.loginId)
-        productLikeService.unlikeProduct(productId = input.productId, userId = user.id)
-        productSummaryService.decreaseLikeCount(productId = input.productId)
+        val productLike = productLikeService.unlikeProduct(productId = input.productId, userId = user.id)
+        productSummaryService.decreaseLikeCount(productLike)
     }
 }

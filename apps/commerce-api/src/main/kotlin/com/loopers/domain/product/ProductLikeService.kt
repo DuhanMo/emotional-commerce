@@ -11,27 +11,29 @@ class ProductLikeService(
     fun likeProduct(
         productId: Long,
         userId: Long,
-    ) {
-        val productLike = findOrCreateProductLike(productId, userId)
+    ): ProductLike? {
+        val productLike = productLikeRepository.findByProductIdAndUserId(productId, userId)
+        if (productLike != null && productLike.status == ProductLikeStatus.ACTIVE) {
+            return null
+        }
 
-        productLike.like()
+        val updateProductLike = productLike ?: ProductLike(productId, userId)
+        updateProductLike.like()
 
-        productLikeRepository.save(productLike)
+        return productLikeRepository.save(updateProductLike)
     }
 
     @Transactional
     fun unlikeProduct(
         productId: Long,
         userId: Long,
-    ) {
-        val productLike = findOrCreateProductLike(productId, userId)
+    ): ProductLike? {
+        val productLike = productLikeRepository.findByProductIdAndUserId(productId, userId) ?: return null
+        if (productLike.status == ProductLikeStatus.DELETED) {
+            return null
+        }
 
         productLike.unlike()
-
-        productLikeRepository.save(productLike)
+        return productLikeRepository.save(productLike)
     }
-
-    private fun findOrCreateProductLike(productId: Long, userId: Long): ProductLike =
-        productLikeRepository.findByProductIdAndUserId(productId, userId)
-            ?: ProductLike(productId, userId)
 }

@@ -6,4 +6,7 @@ interface UserRepository {
     fun existsByLoginId(loginId: LoginId): Boolean
 
     fun getByLoginId(loginId: LoginId): User
+    fun findById(): User? {
+        TODO("Not yet implemented")
+    }
 }

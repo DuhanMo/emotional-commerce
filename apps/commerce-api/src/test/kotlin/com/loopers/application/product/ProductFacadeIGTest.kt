@@ -21,7 +21,6 @@ class ProductFacadeIGTest(
     private val productLikeJpaRepository: ProductLikeJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
 ) : IntegrationSpec({
-
     Given("상품 좋아요가 없는 경우") {
         val user = userJpaRepository.save(createUser(LoginId("user123")))
         val product = productJpaRepository.save(createProduct())
@@ -41,7 +40,27 @@ class ProductFacadeIGTest(
         }
     }
 
-    Given("좋아요 취소한 상품을 좋아요 등록하는 경우") {
+    Given("상품 좋아요 등록을 하지 않은 상태에서 좋아요를 취소하는 경우") {
+        val user = userJpaRepository.save(createUser(LoginId("user123")))
+
+        val product = productJpaRepository.save(createProduct())
+        productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 0L))
+
+        When("좋아요를 취소 하면") {
+            productFacade.unlikeProduct(UnlikeProductInput(product.id, LoginId("user123")))
+
+            Then("상품 좋아요 데이터가 생기지 않고 상품 집계 좋아요 수가 변하지 않는다") {
+                val foundProductLike = productLikeJpaRepository.findAll()
+                    .find { it.productId == product.id && it.userId == user.id }
+                foundProductLike shouldBe null
+
+                val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
+                foundProductSummary.likeCount shouldBe 0L
+            }
+        }
+    }
+
+    Given("좋아요 취소한 상품이 존재하는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("user456")))
         val product = productJpaRepository.save(createProduct())
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 10L))
@@ -61,14 +80,14 @@ class ProductFacadeIGTest(
         }
     }
 
-    Given("좋아요 등록된 상품이 존재하는 경우") {
-        When("다른 사용자가 좋아요 등록하면") {
-            val user1 = userJpaRepository.save(createUser(LoginId("user111")))
-            val user2 = userJpaRepository.save(createUser(LoginId("user222")))
-            val product = productJpaRepository.save(createProduct())
-            productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
-            productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
+    Given("좋아요 등록된 상품이 존재하고 다른 사용자가 좋아요 등록 하는 경우") {
+        val user1 = userJpaRepository.save(createUser(LoginId("user111")))
+        val product = productJpaRepository.save(createProduct())
+        productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
+        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
+        val user2 = userJpaRepository.save(createUser(LoginId("user222")))
+        When("다른 사용자가 좋아요 등록하면") {
             productFacade.likeProduct(LikeProductInput(product.id, LoginId("user222")))
 
             Then("상품 집계 좋아요 수가 증가한다") {
@@ -80,13 +99,16 @@ class ProductFacadeIGTest(
                 foundProductLike.status shouldBe ACTIVE
             }
         }
+    }
+    Given("좋아요 등록된 상품이 존재하고 다른 사용자가 좋아요 취소 하는 경우") {
+        val user1 = userJpaRepository.save(createUser(LoginId("user111")))
+        val product = productJpaRepository.save(createProduct())
+        productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
+        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
+        val user2 = userJpaRepository.save(createUser(LoginId("user222")))
+        productLikeJpaRepository.save(ProductLike(product.id, user2.id, ACTIVE))
         When("다른 사용자가 좋아요 취소하면") {
-            val user1 = userJpaRepository.save(createUser(LoginId("user111")))
-            val user2 = userJpaRepository.save(createUser(LoginId("user222")))
-            val product = productJpaRepository.save(createProduct())
-            productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
-            productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
             productFacade.unlikeProduct(UnlikeProductInput(product.id, LoginId("user222")))
 
