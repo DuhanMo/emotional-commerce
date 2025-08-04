@@ -6,8 +6,21 @@ import org.springframework.stereotype.Service
 class OrderService(
     private val orderRepository: OrderRepository,
 ) {
-    fun createOrder(command: CreateOrderCommand): Order {
-        val order = command.toOrder()
-        return orderRepository.save(order)
+    fun createOrder(command: CreateOrderCommand): Order = with(command) {
+        val orderLines = orderLines.map { item ->
+            OrderLine(
+                productId = item.productId,
+                quantity = item.quantity,
+                unitPrice = item.unitPrice,
+            )
+        }
+        val order = Order(
+            userId = userId,
+            deliveryAddress = deliveryAddress,
+            payMethod = payMethod,
+        ).apply {
+            addOrderLines(orderLines)
+        }
+        orderRepository.save(order)
     }
 }

@@ -48,16 +48,16 @@ class ProductRepositoryImpl(
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
-    override fun getById(productId: Long): ProductWithSummaryInfo {
-        val product = productJpaRepository.findByIdOrNull(productId)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $productId)")
+    override fun getById(id: Long): ProductWithSummaryInfo {
+        val product = productJpaRepository.findByIdOrNull(id)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $productId)")
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $id)")
 
         return ProductWithSummaryInfo(product, summary)
     }
 
-    override fun findAllProductSummaryById(productIds: List<Long>): List<ProductWithSummaryInfo> =
+    override fun findAllProductSummaryById(ids: List<Long>): List<ProductWithSummaryInfo> =
         productJpaRepository.findAll {
             selectNew<ProductWithSummaryInfo>(
                 entity(Product::class),
@@ -66,11 +66,14 @@ class ProductRepositoryImpl(
                 entity(Product::class),
                 join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
             ).where(
-                path(Product::id).`in`(productIds),
+                path(Product::id).`in`(ids),
             )
         }.filterNotNull()
 
-    override fun findAllById(productIds: List<Long>): List<Product> = productJpaRepository.findAllById(productIds)
+    override fun findAllById(ids: List<Long>): List<Product> = productJpaRepository.findAllById(ids)
 
     override fun save(product: Product): Product = productJpaRepository.save(product)
+
+    override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
 }

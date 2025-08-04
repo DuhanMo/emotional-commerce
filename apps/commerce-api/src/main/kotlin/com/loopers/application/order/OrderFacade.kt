@@ -19,7 +19,7 @@ class OrderFacade(
         val user = userQueryService.getByLoginId(input.loginId)
         val order = orderService.createOrder(input.toCommand(user.id))
         paymentService.pay(user, order)
-        productService.deductStock(order.orderLines)
+        productService.deductStock(order)
         return PlaceOrderOutput.from(order)
     }
 }

@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PaymentService(
-    payProcessors: List<PayProcessor>,
     private val orderRepository: OrderRepository,
+    payProcessors: List<PayProcessor>,
 ) {
     private val payProcessors = payProcessors.associateBy { it.support }
 
