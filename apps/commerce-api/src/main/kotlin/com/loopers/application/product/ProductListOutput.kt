@@ -1,7 +1,7 @@
 package com.loopers.application.product
 
 import com.loopers.domain.brand.Brand
-import com.loopers.domain.product.ProductInfo
+import com.loopers.domain.product.ProductWithSummaryInfo
 import org.springframework.data.domain.Page
 
 data class ProductListOutput(
@@ -10,7 +10,7 @@ data class ProductListOutput(
     val hasMore: Boolean,
 ) {
     companion object {
-        fun from(productPage: Page<ProductInfo>, brands: List<Brand>): ProductListOutput {
+        fun from(productPage: Page<ProductWithSummaryInfo>, brands: List<Brand>): ProductListOutput {
             val brandMap = brands.associateBy { it.id }
 
             val productItems = productPage.content.map { productInfo ->

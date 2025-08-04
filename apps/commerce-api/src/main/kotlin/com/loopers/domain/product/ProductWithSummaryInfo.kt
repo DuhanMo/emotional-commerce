@@ -1,6 +1,6 @@
 package com.loopers.domain.product
 
-data class ProductInfo(
+data class ProductWithSummaryInfo(
     val product: Product,
     val summary: ProductSummary,
 )

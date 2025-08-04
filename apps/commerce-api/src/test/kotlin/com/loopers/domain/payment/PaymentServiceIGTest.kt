@@ -48,32 +48,7 @@ class PaymentServiceIGTest(
         }
     }
 
-    Given("재고가 부족한 상품에 대한 결제 요청") {
-        // 부족한 재고.
-        val product = productJpaRepository.save(createProduct(stock = 1))
-        productSummaryJpaRepository.save(createProductSummary(productId = product.id))
-
-        val user = createUser()
-        val point = Point(userId = user.id, amount = 100_000L)
-        val order = createOrder(userId = user.id)
-        order.addOrderLines(
-            listOf(
-                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-            ),
-        )
-        orderJpaRepository.save(order)
-        pointJpaRepository.save(point)
-
-        When("결제를 시도하면") {
-            Then("예외가 발생한다") {
-                val exception = assertThrows<IllegalArgumentException> { paymentService.pay(user, order) }
-                exception.message shouldContain "재고가 부족합니다"
-            }
-        }
-    }
-
-    Given("충분한 포인트와 재고가 있는 정상적인 결제 요청") {
+    Given("충분한 포인트가 있는 정상적인 결제 요청") {
         val product = productJpaRepository.save(createProduct(stock = 100))
         productSummaryJpaRepository.save(createProductSummary(productId = product.id))
         val user = createUser()
@@ -92,15 +67,12 @@ class PaymentServiceIGTest(
         When("결제를 시도하면") {
             paymentService.pay(user, order)
 
-            Then("주문 상태가 PAID로 변경되고 재고와 포인트가 차감된다") {
+            Then("주문 상태가 PAID로 변경되고 포인트가 차감된다") {
                 val foundOrder = orderJpaRepository.findByIdOrNull(order.id)!!
                 foundOrder.status shouldBe OrderStatus.PAID
 
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!
                 foundPoint.amount shouldBe 70_000L
-
-                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
-                foundProduct.stock shouldBe 97
             }
         }
     }

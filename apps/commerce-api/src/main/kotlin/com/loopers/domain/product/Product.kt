@@ -3,6 +3,7 @@ package com.loopers.domain.product
 import com.loopers.domain.BaseEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
+import jakarta.persistence.Version
 
 @Table(name = "product")
 @Entity
@@ -13,6 +14,8 @@ class Product(
     val price: Int,
     var stock: Int,
     val imageUrl: String? = null,
+    @Version
+    var version: Long = 0L,
     id: Long = 0L,
 ) : BaseEntity(id) {
     fun deductStock(quantity: Int) {
