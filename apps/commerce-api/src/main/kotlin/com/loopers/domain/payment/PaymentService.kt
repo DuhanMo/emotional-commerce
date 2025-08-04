@@ -6,7 +6,6 @@ import com.loopers.domain.order.OrderRepository
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.user.User
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PaymentService(
@@ -16,7 +15,6 @@ class PaymentService(
 ) {
     private val payProcessors = payProcessors.associateBy { it.support }
 
-    @Transactional
     fun pay(user: User, order: Order) {
         val payProcessor = payProcessors[order.payMethod]
             ?: throw IllegalArgumentException("지원하지 않는 결제 방법입니다: ${order.payMethod}")

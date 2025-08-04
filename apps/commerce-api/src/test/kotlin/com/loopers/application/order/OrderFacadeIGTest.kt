@@ -2,9 +2,11 @@ package com.loopers.application.order
 
 import com.loopers.application.order.PlaceOrderInput.AddressInput
 import com.loopers.domain.order.PayMethod
+import com.loopers.domain.point.Point
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.order.OrderJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.product.ProductJpaRepository
 import com.loopers.infrastructure.product.ProductSummaryJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -20,6 +22,7 @@ class OrderFacadeIGTest(
     private val productJpaRepository: ProductJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
     private val orderJpaRepository: OrderJpaRepository,
+    private val pointJpaRepository: PointJpaRepository,
 ) : IntegrationSpec({
 
     Given("사용자와 상품이 존재하는 경우") {
@@ -28,6 +31,7 @@ class OrderFacadeIGTest(
         val product2 = productJpaRepository.save(createProduct(name = "상품2", price = 5000))
         productSummaryJpaRepository.save(ProductSummary(productId = product1.id, likeCount = 0L))
         productSummaryJpaRepository.save(ProductSummary(productId = product2.id, likeCount = 0L))
+        pointJpaRepository.save(Point(userId = user.id, amount = 100_000L))
 
         When("주문을 생성하면") {
             val input = PlaceOrderInput(
@@ -76,6 +80,8 @@ class OrderFacadeIGTest(
         val user2 = userJpaRepository.save(createUser(LoginId("user2")))
         val product = productJpaRepository.save(createProduct(name = "공통상품", price = 15000))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 0L))
+        pointJpaRepository.save(Point(userId = user1.id, amount = 100_000L))
+        pointJpaRepository.save(Point(userId = user2.id, amount = 100_000L))
 
         When("서로 다른 사용자가 주문을 생성하면") {
             val input1 = PlaceOrderInput(
@@ -86,7 +92,7 @@ class OrderFacadeIGTest(
                     zipCode = "11111",
                     detailAddress = "1동",
                 ),
-                payMethod = PayMethod.CARD,
+                payMethod = PayMethod.POINT,
                 orderItems = listOf(
                     PlaceOrderInput.OrderLineInput(
                         productId = product.id,

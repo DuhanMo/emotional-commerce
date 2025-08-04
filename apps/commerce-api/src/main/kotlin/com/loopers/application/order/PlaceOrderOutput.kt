@@ -1,6 +1,6 @@
 package com.loopers.application.order
 
-import com.loopers.domain.order.OrderInfo
+import com.loopers.domain.order.Order
 import com.loopers.domain.order.OrderStatus
 import com.loopers.domain.order.PayMethod
 
@@ -27,7 +27,7 @@ data class PlaceOrderOutput(
     )
 
     companion object {
-        fun from(info: OrderInfo): PlaceOrderOutput = PlaceOrderOutput(
+        fun from(info: Order): PlaceOrderOutput = PlaceOrderOutput(
             id = info.id,
             userId = info.userId,
             deliveryAddress = AddressOutput(
@@ -39,7 +39,7 @@ data class PlaceOrderOutput(
             payMethod = info.payMethod,
             status = info.status,
             totalAmount = info.totalAmount,
-            orderLineInfos = info.orderLineInfos.map { orderLine ->
+            orderLineInfos = info.orderLines.map { orderLine ->
                 OrderLineOutput(
                     productId = orderLine.productId,
                     quantity = orderLine.quantity,

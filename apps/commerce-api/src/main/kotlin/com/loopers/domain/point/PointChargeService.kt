@@ -10,13 +10,7 @@ class PointChargeService(
     fun charge(point: Point, amount: Long): Point {
         point.charge(amount)
 
-        pointLogRepository.save(
-            PointLog(
-                userId = point.userId,
-                pointId = point.id,
-                amount = amount,
-            ),
-        )
+        pointLogRepository.save(PointLog.fromCharge(point.userId, point.id, amount))
         return pointRepository.save(point)
     }
 }

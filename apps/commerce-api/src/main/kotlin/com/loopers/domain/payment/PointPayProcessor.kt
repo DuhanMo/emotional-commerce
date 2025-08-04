@@ -2,6 +2,8 @@ package com.loopers.domain.payment
 
 import com.loopers.domain.order.Order
 import com.loopers.domain.order.PayMethod
+import com.loopers.domain.point.PointLog
+import com.loopers.domain.point.PointLogRepository
 import com.loopers.domain.point.PointRepository
 import com.loopers.domain.user.User
 import org.springframework.stereotype.Component
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class PointPayProcessor(
     private val pointRepository: PointRepository,
+    private val pointLogRepository: PointLogRepository,
 ) : PayProcessor {
     override val support: PayMethod = PayMethod.POINT
 
@@ -17,6 +20,7 @@ class PointPayProcessor(
 
         point.use(order.totalAmount)
 
+        pointLogRepository.save(PointLog.fromUse(user.id, point.id, order.totalAmount))
         pointRepository.save(point)
     }
 }

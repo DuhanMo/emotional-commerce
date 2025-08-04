@@ -1,9 +1,11 @@
 package com.loopers.interfaces.api.order
 
 import com.loopers.domain.order.PayMethod
+import com.loopers.domain.point.Point
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.order.OrderJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.product.ProductJpaRepository
 import com.loopers.infrastructure.product.ProductSummaryJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
@@ -28,6 +30,7 @@ class OrderV1ApiE2ETest(
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
     private val orderJpaRepository: OrderJpaRepository,
     private val testRestTemplate: TestRestTemplate,
+    private val pointJpaRepository: PointJpaRepository,
 ) : E2ESpec({
     /**
      * @see OrderV1Controller.placeOrder
@@ -42,6 +45,7 @@ class OrderV1ApiE2ETest(
             val product2 = productJpaRepository.save(createProduct(name = "상품2", price = 5000))
             productSummaryJpaRepository.save(ProductSummary(productId = product1.id, likeCount = 0L))
             productSummaryJpaRepository.save(ProductSummary(productId = product2.id, likeCount = 0L))
+            pointJpaRepository.save(Point(userId = user.id, amount = 100_000L))
 
             val request = PlaceOrderRequest(
                 address = AddressRequest(
@@ -86,8 +90,12 @@ class OrderV1ApiE2ETest(
             val savedOrder = orderJpaRepository.findByIdWithOrderLines(response.body?.data?.id!!)
             savedOrder shouldNotBe null
             savedOrder!!.userId shouldBe user.id
-            savedOrder.totalAmount shouldBe 25000L
+            savedOrder.totalAmount shouldBe 25_000L
             savedOrder.orderLines.size shouldBe 2
+
+            // 포인트 감소 확인
+            val point = pointJpaRepository.findByUserId(user.id)!!
+            point.amount shouldBe 75_000L
         }
 
         it("X-USER-ID 헤더가 없는 경우 - 400 Bad Request 응답을 반환한다") {
