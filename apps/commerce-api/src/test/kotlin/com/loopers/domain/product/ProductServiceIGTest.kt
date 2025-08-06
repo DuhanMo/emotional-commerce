@@ -24,14 +24,13 @@ class ProductServiceIGTest(
     Given("재고가 부족한 상품인 경우") {
         // 부족한 재고.
         val product = productJpaRepository.save(createProduct(stock = 1))
-        val order = createOrder().apply {
-            addOrderLines(
-                listOf(
-                    createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-                    createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-                ),
-            )
-        }
+        val order = createOrder()
+        order.addOrderLines(
+            listOf(
+                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
+                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
+            ),
+        )
 
         When("재고 감소를 시도하면") {
             Then("예외가 발생한다") {
@@ -44,14 +43,13 @@ class ProductServiceIGTest(
     Given("재고가 충분한 상품인 경우") {
         // 충분한 재고.
         val product = productJpaRepository.save(createProduct(stock = 100))
-        val order = createOrder().apply {
-            addOrderLines(
-                listOf(
-                    createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-                    createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
-                ),
-            )
-        }
+        val order = createOrder()
+        order.addOrderLines(
+            listOf(
+                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
+                createOrderLine(productId = product.id, unitPrice = 10_000L, quantity = 1),
+            ),
+        )
 
         When("재고 감소를 시도하면") {
             productService.deductStock(order)
@@ -69,15 +67,15 @@ class ProductServiceIGTest(
 
         val product = productJpaRepository.save(createProduct(stock = initialStock))
 
-        val order = createOrder().apply {
-            addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
-        }
+        val order = createOrder()
+        order.addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
+
         val latch = CountDownLatch(numberOfThreads)
         val executor = Executors.newFixedThreadPool(numberOfThreads)
         val results = ConcurrentLinkedQueue<Result<Unit>>()
 
         When("동시에 재고 감소를 시도하면") {
-            repeat(numberOfThreads) { threadIndex ->
+            repeat(numberOfThreads) {
                 executor.submit {
                     try {
                         val result = runCatching {
@@ -107,14 +105,15 @@ class ProductServiceIGTest(
 
         val product = productJpaRepository.save(createProduct(stock = initialStock))
 
-        val order = createOrder().apply {
-            addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
-        }
+        val order = createOrder()
+        order.addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
 
         When("동시에 재고 감소를 시도하면") {
             val results = (0 until numberOfRequest).map {
                 async(Dispatchers.IO) {
-                    runCatching { productService.deductStock(order) }
+                    runCatching {
+                        productService.deductStock(order)
+                    }
                 }
             }.awaitAll()
 
@@ -133,9 +132,8 @@ class ProductServiceIGTest(
 
         val product = productJpaRepository.save(createProduct(stock = initialStock))
 
-        val order = createOrder().apply {
-            addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
-        }
+        val order = createOrder()
+        order.addOrderLines(listOf(createOrderLine(productId = product.id, quantity = 1)))
 
         When("동시에 재고 감소를 시도하면") {
             val results = (0 until numberOfRequest).map {
