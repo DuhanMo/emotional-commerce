@@ -21,6 +21,9 @@ class OrderService(
         ).apply {
             addOrderLines(orderLines)
         }
+        coupon?.calculateDiscountedAmount(order.totalAmount)?.let {
+            order.updateDiscountedAmount(it)
+        }
         orderRepository.save(order)
     }
 }

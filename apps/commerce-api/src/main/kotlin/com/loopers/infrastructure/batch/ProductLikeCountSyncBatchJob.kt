@@ -2,7 +2,8 @@ package com.loopers.infrastructure.batch
 
 import com.loopers.domain.product.ProductLikeRepository
 import com.loopers.domain.support.PageCriteria
-import java.time.ZonedDateTime
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -13,8 +14,8 @@ class ProductLikeCountSyncBatchJob(
 ) {
     @Scheduled(fixedDelay = 3600000)
     fun syncProductLikeCounts() {
-        val now = ZonedDateTime.now()
-        val twoHoursAgo = now.minusHours(2)
+        val now = Instant.now()
+        val twoHoursAgo = now.minus(2, ChronoUnit.HOURS)
         val batchSize = 200
         val pageCriteria = PageCriteria(0, batchSize)
         do {

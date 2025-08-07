@@ -3,7 +3,7 @@ package com.loopers.infrastructure.product
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import com.loopers.domain.product.ProductLike
 import com.loopers.domain.product.ProductLikeStatus
-import java.time.ZonedDateTime
+import java.time.Instant
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -31,8 +31,8 @@ interface ProductLikeJpaRepository : JpaRepository<ProductLike, Long>, KotlinJds
     """,
     )
     fun findLikeUpdatedProductIds(
-        @Param("from") from: ZonedDateTime,
-        @Param("to") to: ZonedDateTime,
+        @Param("from") from: Instant,
+        @Param("to") to: Instant,
         pageable: Pageable,
     ): Page<Long>
 }

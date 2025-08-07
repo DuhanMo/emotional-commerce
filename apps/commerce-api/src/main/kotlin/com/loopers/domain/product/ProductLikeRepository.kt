@@ -1,6 +1,6 @@
 package com.loopers.domain.product
 
-import java.time.ZonedDateTime
+import java.time.Instant
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -15,8 +15,8 @@ interface ProductLikeRepository {
     fun findAllByUserId(userId: Long): List<ProductLike>
 
     fun findAllLikeUpdatedProductId(
-        from: ZonedDateTime,
-        to: ZonedDateTime,
+        from: Instant,
+        to: Instant,
         pageable: Pageable,
     ): Page<Long>
 

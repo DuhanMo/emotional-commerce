@@ -4,7 +4,7 @@ import com.loopers.domain.product.ProductLike
 import com.loopers.domain.product.ProductLikeCount
 import com.loopers.domain.product.ProductLikeRepository
 import com.loopers.domain.product.ProductLikeStatus.ACTIVE
-import java.time.ZonedDateTime
+import java.time.Instant
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
@@ -25,8 +25,8 @@ class ProductLikeRepositoryImpl(
         productLikeJpaRepository.findAllByUserIdAndStatusOrderByIdDesc(userId, ACTIVE)
 
     override fun findAllLikeUpdatedProductId(
-        from: ZonedDateTime,
-        to: ZonedDateTime,
+        from: Instant,
+        to: Instant,
         pageable: Pageable,
     ): Page<Long> = productLikeJpaRepository.findLikeUpdatedProductIds(from, to, pageable)
 

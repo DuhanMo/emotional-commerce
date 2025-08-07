@@ -1,5 +1,6 @@
 package com.loopers.application.order
 
+import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.order.Address
 import com.loopers.domain.order.CreateOrderCommand
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
@@ -11,8 +12,9 @@ data class PlaceOrderInput(
     val address: AddressInput,
     val payMethod: PayMethod,
     val orderItems: List<OrderLineInput>,
+    val issuedCouponId: Long?,
 ) {
-    fun toCommand(userId: Long): CreateOrderCommand = CreateOrderCommand(
+    fun toCommand(userId: Long, coupon: Coupon?): CreateOrderCommand = CreateOrderCommand(
         userId = userId,
         deliveryAddress = Address(
             street = address.street,
@@ -28,6 +30,7 @@ data class PlaceOrderInput(
                 unitPrice = item.unitPrice,
             )
         },
+        coupon = coupon,
     )
 
     data class AddressInput(

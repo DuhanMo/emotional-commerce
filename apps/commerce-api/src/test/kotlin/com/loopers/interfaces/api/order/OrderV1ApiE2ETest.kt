@@ -67,6 +67,7 @@ class OrderV1ApiE2ETest(
                         unitPrice = 5000,
                     ),
                 ),
+                issuedCouponId = null,
             )
             val headers = HttpHeaders().apply { set("X-USER-ID", "testuser1") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
@@ -115,6 +116,7 @@ class OrderV1ApiE2ETest(
                         unitPrice = 10000,
                     ),
                 ),
+                issuedCouponId = null,
             )
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
 
@@ -142,6 +144,7 @@ class OrderV1ApiE2ETest(
                         unitPrice = 10000,
                     ),
                 ),
+                issuedCouponId = null,
             )
             val headers = HttpHeaders().apply { set("X-USER-ID", "notexist1") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
@@ -166,6 +169,7 @@ class OrderV1ApiE2ETest(
                 ),
                 payMethod = PayMethod.POINT,
                 orderItems = emptyList(),
+                issuedCouponId = null,
             )
             val headers = HttpHeaders().apply { set("X-USER-ID", "testuser2") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
@@ -196,6 +200,7 @@ class OrderV1ApiE2ETest(
                         unitPrice = 10000,
                     ),
                 ),
+                issuedCouponId = null,
             )
             val headers = HttpHeaders().apply { set("X-USER-ID", "testuser3") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
@@ -226,6 +231,7 @@ class OrderV1ApiE2ETest(
                         unitPrice = 10000,
                     ),
                 ),
+                issuedCouponId = null,
             )
             val headers = HttpHeaders().apply { set("X-USER-ID", "testuser4") }
             val responseType = object : ParameterizedTypeReference<ApiResponse<PlaceOrderResponse>>() {}
