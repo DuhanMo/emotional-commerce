@@ -18,7 +18,7 @@ class PointPayProcessor(
 
     @Transactional
     override fun process(user: User, order: Order) {
-        val point = pointRepository.getByUserId(user.id)
+        val point = pointRepository.getByUserIdWithLock(user.id)
 
         point.use(order.totalAmount)
 

@@ -13,6 +13,6 @@ import org.springframework.data.repository.query.Param
 interface ProductJpaRepository : JpaRepository<Product, Long>, KotlinJdslJpqlExecutor {
     @Query("SELECT p FROM Product p WHERE p.id = :id")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints(QueryHint(name = "javax.persistence.lock.timeout", value = "3000")) // 3초
+    @QueryHints(QueryHint(name = "jakarta.persistence.lock.timeout", value = "3000"))
     fun findByIdWithLock(@Param("id") id: Long): Product?
 }

@@ -34,14 +34,14 @@ class PointPayProcessorTest(
                 }
             }.awaitAll()
 
-            Then("하나의 요청만 성공한다") {
+            Then("포인트가 모두 정상 차감되어야 한다") {
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!
 
-                foundPoint.amount shouldBe 40_000L
-                pointHistoryJpaRepository.findAll().count() shouldBe 1
+                foundPoint.amount shouldBe 30_000L
+                pointHistoryJpaRepository.findAll().count() shouldBe 2
 
-                results.count { it.isSuccess } shouldBe 1
-                results.count { it.isFailure } shouldBe 1
+                results.count { it.isSuccess } shouldBe 2
+                results.count { it.isFailure } shouldBe 0
             }
         }
     }
