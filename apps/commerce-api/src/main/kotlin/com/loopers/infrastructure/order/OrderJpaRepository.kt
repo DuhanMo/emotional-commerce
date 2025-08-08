@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param
 interface OrderJpaRepository : JpaRepository<Order, Long> {
     fun findByUserId(userId: Long): List<Order>
 
-    @Query("select o from Order o join fetch o.orderLines WHERE o.id = :id")
+    @Query("SELECT o FROM Order o JOIN FETCH o.orderLines WHERE o.id = :id")
     fun findByIdWithOrderLines(@Param("id") id: Long): Order?
 }

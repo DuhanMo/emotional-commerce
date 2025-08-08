@@ -3,9 +3,9 @@ package com.loopers.infrastructure.product
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
 import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
 import com.loopers.domain.product.Product
-import com.loopers.domain.product.ProductInfo
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
+import com.loopers.domain.product.ProductWithSummaryInfo
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import org.springframework.data.domain.Page
@@ -19,13 +19,13 @@ class ProductRepositoryImpl(
     private val productJpaRepository: ProductJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
 ) : ProductRepository {
-    override fun findProducts(
+    override fun findAllProductSummary(
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductInfo> {
+    ): Page<ProductWithSummaryInfo> {
         val page = productJpaRepository.findPage(pageable) {
-            selectNew<ProductInfo>(
+            selectNew<ProductWithSummaryInfo>(
                 entity(Product::class),
                 entity(ProductSummary::class),
             ).from(
@@ -48,27 +48,32 @@ class ProductRepositoryImpl(
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
-    override fun getById(productId: Long): ProductInfo {
-        val product = productJpaRepository.findByIdOrNull(productId)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $productId)")
+    override fun getById(id: Long): ProductWithSummaryInfo {
+        val product = productJpaRepository.findByIdOrNull(id)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $productId)")
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $id)")
 
-        return ProductInfo(product, summary)
+        return ProductWithSummaryInfo(product, summary)
     }
 
-    override fun findAllById(productIds: List<Long>): List<ProductInfo> =
+    override fun findAllProductSummaryById(ids: List<Long>): List<ProductWithSummaryInfo> =
         productJpaRepository.findAll {
-            selectNew<ProductInfo>(
+            selectNew<ProductWithSummaryInfo>(
                 entity(Product::class),
                 entity(ProductSummary::class),
             ).from(
                 entity(Product::class),
                 join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
             ).where(
-                path(Product::id).`in`(productIds),
+                path(Product::id).`in`(ids),
             )
         }.filterNotNull()
 
+    override fun findAllById(ids: List<Long>): List<Product> = productJpaRepository.findAllById(ids)
+
     override fun save(product: Product): Product = productJpaRepository.save(product)
+
+    override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
+            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
 }

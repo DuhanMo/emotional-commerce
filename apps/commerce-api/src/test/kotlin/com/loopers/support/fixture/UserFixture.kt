@@ -15,9 +15,11 @@ fun createUser(
     email: Email = TEST_USER_EMAIL,
     birthDate: BirthDate = TEST_USER_BIRTH_DATE,
     gender: Gender = Gender.MALE,
+    id: Long = 0L,
 ): User = User(
     loginId = loginId,
     email = email,
     birthDate = birthDate,
     gender = gender,
+    id = id,
 )

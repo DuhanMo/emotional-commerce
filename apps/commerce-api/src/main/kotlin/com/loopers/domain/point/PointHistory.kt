@@ -4,9 +4,9 @@ import com.loopers.domain.BaseEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
 
-@Table(name = "point_log")
+@Table(name = "point_history")
 @Entity
-class PointLog private constructor(
+class PointHistory private constructor(
     val userId: Long,
     val pointId: Long,
     val amount: Long,
@@ -16,12 +16,12 @@ class PointLog private constructor(
             userId: Long,
             pointId: Long,
             amount: Long,
-        ): PointLog = PointLog(userId, pointId, -amount)
+        ): PointHistory = PointHistory(userId, pointId, -amount)
 
         fun fromCharge(
             userId: Long,
             pointId: Long,
             amount: Long,
-        ): PointLog = PointLog(userId, pointId, amount)
+        ): PointHistory = PointHistory(userId, pointId, amount)
     }
 }

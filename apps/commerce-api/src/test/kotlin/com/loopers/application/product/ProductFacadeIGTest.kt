@@ -87,6 +87,7 @@ class ProductFacadeIGTest(
         productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
         val user2 = userJpaRepository.save(createUser(LoginId("user222")))
+
         When("다른 사용자가 좋아요 등록하면") {
             productFacade.likeProduct(LikeProductInput(product.id, LoginId("user222")))
 
@@ -100,6 +101,7 @@ class ProductFacadeIGTest(
             }
         }
     }
+
     Given("좋아요 등록된 상품이 존재하고 다른 사용자가 좋아요 취소 하는 경우") {
         val user1 = userJpaRepository.save(createUser(LoginId("user111")))
         val product = productJpaRepository.save(createProduct())
@@ -108,8 +110,8 @@ class ProductFacadeIGTest(
 
         val user2 = userJpaRepository.save(createUser(LoginId("user222")))
         productLikeJpaRepository.save(ProductLike(product.id, user2.id, ACTIVE))
-        When("다른 사용자가 좋아요 취소하면") {
 
+        When("다른 사용자가 좋아요 취소하면") {
             productFacade.unlikeProduct(UnlikeProductInput(product.id, LoginId("user222")))
 
             Then("상품 집계 좋아요 수가 감소한다") {

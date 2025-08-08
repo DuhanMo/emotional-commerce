@@ -20,7 +20,7 @@ class ProductQueryFacade(
         sortBy: String,
         pageCriteria: PageCriteria,
     ): ProductListOutput {
-        val productPage = productQueryService.findProducts(
+        val productPage = productQueryService.findAllProductSummary(
             brandId = brandId,
             sortBy = sortBy,
             pageCriteria = pageCriteria,
@@ -48,12 +48,12 @@ class ProductQueryFacade(
         val productLikes = productLikeQueryService.findLikedProducts(user.id)
 
         val productIds = productLikes.map { it.productId }
-        val productInfos = productQueryService.findAllById(productIds)
+        val productSummaries = productQueryService.findAllProductSummaryById(productIds)
 
-        val brandIds = productInfos.map { it.product.brandId }.distinct()
+        val brandIds = productSummaries.map { it.product.brandId }.distinct()
         val brands = brandQueryService.findBrands(brandIds).associateBy { it.id }
 
-        return productInfos.map { info ->
+        return productSummaries.map { info ->
             val brand = brands[info.product.brandId]
                 ?: throw IllegalStateException("해당 상품의 브랜드를 찾을 수 없습니다.(productId: ${info.product.id})")
             ProductItemOutput.from(info, brand)

@@ -1,5 +1,6 @@
 package com.loopers.support.fixture
 
+import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.order.Address
 import com.loopers.domain.order.CreateOrderCommand
 import com.loopers.domain.order.Order
@@ -23,11 +24,13 @@ fun createOrderCommand(
         OrderLineInfo(productId = 1L, quantity = 2, unitPrice = 10000),
         OrderLineInfo(productId = 2L, quantity = 1, unitPrice = 5000),
     ),
+    coupon: Coupon? = null,
 ): CreateOrderCommand = CreateOrderCommand(
     userId = userId,
     deliveryAddress = deliveryAddress,
     payMethod = payMethod,
     orderLines = orderLines,
+    coupon = coupon,
 )
 
 fun createOrder(

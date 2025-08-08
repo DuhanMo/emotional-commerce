@@ -25,6 +25,9 @@ data class PlaceOrderRequest(
     @field:Valid
     @field:Size(min = 1, message = "주문 상품은 최소 1개 이상이어야 합니다.")
     val orderItems: List<OrderLineRequest>,
+
+    @Schema(description = "발급쿠폰 식별자", example = "1", required = true)
+    val issuedCouponId: Long?,
 ) {
     @Schema(description = "배송 주소 정보")
     data class AddressRequest(
@@ -78,5 +81,6 @@ data class PlaceOrderRequest(
                 unitPrice = item.unitPrice!!,
             )
         },
+        issuedCouponId = issuedCouponId,
     )
 }

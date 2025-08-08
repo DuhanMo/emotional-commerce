@@ -35,7 +35,7 @@ class ProductQueryServiceIGTest(
         val sortBy = "likes_desc"
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findProducts(
+            val result = productQueryService.findAllProductSummary(
                 brandId = null,
                 sortBy = sortBy,
                 pageCriteria = PageCriteria(0, 20),
@@ -53,7 +53,7 @@ class ProductQueryServiceIGTest(
         val sortBy = "price_asc"
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findProducts(
+            val result = productQueryService.findAllProductSummary(
                 brandId = null,
                 sortBy = sortBy,
                 pageCriteria = PageCriteria(0, 20),
@@ -71,7 +71,7 @@ class ProductQueryServiceIGTest(
 
         When("상품 목록을 조회하면") {
             // 두 번째 페이지, 페이지 사이즈 2
-            val result = productQueryService.findProducts(
+            val result = productQueryService.findAllProductSummary(
                 brandId = null,
                 sortBy = "latest",
                 pageCriteria = PageCriteria(1, 2),
@@ -88,7 +88,7 @@ class ProductQueryServiceIGTest(
         val brandId = 99L
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findProducts(
+            val result = productQueryService.findAllProductSummary(
                 brandId = brandId,
                 sortBy = "latest",
                 pageCriteria = PageCriteria(0, 20),

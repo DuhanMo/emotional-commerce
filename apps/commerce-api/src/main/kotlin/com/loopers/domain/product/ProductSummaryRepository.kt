@@ -4,4 +4,6 @@ interface ProductSummaryRepository {
     fun getByProductId(productId: Long): ProductSummary
 
     fun save(productSummary: ProductSummary): ProductSummary
+
+    fun findAllByProductId(productIds: List<Long>): List<ProductSummary>
 }

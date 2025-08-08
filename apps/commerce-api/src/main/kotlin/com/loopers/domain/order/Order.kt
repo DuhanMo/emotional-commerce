@@ -25,6 +25,8 @@ class Order(
     val totalAmount: Long
         get() = orderLines.sumOf { it.lineAmount }
 
+    var discountedAmount: Long? = null
+
     fun addOrderLines(orderLines: List<OrderLine>) {
         require(orderLines.count() > 0) { "주문 상품이 최소 1개는 있어야 합니다." }
         val orderLines = orderLines.map { it.setOrder(this) }
@@ -44,4 +46,8 @@ class Order(
     fun isPending(): Boolean = status == OrderStatus.PENDING
     fun isPaid(): Boolean = status == OrderStatus.PAID
     fun isPaymentFailed(): Boolean = status == OrderStatus.PAYMENT_FAILED
+
+    fun updateDiscountedAmount(amount: Long) {
+        this.discountedAmount = amount
+    }
 }
