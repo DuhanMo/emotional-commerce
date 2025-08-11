@@ -9,12 +9,6 @@ server:
     accept-count: 100 # 대기 큐 크기 (default : 100)
     keep-alive-timeout: 60s # 60s
   max-http-request-header-size: 8KB
-app:
-  seed:
-    enable: true
-    brands: 1000000
-    products-per-brand: 10
-    batch-size: 2000
 spring:
   main:
     web-application-type: servlet

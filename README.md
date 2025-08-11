@@ -1,40 +1,56 @@
-# Loopers Template (Spring + Kotlin)
-Loopers 에서 제공하는 스프링 코틀린 템플릿 프로젝트입니다.
+# Spring Boot + Kotlin 프로젝트
 
-## Getting Started
-현재 프로젝트 안정성 및 유지보수성 등을 위해 아래와 같은 장치를 운용하고 있습니다. 이에 아래 명령어를 통해 프로젝트의 기반을 설치해주세요.
-### Setup
-- pre-commit : 커밋 이전에 `ktlint` 를 통해 점검, 코드 안정성 확보
-```shell
-make init
-```
-### Environment
-`local` 프로필로 동작할 수 있도록, 필요 인프라를 `docker-compose` 로 제공합니다.
-```shell
-docker-compose -f ./docker/infra-compose.yml up
-```
-### Monitoring
-`local` 환경에서 모니터링을 할 수 있도록, `docker-compose` 를 통해 `prometheus` 와 `grafana` 를 제공합니다.
+로컬 환경에서 **인프라 기동 → 데모 데이터 시딩 → 애플리케이션 실행**까지의 절차를 안내합니다.
 
-애플리케이션 실행 이후, **http://localhost:3000** 로 접속해, admin/admin 계정으로 로그인하여 확인하실 수 있습니다.
-```shell
-docker-compose -f ./docker/monitoring-compose.yml up
+## 1) 요구사항
+- JDK 17+
+- Docker & Docker Compose
+- Python 3.9+ (시더 실행용)
+
+## 2) 로컬 인프라 기동 (MySQL, Redis)
+```bash
+docker-compose -f ./docker/infra-compose.yml up -d
 ```
 
-## About Multi-Module Project
-본 프로젝트는 멀티 모듈 프로젝트로 구성되어 있습니다. 각 모듈의 위계 및 역할을 분명히 하고, 아래와 같은 규칙을 적용합니다.
+MySQL: localhost:3306 / DB명: loopers (구성 파일에 따라 변경 가능)
 
-- apps : 각 모듈은 실행가능한 **SpringBootApplication** 을 의미합니다.
-- modules : 특정 구현이나 도메인에 의존적이지 않고, reusable 한 configuration 을 원칙으로 합니다.
-- supports : logging, monitoring 과 같이 부가적인 기능을 지원하는 add-on 모듈입니다.
 
+## 3) 데모 데이터 시딩 (Python)
+
+레포에 포함된 스크립트를 사용합니다.
+
+
+scripts/seed/
+ ├─ requirements.txt
+ ├─ .env
+ └─ seed.py
+
+
+### 3-1) 의존성 설치 & 시딩 실행
+
+```bash
+cd scripts/seed
+python3 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install -r requirements.txt   # 반드시 활성화된 파이썬으로 설치
+python -m pip show Faker                    # 설치 확인(정보가 나오면 OK)
+# 이미 데이터가 있으면 자동 스킵됩니다.
+python seed.py
 ```
-Root
-├── apps ( spring-applications )
-│   └── 📦 commerce-api
-├── modules ( reusable-configurations )
-│   └── 📦 jpa
-└── supports ( add-ons )
-    ├── 📦 monitoring
-    └── 📦 logging
-```
+대량 시딩 전, 작은 수치로 먼저 검증하세요.
+
+### 3-3) 시딩 실행
+
+
+## 4) 애플리케이션 실행
+
+./gradlew :apps:commerce-api:bootRun
+
+기본 프로필이 local이라면 다음 JPA/데이터소스 설정이 적용됩니다(레포 설정 기준):
+- JDBC: jdbc:mysql://localhost:3306/loopers?rewriteBatchedStatements=true&useConfigs=maxPerformance
+- USER/PWD: application / application
+
+참고
+- 시딩 데이터 규모가 크면 MySQL 리소스 사용량이 급증할 수 있습니다. Docker 메모리/CPU 제한을 확인하세요.
+- 시딩 스크립트와 애플리케이션의 시더 로직이 중복되지 않도록 환경을 분리하는 것을 권장합니다.
