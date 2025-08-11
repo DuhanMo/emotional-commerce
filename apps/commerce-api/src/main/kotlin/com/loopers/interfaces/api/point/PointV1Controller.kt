@@ -1,5 +1,6 @@
 package com.loopers.interfaces.api.point
 
+import com.loopers.application.point.ChargePointInput
 import com.loopers.application.point.PointFacade
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
@@ -21,7 +22,14 @@ class PointV1Controller(
         @Valid @RequestBody request: PointChargeRequest,
         @RequestHeader("X-USER-ID") loginId: String,
     ): ApiResponse<PointResponse> {
-        val response = PointResponse.from(pointFacade.charge(request.toCommand(loginId)))
+        val response = PointResponse.from(
+            pointFacade.charge(
+                ChargePointInput(
+                    loginId = LoginId(loginId),
+                    point = request.point!!,
+                ),
+            ),
+        )
         return ApiResponse.success(response)
     }
 

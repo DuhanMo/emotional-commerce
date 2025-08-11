@@ -1,6 +1,9 @@
 package com.loopers.interfaces.api.user
 
 import com.loopers.application.user.UserFacade
+import com.loopers.application.user.UserRegisterInput
+import com.loopers.domain.user.BirthDate
+import com.loopers.domain.user.Email
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
@@ -20,7 +23,16 @@ class UserV1Controller(
     override fun register(
         @Valid @RequestBody request: UserRegisterRequest,
     ): ApiResponse<UserResponse> {
-        val response = UserResponse.from(userFacade.register(request.toCommand()))
+        val response = UserResponse.from(
+            userFacade.register(
+                UserRegisterInput(
+                    loginId = LoginId(request.loginId),
+                    email = Email(request.email),
+                    birthDate = BirthDate(request.birthDate),
+                    gender = request.gender!!,
+                ),
+            ),
+        )
         return ApiResponse.success(response)
     }
 

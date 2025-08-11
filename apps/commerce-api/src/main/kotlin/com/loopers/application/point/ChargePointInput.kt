@@ -1,8 +1,8 @@
-package com.loopers.domain.point
+package com.loopers.application.point
 
 import com.loopers.domain.user.LoginId
 
-data class ChargePointCommand(
+data class ChargePointInput(
     val loginId: LoginId,
     val point: Long,
 )

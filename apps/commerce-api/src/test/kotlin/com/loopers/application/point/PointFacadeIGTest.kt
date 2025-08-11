@@ -1,10 +1,9 @@
 package com.loopers.application.point
 
-import com.loopers.domain.point.ChargePointCommand
 import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
-import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.point.PointHistoryJpaRepository
+import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -26,7 +25,7 @@ class PointFacadeIGTest(
         When("포인트를 충전하면") {
             Then("예외 발생한다") {
                 shouldThrow<CoreException> {
-                    pointFacade.charge(ChargePointCommand(LoginId("xyz789"), 100))
+                    pointFacade.charge(ChargePointInput(LoginId("xyz789"), 100))
                 }
             }
         }
@@ -37,7 +36,7 @@ class PointFacadeIGTest(
         val point = pointJpaRepository.save(Point(user.id))
 
         When("포인트를 충전하면") {
-            pointFacade.charge(ChargePointCommand(LoginId("abc123"), 100))
+            pointFacade.charge(ChargePointInput(LoginId("abc123"), 100))
 
             Then("포인트가 증가하고 포인트 로그가 적재된다") {
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!

@@ -1,10 +1,6 @@
 package com.loopers.interfaces.api.user
 
-import com.loopers.domain.user.BirthDate
-import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
-import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.UserRegisterCommand
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -28,11 +24,4 @@ data class UserRegisterRequest(
     @Schema(description = "성별", example = "MALE", required = true, allowableValues = ["MALE", "FEMALE"])
     @field:NotNull(message = "성별은 빈 값일 수 없습니다.")
     val gender: Gender?,
-) {
-    fun toCommand(): UserRegisterCommand = UserRegisterCommand(
-        loginId = LoginId(loginId),
-        email = Email(email),
-        birthDate = BirthDate(birthDate),
-        gender = gender!!,
-    )
-}
+)
