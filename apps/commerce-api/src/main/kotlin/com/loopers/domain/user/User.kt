@@ -14,4 +14,5 @@ class User(
     val birthDate: BirthDate,
     @Enumerated(EnumType.STRING)
     val gender: Gender,
-) : BaseEntity()
+    id: Long = 0L,
+) : BaseEntity(id)

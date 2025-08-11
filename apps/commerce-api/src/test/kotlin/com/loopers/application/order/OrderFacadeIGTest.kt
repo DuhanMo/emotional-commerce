@@ -55,6 +55,7 @@ class OrderFacadeIGTest(
                         unitPrice = 5000,
                     ),
                 ),
+                issuedCouponId = null,
             )
 
             val result = orderFacade.placeOrder(input)
@@ -100,6 +101,7 @@ class OrderFacadeIGTest(
                         unitPrice = 15000,
                     ),
                 ),
+                issuedCouponId = null,
             )
 
             val input2 = PlaceOrderInput(
@@ -118,6 +120,7 @@ class OrderFacadeIGTest(
                         unitPrice = 15000,
                     ),
                 ),
+                issuedCouponId = null,
             )
 
             val result1 = orderFacade.placeOrder(input1)

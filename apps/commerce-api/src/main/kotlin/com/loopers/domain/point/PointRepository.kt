@@ -8,4 +8,6 @@ interface PointRepository {
     fun getByUserLoginId(loginId: LoginId): Point
 
     fun getByUserId(userId: Long): Point
+
+    fun getByUserIdWithLock(userId: Long): Point
 }

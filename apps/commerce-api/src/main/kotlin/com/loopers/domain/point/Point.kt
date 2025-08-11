@@ -16,9 +16,7 @@ class Point(
     }
 
     fun use(amount: Long) {
-        require(amount < this.amount) {
-            "포인트가 부족합니다.(현재 포인트: ${this.amount}, 결제 금액: $amount)"
-        }
+        require(amount < this.amount) { "포인트가 부족합니다.(현재 포인트: ${this.amount}, 결제 금액: $amount)" }
         this.amount -= amount
     }
 }

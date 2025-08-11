@@ -4,7 +4,7 @@ import com.loopers.domain.point.ChargePointCommand
 import com.loopers.domain.point.Point
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.point.PointJpaRepository
-import com.loopers.infrastructure.point.PointLogJpaRepository
+import com.loopers.infrastructure.point.PointHistoryJpaRepository
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
 import com.loopers.support.fixture.createUser
@@ -17,7 +17,7 @@ class PointFacadeIGTest(
     private val pointFacade: PointFacade,
     private val userJpaRepository: UserJpaRepository,
     private val pointJpaRepository: PointJpaRepository,
-    private val pointLogJpaRepository: PointLogJpaRepository,
+    private val pointHistoryJpaRepository: PointHistoryJpaRepository,
 ) : IntegrationSpec({
     Given("로그인 ID가 존재하지 않는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("abc123")))
@@ -42,7 +42,7 @@ class PointFacadeIGTest(
             Then("포인트가 증가하고 포인트 로그가 적재된다") {
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!
                 foundPoint.amount shouldBe 100
-                pointLogJpaRepository.findAll().first { it.pointId == foundPoint.id }.amount shouldBe 100
+                pointHistoryJpaRepository.findAll().first { it.pointId == foundPoint.id }.amount shouldBe 100
             }
         }
     }

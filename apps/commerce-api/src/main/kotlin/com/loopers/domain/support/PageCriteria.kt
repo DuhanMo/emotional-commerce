@@ -9,4 +9,6 @@ data class PageCriteria(
 ) {
     val pageable: Pageable
         get() = PageRequest.of(page, size)
+
+    fun nextPage(): PageCriteria = copy(page = page + 1)
 }

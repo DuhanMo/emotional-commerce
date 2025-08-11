@@ -18,4 +18,7 @@ class PointRepositoryImpl(
 
     override fun getByUserId(userId: Long): Point = pointJpaRepository.findByUserId(userId)
         ?: throw CoreException(ErrorType.NOT_FOUND, "포인트를 찾을 수 없습니다.(userId: $userId)")
+
+    override fun getByUserIdWithLock(userId: Long): Point = pointJpaRepository.findByUserIdWithLock(userId)
+        ?: throw CoreException(ErrorType.NOT_FOUND, "포인트를 찾을 수 없습니다.(userId: $userId)")
 }

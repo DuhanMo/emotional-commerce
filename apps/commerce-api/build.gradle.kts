@@ -20,10 +20,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${project.properties["springDocOpenApiVersion"]}")
 
-    // querydsl
-    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:3.5.5")
-    implementation("com.linecorp.kotlin-jdsl:jpql-render:3.5.5")
-    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:3.5.5")
+    // jdsl
+    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${project.properties["jdslVersion"]}")
+    implementation("com.linecorp.kotlin-jdsl:jpql-render:${project.properties["jdslVersion"]}")
+    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${project.properties["jdslVersion"]}")
+
+    // retry
+    implementation("org.springframework.retry:spring-retry")
 
     // test-fixtures
     testImplementation(testFixtures(project(":modules:jpa")))

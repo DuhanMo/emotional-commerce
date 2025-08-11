@@ -16,4 +16,7 @@ class ProductSummaryRepositoryImpl(
 
     override fun save(productSummary: ProductSummary): ProductSummary =
         productSummaryJpaRepository.save(productSummary)
+
+    override fun findAllByProductId(productIds: List<Long>): List<ProductSummary> =
+        productSummaryJpaRepository.findAllByProductIdIn(productIds)
 }
