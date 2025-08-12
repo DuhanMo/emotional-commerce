@@ -18,4 +18,20 @@ class ProductService(
             productRepository.save(product)
         }
     }
+
+    fun increaseLikeCount(productId: Long) {
+        val product = productRepository.getById(productId)
+
+        product.increaseLikeCount()
+
+        productRepository.save(product)
+    }
+
+    fun decreaseLikeCount(productId: Long) {
+        val product = productRepository.getById(productId)
+
+        product.decreaseLikeCount()
+
+        productRepository.save(product)
+    }
 }

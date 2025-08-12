@@ -48,7 +48,7 @@ class ProductRepositoryImpl(
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
-    override fun getById(id: Long): ProductWithSummaryInfo {
+    override fun getByIdWithSummary(id: Long): ProductWithSummaryInfo {
         val product = productJpaRepository.findByIdOrNull(id)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
@@ -76,4 +76,7 @@ class ProductRepositoryImpl(
 
     override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+
+    override fun getById(id: Long): Product = productJpaRepository.findByIdOrNull(id)
+    ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
 }

@@ -35,7 +35,7 @@ class ProductQueryFacade(
     fun get(
         productId: Long,
     ): ProductItemOutput {
-        val productInfos = productQueryService.getById(productId)
+        val productInfos = productQueryService.getByIdWithSummary(productId)
         val brand = brandQueryService.getById(productInfos.product.brandId)
 
         return ProductItemOutput.from(productInfos, brand)

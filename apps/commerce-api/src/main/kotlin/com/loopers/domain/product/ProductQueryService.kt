@@ -19,7 +19,7 @@ class ProductQueryService(
             pageable = pageCriteria.pageable,
         )
 
-    fun getById(productId: Long): ProductWithSummaryInfo = productRepository.getById(productId)
+    fun getByIdWithSummary(productId: Long): ProductWithSummaryInfo = productRepository.getByIdWithSummary(productId)
 
     fun findAllProductSummaryById(productIds: List<Long>): List<ProductWithSummaryInfo> =
         productRepository.findAllProductSummaryById(productIds)

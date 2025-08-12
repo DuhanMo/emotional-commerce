@@ -10,7 +10,7 @@ interface ProductRepository {
         pageable: Pageable,
     ): Page<ProductWithSummaryInfo>
 
-    fun getById(id: Long): ProductWithSummaryInfo
+    fun getByIdWithSummary(id: Long): ProductWithSummaryInfo
 
     fun findAllProductSummaryById(ids: List<Long>): List<ProductWithSummaryInfo>
 
@@ -19,4 +19,6 @@ interface ProductRepository {
     fun save(product: Product): Product
 
     fun getByIdWithLock(id: Long): Product
+
+    fun getById(id: Long): Product
 }
