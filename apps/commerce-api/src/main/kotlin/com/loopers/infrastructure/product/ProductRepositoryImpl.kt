@@ -1,10 +1,16 @@
 package com.loopers.infrastructure.product
 
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
+import com.linecorp.kotlinjdsl.querymodel.jpql.expression.Expressions.count
+import com.linecorp.kotlinjdsl.querymodel.jpql.path.Paths.path
 import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
+import com.linecorp.kotlinjdsl.querymodel.jpql.sort.Sortable
 import com.loopers.domain.product.Product
+import com.loopers.domain.product.ProductLike
+import com.loopers.domain.product.ProductLikeStatus.ACTIVE
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
+import com.loopers.domain.product.ProductWithLikeCount
 import com.loopers.domain.product.ProductWithSummaryInfo
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
@@ -44,6 +50,40 @@ class ProductRepositoryImpl(
 
         val filteredContent = page.content.filterNotNull()
         return PageImpl(filteredContent, pageable, page.totalElements)
+    }
+
+    override fun findAllProductWithLikeCount(
+        brandId: Long?,
+        sortBy: String,
+        pageable: Pageable,
+    ): Page<ProductWithLikeCount> {
+        val page = productJpaRepository.findPage(pageable) {
+            selectNew<ProductWithLikeCount>(
+                entity(Product::class),
+                count(ProductLike::id),
+            ).from(
+                entity(Product::class),
+                leftJoin(entity(ProductLike::class))
+                    .on(
+                        path(Product::id).equal(path(ProductLike::productId))
+                            .and(path(ProductLike::status).eq(ACTIVE)),
+                    ),
+            ).where(
+                eqBrandId(brandId),
+            ).groupBy(
+                path(Product::id),
+            ).orderBy(
+                *makeSort(sortBy),
+            )
+        }
+        val filteredContent = page.content.filterNotNull()
+        return PageImpl(filteredContent, pageable, page.totalElements)
+    }
+
+    private fun Jpql.makeSort(sortBy: String): Array<out Sortable?> = when (sortBy) {
+        "likes_desc" -> arrayOf(count(ProductLike::id).desc(), path(Product::id).desc())
+        "price_asc" -> arrayOf(path(Product::price).asc(), path(Product::id).desc())
+        else -> arrayOf(path(Product::id).desc())
     }
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }

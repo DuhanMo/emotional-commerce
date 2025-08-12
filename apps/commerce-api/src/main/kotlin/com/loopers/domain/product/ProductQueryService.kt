@@ -19,6 +19,17 @@ class ProductQueryService(
             pageable = pageCriteria.pageable,
         )
 
+    fun findAllProductWithLikeCount(
+        brandId: Long?,
+        sortBy: String,
+        pageCriteria: PageCriteria,
+    ): Page<ProductWithLikeCount> =
+        productRepository.findAllProductWithLikeCount(
+            brandId = brandId,
+            sortBy = sortBy,
+            pageable = pageCriteria.pageable,
+        )
+
     fun getById(productId: Long): ProductWithSummaryInfo = productRepository.getById(productId)
 
     fun findAllProductSummaryById(productIds: List<Long>): List<ProductWithSummaryInfo> =

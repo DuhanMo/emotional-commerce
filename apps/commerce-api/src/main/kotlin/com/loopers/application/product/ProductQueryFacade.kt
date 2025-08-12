@@ -32,6 +32,23 @@ class ProductQueryFacade(
         return ProductListOutput.from(productPage, brands)
     }
 
+    fun findProductsForIndexTest(
+        brandId: Long?,
+        sortBy: String,
+        pageCriteria: PageCriteria,
+    ): ProductListOutput {
+        val productPage = productQueryService.findAllProductWithLikeCount(
+            brandId = brandId,
+            sortBy = sortBy,
+            pageCriteria = pageCriteria,
+        )
+
+        val brandIds = productPage.content.map { it.product.brandId }.distinct()
+        val brands = brandQueryService.findBrands(brandIds)
+
+        return ProductListOutput.forStress(productPage, brands)
+    }
+
     fun get(
         productId: Long,
     ): ProductItemOutput {

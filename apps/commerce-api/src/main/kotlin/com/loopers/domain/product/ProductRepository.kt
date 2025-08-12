@@ -10,6 +10,12 @@ interface ProductRepository {
         pageable: Pageable,
     ): Page<ProductWithSummaryInfo>
 
+    fun findAllProductWithLikeCount(
+        brandId: Long?,
+        sortBy: String,
+        pageable: Pageable,
+    ): Page<ProductWithLikeCount>
+
     fun getById(id: Long): ProductWithSummaryInfo
 
     fun findAllProductSummaryById(ids: List<Long>): List<ProductWithSummaryInfo>
