@@ -2,6 +2,7 @@ package com.loopers.application.product
 
 import com.loopers.application.brand.BrandOutput
 import com.loopers.domain.brand.Brand
+import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductWithLikeCount
 import com.loopers.domain.product.ProductWithSummaryInfo
 
@@ -44,6 +45,20 @@ data class ProductItemOutput(
                 imageUrl = product.imageUrl,
                 brand = BrandOutput.from(brand),
                 summary = ProductSummaryOutput(info.likeCount),
+            )
+        }
+
+        fun from(product: Product, brand: Brand): ProductItemOutput {
+            return ProductItemOutput(
+                id = product.id,
+                brandId = product.brandId,
+                name = product.name,
+                description = product.description,
+                price = product.price,
+                stock = product.stock,
+                imageUrl = product.imageUrl,
+                brand = BrandOutput.from(brand),
+                summary = ProductSummaryOutput(product.likeCount),
             )
         }
     }

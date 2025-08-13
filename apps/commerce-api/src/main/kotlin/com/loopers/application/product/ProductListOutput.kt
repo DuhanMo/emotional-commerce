@@ -1,7 +1,7 @@
 package com.loopers.application.product
 
 import com.loopers.domain.brand.Brand
-import com.loopers.domain.product.ProductWithLikeCount
+import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductWithSummaryInfo
 import org.springframework.data.domain.Page
 
@@ -28,14 +28,14 @@ data class ProductListOutput(
             )
         }
 
-        fun forStress(productPage: Page<ProductWithLikeCount>, brands: List<Brand>): ProductListOutput {
+        fun forStress(productPage: Page<Product>, brands: List<Brand>): ProductListOutput {
             val brandMap = brands.associateBy { it.id }
 
-            val productItems = productPage.content.map { productInfo ->
-                val brand = brandMap[productInfo.product.brandId]
-                    ?: throw IllegalStateException("해당 상품의 브랜드를 찾을 수 없습니다.(productId: ${productInfo.product.id})")
+            val productItems = productPage.content.map { product ->
+                val brand = brandMap[product.brandId]
+                    ?: throw IllegalStateException("해당 상품의 브랜드를 찾을 수 없습니다.(productId: ${product.id})")
 
-                ProductItemOutput.from(productInfo, brand)
+                ProductItemOutput.from(product, brand)
             }
 
             return ProductListOutput(

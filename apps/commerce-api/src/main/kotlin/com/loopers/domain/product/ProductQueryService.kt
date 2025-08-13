@@ -23,7 +23,7 @@ class ProductQueryService(
         brandId: Long?,
         sortBy: String,
         pageCriteria: PageCriteria,
-    ): Page<ProductWithLikeCount> =
+    ): Page<Product> =
         productRepository.findAllProductWithLikeCount(
             brandId = brandId,
             sortBy = sortBy,

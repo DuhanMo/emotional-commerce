@@ -13,6 +13,7 @@ class Product(
     val price: Int,
     var stock: Int,
     val imageUrl: String? = null,
+    val likeCount: Long = 0L,
     id: Long = 0L,
 ) : BaseEntity(id) {
     fun deductStock(quantity: Int) {

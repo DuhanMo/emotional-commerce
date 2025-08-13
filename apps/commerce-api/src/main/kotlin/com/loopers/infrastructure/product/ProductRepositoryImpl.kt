@@ -1,16 +1,11 @@
 package com.loopers.infrastructure.product
 
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
-import com.linecorp.kotlinjdsl.querymodel.jpql.expression.Expressions.count
-import com.linecorp.kotlinjdsl.querymodel.jpql.path.Paths.path
 import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
 import com.linecorp.kotlinjdsl.querymodel.jpql.sort.Sortable
 import com.loopers.domain.product.Product
-import com.loopers.domain.product.ProductLike
-import com.loopers.domain.product.ProductLikeStatus.ACTIVE
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
-import com.loopers.domain.product.ProductWithLikeCount
 import com.loopers.domain.product.ProductWithSummaryInfo
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
@@ -56,18 +51,12 @@ class ProductRepositoryImpl(
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductWithLikeCount> {
+    ): Page<Product> {
         val page = productJpaRepository.findPage(pageable) {
-            selectNew<ProductWithLikeCount>(
+            select<Product>(
                 entity(Product::class),
-                count(ProductLike::id),
             ).from(
                 entity(Product::class),
-                leftJoin(entity(ProductLike::class))
-                    .on(
-                        path(Product::id).equal(path(ProductLike::productId))
-                            .and(path(ProductLike::status).eq(ACTIVE)),
-                    ),
             ).where(
                 eqBrandId(brandId),
             ).groupBy(
@@ -81,7 +70,7 @@ class ProductRepositoryImpl(
     }
 
     private fun Jpql.makeSort(sortBy: String): Array<out Sortable?> = when (sortBy) {
-        "likes_desc" -> arrayOf(count(ProductLike::id).desc(), path(Product::id).desc())
+        "likes_desc" -> arrayOf(path(Product::likeCount).desc(), path(Product::id).desc())
         "price_asc" -> arrayOf(path(Product::price).asc(), path(Product::id).desc())
         else -> arrayOf(path(Product::id).desc())
     }
@@ -115,5 +104,5 @@ class ProductRepositoryImpl(
     override fun save(product: Product): Product = productJpaRepository.save(product)
 
     override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+        ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
 }

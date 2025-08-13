@@ -43,7 +43,7 @@ class ProductQueryFacade(
             pageCriteria = pageCriteria,
         )
 
-        val brandIds = productPage.content.map { it.product.brandId }.distinct()
+        val brandIds = productPage.content.map { it.brandId }.distinct()
         val brands = brandQueryService.findBrands(brandIds)
 
         return ProductListOutput.forStress(productPage, brands)

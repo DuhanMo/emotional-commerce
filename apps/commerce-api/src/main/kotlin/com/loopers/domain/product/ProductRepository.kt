@@ -14,7 +14,7 @@ interface ProductRepository {
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductWithLikeCount>
+    ): Page<Product>
 
     fun getById(id: Long): ProductWithSummaryInfo
 
