@@ -4,8 +4,13 @@ import com.loopers.domain.brand.BrandQueryService
 import com.loopers.domain.product.ProductLikeQueryService
 import com.loopers.domain.product.ProductQueryService
 import com.loopers.domain.support.PageCriteria
+import com.loopers.domain.support.cache.CacheKey
+import com.loopers.domain.support.cache.CacheKeyUtil
+import com.loopers.domain.support.cache.CacheNameSpace.API_SERVER
+import com.loopers.domain.support.cache.CacheService
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserQueryService
+import java.time.Duration
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,6 +19,7 @@ class ProductQueryFacade(
     private val productLikeQueryService: ProductLikeQueryService,
     private val brandQueryService: BrandQueryService,
     private val userQueryService: UserQueryService,
+    private val cacheService: CacheService,
 ) {
     fun findProducts(
         brandId: Long?,
@@ -37,16 +43,32 @@ class ProductQueryFacade(
         sortBy: String,
         pageCriteria: PageCriteria,
     ): ProductListOutput {
-        val productPage = productQueryService.findAllProductWithLikeCount(
-            brandId = brandId,
-            sortBy = sortBy,
-            pageCriteria = pageCriteria,
+        val cacheKey = CacheKeyUtil.build(
+            ::findProductsForIndexTest,
+            brandId,
+            sortBy,
+            pageCriteria.page,
+            pageCriteria.size,
         )
+        return cacheService.findOrLoad(
+            key = CacheKey(
+                namespace = API_SERVER,
+                key = cacheKey,
+                ttl = Duration.ofMinutes(2),
+            ),
+            clazz = ProductListOutput::class.java,
+        ) {
+            val productPage = productQueryService.findAllProductWithLikeCount(
+                brandId = brandId,
+                sortBy = sortBy,
+                pageCriteria = pageCriteria,
+            )
 
-        val brandIds = productPage.content.map { it.brandId }.distinct()
-        val brands = brandQueryService.findBrands(brandIds)
+            val brandIds = productPage.content.map { it.brandId }.distinct()
+            val brands = brandQueryService.findBrands(brandIds)
 
-        return ProductListOutput.forStress(productPage, brands)
+            ProductListOutput.forStress(productPage, brands)
+        }!!
     }
 
     fun get(
