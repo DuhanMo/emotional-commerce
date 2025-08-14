@@ -4,19 +4,13 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface ProductRepository {
-    fun findAllProductSummary(
-        brandId: Long?,
-        sortBy: String,
-        pageable: Pageable,
-    ): Page<ProductWithSummaryInfo>
-
-    fun findAllProductWithLikeCount(
+    fun findAllProduct(
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
     ): Page<Product>
 
-    fun getById(id: Long): ProductWithSummaryInfo
+    fun getByIdWithSummary(id: Long): ProductWithSummaryInfo
 
     fun findAllProductSummaryById(ids: List<Long>): List<ProductWithSummaryInfo>
 
@@ -25,4 +19,6 @@ interface ProductRepository {
     fun save(product: Product): Product
 
     fun getByIdWithLock(id: Long): Product
+
+    fun getById(id: Long): Product
 }

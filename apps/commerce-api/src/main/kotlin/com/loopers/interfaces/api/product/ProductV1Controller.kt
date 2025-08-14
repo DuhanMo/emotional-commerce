@@ -30,22 +30,6 @@ class ProductV1Controller(
         return ApiResponse.success(response)
     }
 
-    @GetMapping("/stress")
-     fun findProductsForStress(
-        @RequestParam brandId: Long?,
-        @RequestParam(defaultValue = "latest") sortBy: String,
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "20") size: Int,
-    ): ApiResponse<ProductListResponse> {
-        val output = productQueryFacade.findProductsForIndexTest(
-            brandId = brandId,
-            sortBy = sortBy,
-            pageCriteria = PageCriteria(page, size),
-        )
-        val response = ProductListResponse.from(output)
-        return ApiResponse.success(response)
-    }
-
     @GetMapping("/{productId}")
      fun get(
         @PathVariable productId: Long,

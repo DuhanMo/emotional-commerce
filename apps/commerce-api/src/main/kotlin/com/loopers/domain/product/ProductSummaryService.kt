@@ -18,12 +18,8 @@ class ProductSummaryService(
         maxAttempts = 5,
         backoff = Backoff(delay = 50, multiplier = 2.0),
     )
-    fun increaseLikeCount(productLike: ProductLike?) {
-        if (productLike == null) {
-            return
-        }
-
-        val productSummary = productSummaryRepository.getByProductId(productLike.productId)
+    fun increaseLikeCount(productId: Long) {
+        val productSummary = productSummaryRepository.getByProductId(productId)
 
         productSummary.increaseLikeCount()
 
@@ -37,12 +33,8 @@ class ProductSummaryService(
         maxAttempts = 5,
         backoff = Backoff(delay = 50, multiplier = 2.0),
     )
-    fun decreaseLikeCount(productLike: ProductLike?) {
-        if (productLike == null) {
-            return
-        }
-
-        val productSummary = productSummaryRepository.getByProductId(productLike.productId)
+    fun decreaseLikeCount(productId: Long) {
+        val productSummary = productSummaryRepository.getByProductId(productId)
 
         productSummary.decreaseLikeCount()
 

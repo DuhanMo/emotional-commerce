@@ -170,7 +170,7 @@ class LikeV1ApiE2ETest(
         it("좋아요한 상품을 취소하는 경우 - 성공 응답을 반환한다") {
             // Given
             val user = userJpaRepository.save(createUser(loginId = LoginId("user111")))
-            val product = productJpaRepository.save(createProduct())
+            val product = productJpaRepository.save(createProduct(likeCount = 1))
             productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 8L))
             productLikeJpaRepository.save(ProductLike(product.id, user.id, ProductLikeStatus.ACTIVE))
 

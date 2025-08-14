@@ -18,7 +18,7 @@ class ProductSummaryServiceIGTest(
         When("상품 집계 좋아요 수 감소하면") {
             Then("예외 발생한다") {
                 shouldThrow<IllegalArgumentException> {
-                    productSummaryService.decreaseLikeCount(ProductLike(productId = 1L, userId = 99L))
+                    productSummaryService.decreaseLikeCount(1L)
                 }
             }
         }
@@ -28,7 +28,7 @@ class ProductSummaryServiceIGTest(
         When("상품 집계 좋아요 수 증가하면") {
             Then("예외 발생한다") {
                 shouldThrow<CoreException> {
-                    productSummaryService.increaseLikeCount(ProductLike(productId = 1L, userId = 99L))
+                    productSummaryService.increaseLikeCount(1L)
                 }
             }
         }
@@ -38,7 +38,7 @@ class ProductSummaryServiceIGTest(
         productSummaryJpaRepository.save(ProductSummary(productId = 1L, likeCount = 100L))
 
         When("상품 집계 좋아요 수 증가하면") {
-            productSummaryService.increaseLikeCount(ProductLike(productId = 1L, userId = 99L))
+            productSummaryService.increaseLikeCount(1L)
 
             Then("좋아요 수 1 증가한다") {
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(1L)
@@ -52,7 +52,7 @@ class ProductSummaryServiceIGTest(
         productLikeJpaRepository.save(ProductLike(productId = 99L, userId = 99L))
 
         When("상품 집계 좋아요 수 감소하면") {
-            productSummaryService.decreaseLikeCount(ProductLike(productId = 1L, userId = 99L))
+            productSummaryService.decreaseLikeCount(1L)
 
             Then("좋아요 수 1 감소한다") {
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(1L)

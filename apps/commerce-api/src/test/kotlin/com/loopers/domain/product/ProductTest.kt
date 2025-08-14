@@ -21,4 +21,19 @@ class ProductTest : StringSpec({
 
         product.stock shouldBe 0
     }
+
+    "상품 좋아요 수는 음수로 차감할 수 없다" {
+        val product = createProduct(likeCount = 0)
+        shouldThrow<IllegalStateException> {
+            product.decreaseLikeCount()
+        }
+    }
+
+    "상품 좋아요 수 증가시 상품 좋아요 수가 증가한다" {
+        val product = createProduct(likeCount = 0)
+
+        product.increaseLikeCount()
+
+        product.likeCount shouldBe 1
+    }
 })

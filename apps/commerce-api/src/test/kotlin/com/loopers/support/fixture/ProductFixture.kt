@@ -9,6 +9,7 @@ fun createProduct(
     price: Int = 10_000,
     stock: Int = 100,
     imageUrl: String? = "/test/image.png",
+    likeCount: Long = 0,
     id: Long = 0L,
 ): Product = Product(
     brandId = brandId,
@@ -17,5 +18,6 @@ fun createProduct(
     price = price,
     stock = stock,
     imageUrl = imageUrl,
+    likeCount = likeCount,
     id = id,
 )

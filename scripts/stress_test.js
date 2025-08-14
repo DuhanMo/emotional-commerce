@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import {check, sleep} from 'k6';
 
 export let options = {
     vus: 50,             // 동시 사용자 수
@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-    const res = http.get('http://127.0.0.1:8080/api/v1/products/stress?brandId=55&sortBy=likes_desc');
+    const res = http.get('http://127.0.0.1:8080/api/v1/products?brandId=55&sortBy=likes_desc');
 
     check(res, {
         'status is 200': (r) => r.status === 200,

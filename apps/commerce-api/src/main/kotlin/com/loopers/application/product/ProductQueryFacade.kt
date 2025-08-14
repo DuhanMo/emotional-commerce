@@ -4,10 +4,11 @@ import com.loopers.domain.brand.BrandQueryService
 import com.loopers.domain.product.ProductLikeQueryService
 import com.loopers.domain.product.ProductQueryService
 import com.loopers.domain.support.PageCriteria
-import com.loopers.domain.support.cache.CacheKey
-import com.loopers.domain.support.cache.CacheKeyUtil
-import com.loopers.domain.support.cache.CacheNameSpace.API_SERVER
-import com.loopers.domain.support.cache.CacheService
+import com.loopers.domain.support.cache.CacheNamespaces
+import com.loopers.domain.support.cache.CachePolicy
+import com.loopers.domain.support.cache.CacheTemplate
+import com.loopers.domain.support.cache.KeyBuilder
+import com.loopers.domain.support.cache.typeRef
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserQueryService
 import java.time.Duration
@@ -19,46 +20,33 @@ class ProductQueryFacade(
     private val productLikeQueryService: ProductLikeQueryService,
     private val brandQueryService: BrandQueryService,
     private val userQueryService: UserQueryService,
-    private val cacheService: CacheService,
+    private val cacheTemplate: CacheTemplate,
 ) {
     fun findProducts(
         brandId: Long?,
         sortBy: String,
         pageCriteria: PageCriteria,
     ): ProductListOutput {
-        val productPage = productQueryService.findAllProductSummary(
-            brandId = brandId,
-            sortBy = sortBy,
-            pageCriteria = pageCriteria,
-        )
-
-        val brandIds = productPage.content.map { it.product.brandId }.distinct()
-        val brands = brandQueryService.findBrands(brandIds)
-
-        return ProductListOutput.from(productPage, brands)
-    }
-
-    fun findProductsForIndexTest(
-        brandId: Long?,
-        sortBy: String,
-        pageCriteria: PageCriteria,
-    ): ProductListOutput {
-        val cacheKey = CacheKeyUtil.build(
-            ::findProductsForIndexTest,
-            brandId,
+        val key = KeyBuilder.build(
+            CacheNamespaces.PRODUCT_LIST,
+            brandId ?: "ALL",
             sortBy,
             pageCriteria.page,
             pageCriteria.size,
+            version = "1",
         )
-        return cacheService.findOrLoad(
-            key = CacheKey(
-                namespace = API_SERVER,
-                key = cacheKey,
-                ttl = Duration.ofMinutes(2),
-            ),
-            clazz = ProductListOutput::class.java,
+
+        val policy = CachePolicy(
+            ttl = Duration.ofMinutes(2),
+            cacheNullAbsent = false,
+            version = "1",
+        )
+        return cacheTemplate.findOrLoad(
+            key = key,
+            type = typeRef<ProductListOutput>(),
+            policy = policy,
         ) {
-            val productPage = productQueryService.findAllProductWithLikeCount(
+            val productPage = productQueryService.findAllProduct(
                 brandId = brandId,
                 sortBy = sortBy,
                 pageCriteria = pageCriteria,
@@ -66,15 +54,14 @@ class ProductQueryFacade(
 
             val brandIds = productPage.content.map { it.brandId }.distinct()
             val brands = brandQueryService.findBrands(brandIds)
-
-            ProductListOutput.forStress(productPage, brands)
+            ProductListOutput.from(productPage, brands)
         }!!
     }
 
     fun get(
         productId: Long,
     ): ProductItemOutput {
-        val productInfos = productQueryService.getById(productId)
+        val productInfos = productQueryService.getByIdWithSummary(productId)
         val brand = brandQueryService.getById(productInfos.product.brandId)
 
         return ProductItemOutput.from(productInfos, brand)
