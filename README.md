@@ -2,10 +2,10 @@
 
 본 프로젝트에서는 대규모 상품 조회 API의 성능 개선을 위해 3단계 최적화를 진행하였습니다.
 각 단계별 상세 보고서는 아래 링크에서 확인할 수 있습니다.
-- [[Index를 통한 성능 개선] K6 부하테스트 실험 결과](docs/performance/%5BIndex%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%20%EA%B0%9C%EC%84%A0%5D%20K6%20%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%8B%A4%ED%97%98%20%EA%B2%B0%EA%B3%BC.md)
 - [[index를 통한 성능개선] EXPLAIN 실험 결과](docs/performance/%5Bindex%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%EA%B0%9C%EC%84%A0%5D%20EXPLAIN%20%EC%8B%A4%ED%97%98%20%EA%B2%B0%EA%B3%BC.md)
+- [[Index를 통한 성능 개선] K6 부하테스트 실험 결과](docs/performance/%5BIndex%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%20%EA%B0%9C%EC%84%A0%5D%20K6%20%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%8B%A4%ED%97%98%20%EA%B2%B0%EA%B3%BC.md)
 - [[비정규화를 통한 성능개선] K6 부하테스트 실험 결과](docs/performance/%5B%EB%B9%84%EC%A0%95%EA%B7%9C%ED%99%94%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%EA%B0%9C%EC%84%A0%5D%20K6%20%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EC%8B%A4%ED%97%98%20%EA%B2%B0%EA%B3%BC.md)
-- [[캐시를 통한 성능개선] k6 부하테스트](docs/performance/%5B%EC%BA%90%EC%8B%9C%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%EA%B0%9C%EC%84%A0%5D%20k6%20%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8.md)
+- [[캐시를 통한 성능개선] k6 부하테스트 실험 결과](docs/performance/%5B%EC%BA%90%EC%8B%9C%EB%A5%BC%20%ED%86%B5%ED%95%9C%20%EC%84%B1%EB%8A%A5%EA%B0%9C%EC%84%A0%5D%20k6%20%EB%B6%80%ED%95%98%ED%85%8C%EC%8A%A4%ED%8A%B8.md)
 
 ---
 
