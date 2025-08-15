@@ -10,7 +10,6 @@ data class CachePolicy(
     val ttl: Duration,
     val cacheNullAbsent: Boolean = true,
     val nullTtl: Duration = Duration.ofSeconds(30),
-    val version: String? = null,
 ) {
     companion object {
         fun default() = CachePolicy(ttl = Duration.ofMinutes(5))

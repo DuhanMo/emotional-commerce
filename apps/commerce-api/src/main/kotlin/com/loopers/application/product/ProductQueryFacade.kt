@@ -39,7 +39,6 @@ class ProductQueryFacade(
         val policy = CachePolicy(
             ttl = Duration.ofMinutes(2),
             cacheNullAbsent = false,
-            version = "1",
         )
         return cacheTemplate.findOrLoad(
             key = key,
@@ -61,10 +60,24 @@ class ProductQueryFacade(
     fun get(
         productId: Long,
     ): ProductItemOutput {
-        val productInfos = productQueryService.getByIdWithSummary(productId)
-        val brand = brandQueryService.getById(productInfos.product.brandId)
-
-        return ProductItemOutput.from(productInfos, brand)
+        val key = KeyBuilder.build(
+            CacheNamespaces.PRODUCT_DETAIL,
+            productId,
+            version = "1",
+        )
+        val policy = CachePolicy(
+            ttl = Duration.ofMinutes(2),
+            cacheNullAbsent = false,
+        )
+        return cacheTemplate.findOrLoad(
+            key = key,
+            type = typeRef<ProductItemOutput>(),
+            policy = policy,
+        ) {
+            val productInfos = productQueryService.getByIdWithSummary(productId)
+            val brand = brandQueryService.getById(productInfos.product.brandId)
+            ProductItemOutput.from(productInfos, brand)
+        }!!
     }
 
     fun findLikedProducts(
