@@ -1,11 +1,10 @@
 package com.loopers.domain.payment
 
 import com.loopers.domain.order.Order
-import com.loopers.domain.order.PayMethod
 import com.loopers.domain.user.User
 
 interface PayProcessor {
-    val support: PayMethod
+    val support: PaymentMethod
 
-    fun process(user: User, order: Order)
+    fun process(command: PayProcessCommand)
 }

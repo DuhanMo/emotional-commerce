@@ -1,13 +1,14 @@
 package com.loopers.domain.order
 
+import com.loopers.application.order.CaptureOrderInfoCommand
 import org.springframework.stereotype.Service
 
 @Service
 class OrderService(
     private val orderRepository: OrderRepository,
 ) {
-    fun createOrder(command: CreateOrderCommand): Order = with(command) {
-        val orderLines = orderLines.map { item ->
+    fun createOrder(command: CreateOrderCommand): Order {
+        val orderLines = command.orderLines.map { item ->
             OrderLine(
                 productId = item.productId,
                 quantity = item.quantity,
@@ -15,15 +16,23 @@ class OrderService(
             )
         }
         val order = Order(
-            userId = userId,
-            deliveryAddress = deliveryAddress,
-            payMethod = payMethod,
+            userId = command.userId,
         ).apply {
             addOrderLines(orderLines)
         }
-        coupon?.calculateDiscountedAmount(order.totalAmount)?.let {
-            order.updateDiscountedAmount(it)
-        }
-        orderRepository.save(order)
+
+        return orderRepository.save(order)
+    }
+
+    fun captureOrderInfo(command: CaptureOrderInfoCommand): Order {
+        command.orderId
+            val order = orderRepository.findById(orderId)
+                ?: throw IllegalArgumentException("존재하지 않는 주문입니다: $orderId")
+            order.checkout(
+                amount = amount,
+                issuedCouponId = issuedCouponId,
+                deliveryAddress = deliveryAddress,
+            )
+            orderRepository.save(order)
     }
 }

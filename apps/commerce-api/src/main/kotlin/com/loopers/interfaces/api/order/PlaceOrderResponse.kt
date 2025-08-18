@@ -2,7 +2,6 @@ package com.loopers.interfaces.api.order
 
 import com.loopers.application.order.PlaceOrderOutput
 import com.loopers.domain.order.OrderStatus
-import com.loopers.domain.order.PayMethod
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "주문 생성 응답")
@@ -12,12 +11,6 @@ data class PlaceOrderResponse(
 
     @Schema(description = "사용자 식별자", example = "1")
     val userId: Long,
-
-    @Schema(description = "배송 주소")
-    val deliveryAddress: AddressResponse,
-
-    @Schema(description = "결제 방법", example = "POINT")
-    val payMethod: PayMethod,
 
     @Schema(description = "주문 상태", example = "PENDING")
     val status: OrderStatus,
@@ -59,16 +52,9 @@ data class PlaceOrderResponse(
         fun from(output: PlaceOrderOutput): PlaceOrderResponse = PlaceOrderResponse(
             id = output.id,
             userId = output.userId,
-            deliveryAddress = AddressResponse(
-                street = output.deliveryAddress.street,
-                city = output.deliveryAddress.city,
-                zipCode = output.deliveryAddress.zipCode,
-                detailAddress = output.deliveryAddress.detailAddress,
-            ),
-            payMethod = output.payMethod,
             status = output.status,
             totalAmount = output.totalAmount,
-            orderLines = output.orderLineInfos.map { orderLine ->
+            orderLines = output.orderLines.map { orderLine ->
                 OrderLineResponse(
                     productId = orderLine.productId,
                     quantity = orderLine.quantity,

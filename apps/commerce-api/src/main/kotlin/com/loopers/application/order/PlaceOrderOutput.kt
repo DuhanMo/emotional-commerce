@@ -2,16 +2,13 @@ package com.loopers.application.order
 
 import com.loopers.domain.order.Order
 import com.loopers.domain.order.OrderStatus
-import com.loopers.domain.order.PayMethod
 
 data class PlaceOrderOutput(
     val id: Long,
     val userId: Long,
-    val deliveryAddress: AddressOutput,
-    val payMethod: PayMethod,
     val status: OrderStatus,
     val totalAmount: Long,
-    val orderLineInfos: List<OrderLineOutput>,
+    val orderLines: List<OrderLineOutput>,
 ) {
     data class AddressOutput(
         val street: String,
@@ -30,16 +27,9 @@ data class PlaceOrderOutput(
         fun from(info: Order): PlaceOrderOutput = PlaceOrderOutput(
             id = info.id,
             userId = info.userId,
-            deliveryAddress = AddressOutput(
-                street = info.deliveryAddress.street,
-                city = info.deliveryAddress.city,
-                zipCode = info.deliveryAddress.zipCode,
-                detailAddress = info.deliveryAddress.detailAddress,
-            ),
-            payMethod = info.payMethod,
             status = info.status,
             totalAmount = info.totalAmount,
-            orderLineInfos = info.orderLines.map { orderLine ->
+            orderLines = info.orderLines.map { orderLine ->
                 OrderLineOutput(
                     productId = orderLine.productId,
                     quantity = orderLine.quantity,

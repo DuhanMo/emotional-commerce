@@ -1,6 +1,6 @@
 package com.loopers.interfaces.api.order
 
-import com.loopers.domain.order.PayMethod
+import com.loopers.domain.payment.PaymentMethod
 import com.loopers.domain.point.Point
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.user.LoginId
@@ -54,7 +54,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = "101동 1001호",
                 ),
-                payMethod = PayMethod.POINT,
+                paymentMethod = PaymentMethod.POINT,
                 orderItems = listOf(
                     OrderLineRequest(
                         productId = product1.id,
@@ -80,11 +80,6 @@ class OrderV1ApiE2ETest(
             response.body?.data?.id shouldNotBe null
             response.body?.data?.userId shouldBe user.id
             response.body?.data?.totalAmount shouldBe 25000L
-            response.body?.data?.payMethod shouldBe PayMethod.POINT
-            response.body?.data?.deliveryAddress?.street shouldBe "강남대로 123"
-            response.body?.data?.deliveryAddress?.city shouldBe "서울시"
-            response.body?.data?.deliveryAddress?.zipCode shouldBe "12345"
-            response.body?.data?.deliveryAddress?.detailAddress shouldBe "101동 1001호"
             response.body?.data?.orderLines?.size shouldBe 2
 
             // 데이터베이스 저장 확인
@@ -94,9 +89,6 @@ class OrderV1ApiE2ETest(
             savedOrder.totalAmount shouldBe 25_000L
             savedOrder.orderLines.size shouldBe 2
 
-            // 포인트 감소 확인
-            val point = pointJpaRepository.findByUserId(user.id)!!
-            point.amount shouldBe 75_000L
         }
 
         it("X-USER-ID 헤더가 없는 경우 - 400 Bad Request 응답을 반환한다") {
@@ -108,7 +100,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = null,
                 ),
-                payMethod = PayMethod.POINT,
+                paymentMethod = PaymentMethod.POINT,
                 orderItems = listOf(
                     OrderLineRequest(
                         productId = 1L,
@@ -136,7 +128,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = null,
                 ),
-                payMethod = PayMethod.POINT,
+                paymentMethod = PaymentMethod.POINT,
                 orderItems = listOf(
                     OrderLineRequest(
                         productId = 1L,
@@ -167,7 +159,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = null,
                 ),
-                payMethod = PayMethod.POINT,
+                paymentMethod = PaymentMethod.POINT,
                 orderItems = emptyList(),
                 issuedCouponId = null,
             )
@@ -192,7 +184,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = null,
                 ),
-                payMethod = null,
+                paymentMethod = null,
                 orderItems = listOf(
                     OrderLineRequest(
                         productId = 1L,
@@ -223,7 +215,7 @@ class OrderV1ApiE2ETest(
                     zipCode = "12345",
                     detailAddress = null,
                 ),
-                payMethod = PayMethod.POINT,
+                paymentMethod = PaymentMethod.POINT,
                 orderItems = listOf(
                     OrderLineRequest(
                         productId = 1L,

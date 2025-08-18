@@ -13,11 +13,10 @@ import jakarta.persistence.Table
 @Entity
 class Order(
     val userId: Long,
-    @Embedded
-    val deliveryAddress: Address,
-    val payMethod: PayMethod,
     @Enumerated(EnumType.STRING)
     var status: OrderStatus = OrderStatus.PENDING,
+    @Embedded
+    val deliveryAddress: Address? = null,
 ) : BaseEntity() {
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
     val orderLines: MutableList<OrderLine> = mutableListOf()

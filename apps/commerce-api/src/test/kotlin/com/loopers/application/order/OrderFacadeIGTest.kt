@@ -1,7 +1,5 @@
 package com.loopers.application.order
 
-import com.loopers.application.order.PlaceOrderInput.AddressInput
-import com.loopers.domain.order.PayMethod
 import com.loopers.domain.point.Point
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.user.LoginId
@@ -36,13 +34,6 @@ class OrderFacadeIGTest(
         When("주문을 생성하면") {
             val input = PlaceOrderInput(
                 loginId = LoginId("testuser1"),
-                address = AddressInput(
-                    street = "강남대로 123",
-                    city = "서울시",
-                    zipCode = "12345",
-                    detailAddress = "테스트 상세주소",
-                ),
-                payMethod = PayMethod.POINT,
                 orderItems = listOf(
                     PlaceOrderInput.OrderLineInput(
                         productId = product1.id,
@@ -55,18 +46,14 @@ class OrderFacadeIGTest(
                         unitPrice = 5000,
                     ),
                 ),
-                issuedCouponId = null,
             )
 
             val result = orderFacade.placeOrder(input)
 
             Then("주문이 정상적으로 생성되고 응답이 반환된다") {
                 result.id shouldNotBe null
-                result.orderLineInfos.size shouldBe 2
+                result.orderLines.size shouldBe 2
                 result.totalAmount shouldBe 25000L
-                result.deliveryAddress.street shouldBe "강남대로 123"
-                result.deliveryAddress.city shouldBe "서울시"
-                result.payMethod shouldBe PayMethod.POINT
 
                 val savedOrder = orderJpaRepository.findByIdWithOrderLines(result.id)!!
                 savedOrder.userId shouldBe user.id
@@ -87,13 +74,6 @@ class OrderFacadeIGTest(
         When("서로 다른 사용자가 주문을 생성하면") {
             val input1 = PlaceOrderInput(
                 loginId = LoginId("user1"),
-                address = AddressInput(
-                    street = "테헤란로 1",
-                    city = "서울시",
-                    zipCode = "11111",
-                    detailAddress = "1동",
-                ),
-                payMethod = PayMethod.POINT,
                 orderItems = listOf(
                     PlaceOrderInput.OrderLineInput(
                         productId = product.id,
@@ -101,18 +81,10 @@ class OrderFacadeIGTest(
                         unitPrice = 15000,
                     ),
                 ),
-                issuedCouponId = null,
             )
 
             val input2 = PlaceOrderInput(
                 loginId = LoginId("user2"),
-                address = AddressInput(
-                    street = "테헤란로 2",
-                    city = "서울시",
-                    zipCode = "22222",
-                    detailAddress = "2동",
-                ),
-                payMethod = PayMethod.POINT,
                 orderItems = listOf(
                     PlaceOrderInput.OrderLineInput(
                         productId = product.id,
@@ -120,7 +92,6 @@ class OrderFacadeIGTest(
                         unitPrice = 15000,
                     ),
                 ),
-                issuedCouponId = null,
             )
 
             val result1 = orderFacade.placeOrder(input1)
@@ -136,8 +107,6 @@ class OrderFacadeIGTest(
 
                 order1.userId shouldBe user1.id
                 order2.userId shouldBe user2.id
-                order1.deliveryAddress.detailAddress shouldBe "1동"
-                order2.deliveryAddress.detailAddress shouldBe "2동"
             }
         }
     }

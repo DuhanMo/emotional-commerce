@@ -39,7 +39,7 @@ class PaymentServiceIGTest(
 
         When("결제를 시도하면") {
             Then("예외가 발생하고 상태가 변경되지 않는다") {
-                val exception = assertThrows<IllegalArgumentException> { paymentService.pay(user, order) }
+                val exception = assertThrows<IllegalArgumentException> { paymentService.payRequest(user, order) }
                 exception.message shouldContain "포인트가 부족합니다"
 
                 val foundOrder = orderJpaRepository.findByIdOrNull(order.id)!!
@@ -65,7 +65,7 @@ class PaymentServiceIGTest(
         pointJpaRepository.save(point)
 
         When("결제를 시도하면") {
-            paymentService.pay(user, order)
+            paymentService.payRequest(user, order)
 
             Then("주문 상태가 PAID로 변경되고 포인트가 차감된다") {
                 val foundOrder = orderJpaRepository.findByIdOrNull(order.id)!!

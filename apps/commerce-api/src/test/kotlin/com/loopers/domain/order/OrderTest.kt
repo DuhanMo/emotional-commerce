@@ -13,7 +13,6 @@ class OrderTest : StringSpec({
         shouldThrow<IllegalArgumentException> {
             val order = Order(
                 userId = 1L,
-                payMethod = PayMethod.POINT,
                 deliveryAddress = address,
             )
             order.addOrderLines(emptyOrderLines)
@@ -26,7 +25,6 @@ class OrderTest : StringSpec({
         shouldNotThrow<IllegalArgumentException> {
             Order(
                 userId = 1L,
-                payMethod = PayMethod.POINT,
                 deliveryAddress = address,
             )
         }
@@ -37,7 +35,7 @@ class OrderTest : StringSpec({
 
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -60,7 +58,7 @@ class OrderTest : StringSpec({
 
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
         order.addOrderLines(orderLines)
@@ -72,7 +70,7 @@ class OrderTest : StringSpec({
         val address = Address("강남대로", "서울시", "12345", "상세주소")
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -88,7 +86,7 @@ class OrderTest : StringSpec({
         val address = Address("강남대로", "서울시", "12345", "상세주소")
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -105,7 +103,7 @@ class OrderTest : StringSpec({
 
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -121,7 +119,7 @@ class OrderTest : StringSpec({
 
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -137,7 +135,7 @@ class OrderTest : StringSpec({
 
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
@@ -152,7 +150,7 @@ class OrderTest : StringSpec({
         val address = Address("강남대로", "서울시", "12345", "상세주소")
         val order = Order(
             userId = 1L,
-            payMethod = PayMethod.POINT,
+            
             deliveryAddress = address,
         )
 
