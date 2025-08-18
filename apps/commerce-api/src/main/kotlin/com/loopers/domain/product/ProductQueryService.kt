@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service
 class ProductQueryService(
     private val productRepository: ProductRepository,
 ) {
-    fun findAllProductSummary(
+    fun findAllProduct(
         brandId: Long?,
         sortBy: String,
         pageCriteria: PageCriteria,
-    ): Page<ProductWithSummaryInfo> =
-        productRepository.findAllProductSummary(
+    ): Page<Product> =
+        productRepository.findAllProduct(
             brandId = brandId,
             sortBy = sortBy,
             pageable = pageCriteria.pageable,
         )
 
-    fun getById(productId: Long): ProductWithSummaryInfo = productRepository.getById(productId)
+    fun getByIdWithSummary(productId: Long): ProductWithSummaryInfo = productRepository.getByIdWithSummary(productId)
 
     fun findAllProductSummaryById(productIds: List<Long>): List<ProductWithSummaryInfo> =
         productRepository.findAllProductSummaryById(productIds)

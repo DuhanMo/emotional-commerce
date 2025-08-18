@@ -5,7 +5,6 @@ import com.loopers.domain.user.Email
 import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.UserQueryService
-import com.loopers.domain.user.UserRegisterCommand
 import com.loopers.domain.user.UserService
 import com.loopers.infrastructure.user.UserJpaRepository
 import com.loopers.support.error.CoreException
@@ -24,7 +23,7 @@ class UserFacadeIGTest(
     Given("이미 가입된 ID 가 없는 경우") {
         val userWriterSpy = spyk(userService)
         val userFacade = UserFacade(userWriterSpy, userQueryService)
-        val command = createUserCreateCommand()
+        val command = createUserCreateInput()
 
         When("회원 가입 하면") {
             userFacade.register(command)
@@ -39,7 +38,7 @@ class UserFacadeIGTest(
         val userFacade = UserFacade(userService, userQueryService)
         val existLoginId = LoginId("test123")
         userJpaRepository.save(createUser(loginId = existLoginId))
-        val command = createUserCreateCommand(loginId = existLoginId)
+        val command = createUserCreateInput(loginId = existLoginId)
 
         When("회원 가입 하면") {
             Then("예외 발생한다") {
@@ -52,12 +51,12 @@ class UserFacadeIGTest(
     }
 })
 
-private fun createUserCreateCommand(
+private fun createUserCreateInput(
     loginId: LoginId = LoginId("test123"),
     email: Email = Email("test@test.com"),
     birthDate: BirthDate = BirthDate("1999-12-25"),
     gender: Gender = Gender.MALE,
-): UserRegisterCommand = UserRegisterCommand(
+): UserRegisterInput = UserRegisterInput(
     loginId = loginId,
     email = email,
     birthDate = birthDate,

@@ -13,6 +13,7 @@ import com.loopers.support.fixture.createProduct
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
+import org.springframework.data.repository.findByIdOrNull
 
 class ProductFacadeIGTest(
     private val productFacade: ProductFacade,
@@ -34,6 +35,9 @@ class ProductFacadeIGTest(
                     .first { it.productId == product.id && it.userId == user.id }
                 foundProductLike.status shouldBe ACTIVE
 
+                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
+                foundProduct.likeCount shouldBe 1
+
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
                 foundProductSummary.likeCount shouldBe 1L
             }
@@ -54,6 +58,9 @@ class ProductFacadeIGTest(
                     .find { it.productId == product.id && it.userId == user.id }
                 foundProductLike shouldBe null
 
+                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
+                foundProduct.likeCount shouldBe 0
+
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
                 foundProductSummary.likeCount shouldBe 0L
             }
@@ -62,7 +69,7 @@ class ProductFacadeIGTest(
 
     Given("좋아요 취소한 상품이 존재하는 경우") {
         val user = userJpaRepository.save(createUser(loginId = LoginId("user456")))
-        val product = productJpaRepository.save(createProduct())
+        val product = productJpaRepository.save(createProduct(likeCount = 10L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 10L))
         productLikeJpaRepository.save(ProductLike(product.id, user.id, DELETED))
 
@@ -74,6 +81,9 @@ class ProductFacadeIGTest(
                     .first { it.productId == product.id && it.userId == user.id }
                 foundProductLike.status shouldBe ACTIVE
 
+                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
+                foundProduct.likeCount shouldBe 11L
+
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
                 foundProductSummary.likeCount shouldBe 11L
             }
@@ -82,7 +92,7 @@ class ProductFacadeIGTest(
 
     Given("좋아요 등록된 상품이 존재하고 다른 사용자가 좋아요 등록 하는 경우") {
         val user1 = userJpaRepository.save(createUser(LoginId("user111")))
-        val product = productJpaRepository.save(createProduct())
+        val product = productJpaRepository.save(createProduct(likeCount = 5L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
         productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
@@ -94,6 +104,8 @@ class ProductFacadeIGTest(
             Then("상품 집계 좋아요 수가 증가한다") {
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
                 foundProductSummary.likeCount shouldBe 6L
+                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
+                foundProduct.likeCount shouldBe 6L
 
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user2.id }
@@ -104,7 +116,7 @@ class ProductFacadeIGTest(
 
     Given("좋아요 등록된 상품이 존재하고 다른 사용자가 좋아요 취소 하는 경우") {
         val user1 = userJpaRepository.save(createUser(LoginId("user111")))
-        val product = productJpaRepository.save(createProduct())
+        val product = productJpaRepository.save(createProduct(likeCount = 5L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
         productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
 
@@ -117,6 +129,9 @@ class ProductFacadeIGTest(
             Then("상품 집계 좋아요 수가 감소한다") {
                 val foundProductSummary = productSummaryJpaRepository.findByProductId(product.id)!!
                 foundProductSummary.likeCount shouldBe 4L
+
+                val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
+                foundProduct.likeCount shouldBe 4L
 
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user2.id }

@@ -9,7 +9,6 @@ server:
     accept-count: 100 # 대기 큐 크기 (default : 100)
     keep-alive-timeout: 60s # 60s
   max-http-request-header-size: 8KB
-
 spring:
   main:
     web-application-type: servlet
@@ -20,6 +19,7 @@ spring:
   config:
     import:
       - jpa.yml
+      - redis.yml
       - logging.yml
       - monitoring.yml
 

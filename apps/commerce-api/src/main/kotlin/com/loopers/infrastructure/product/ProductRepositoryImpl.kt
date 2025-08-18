@@ -2,6 +2,7 @@ package com.loopers.infrastructure.product
 
 import com.linecorp.kotlinjdsl.dsl.jpql.Jpql
 import com.linecorp.kotlinjdsl.querymodel.jpql.predicate.Predicate
+import com.linecorp.kotlinjdsl.querymodel.jpql.sort.Sortable
 import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
@@ -19,36 +20,37 @@ class ProductRepositoryImpl(
     private val productJpaRepository: ProductJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
 ) : ProductRepository {
-    override fun findAllProductSummary(
+    override fun findAllProduct(
         brandId: Long?,
         sortBy: String,
         pageable: Pageable,
-    ): Page<ProductWithSummaryInfo> {
+    ): Page<Product> {
         val page = productJpaRepository.findPage(pageable) {
-            selectNew<ProductWithSummaryInfo>(
+            select<Product>(
                 entity(Product::class),
-                entity(ProductSummary::class),
             ).from(
                 entity(Product::class),
-                join(entity(ProductSummary::class)).on(path(Product::id).equal(path(ProductSummary::productId))),
             ).where(
                 eqBrandId(brandId),
+            ).groupBy(
+                path(Product::id),
             ).orderBy(
-                when (sortBy) {
-                    "likes_desc" -> path(ProductSummary::likeCount).desc()
-                    "price_asc" -> path(Product::price).asc()
-                    else -> path(Product::id).desc()
-                },
+                *makeSort(sortBy),
             )
         }
-
         val filteredContent = page.content.filterNotNull()
         return PageImpl(filteredContent, pageable, page.totalElements)
     }
 
     private fun Jpql.eqBrandId(brandId: Long?): Predicate? = brandId?.let { (path(Product::brandId).equal(it)) }
 
-    override fun getById(id: Long): ProductWithSummaryInfo {
+    private fun Jpql.makeSort(sortBy: String): Array<out Sortable?> = when (sortBy) {
+        "likes_desc" -> arrayOf(path(Product::likeCount).desc(), path(Product::id).desc())
+        "price_asc" -> arrayOf(path(Product::price).asc(), path(Product::id).desc())
+        else -> arrayOf(path(Product::id).desc())
+    }
+
+    override fun getByIdWithSummary(id: Long): ProductWithSummaryInfo {
         val product = productJpaRepository.findByIdOrNull(id)
             ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
@@ -75,5 +77,8 @@ class ProductRepositoryImpl(
     override fun save(product: Product): Product = productJpaRepository.save(product)
 
     override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+        ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+
+    override fun getById(id: Long): Product = productJpaRepository.findByIdOrNull(id)
+        ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
 }

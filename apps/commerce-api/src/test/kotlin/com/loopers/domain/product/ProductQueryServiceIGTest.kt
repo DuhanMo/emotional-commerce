@@ -35,7 +35,7 @@ class ProductQueryServiceIGTest(
         val sortBy = "likes_desc"
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findAllProductSummary(
+            val result = productQueryService.findAllProduct(
                 brandId = null,
                 sortBy = sortBy,
                 pageCriteria = PageCriteria(0, 20),
@@ -43,7 +43,7 @@ class ProductQueryServiceIGTest(
 
             Then("좋아요 내림차순으로 정렬된다") {
                 result shouldHaveSize 5
-                result.shouldBeSortedDescendingBy { it.summary.likeCount }
+                result.shouldBeSortedDescendingBy { it.likeCount }
             }
         }
     }
@@ -53,7 +53,7 @@ class ProductQueryServiceIGTest(
         val sortBy = "price_asc"
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findAllProductSummary(
+            val result = productQueryService.findAllProduct(
                 brandId = null,
                 sortBy = sortBy,
                 pageCriteria = PageCriteria(0, 20),
@@ -61,7 +61,7 @@ class ProductQueryServiceIGTest(
 
             Then("가격 오름차순으로 정렬된다") {
                 result shouldHaveSize 5
-                result.shouldBeSortedBy { it.product.price }
+                result.shouldBeSortedBy { it.price }
             }
         }
     }
@@ -71,7 +71,7 @@ class ProductQueryServiceIGTest(
 
         When("상품 목록을 조회하면") {
             // 두 번째 페이지, 페이지 사이즈 2
-            val result = productQueryService.findAllProductSummary(
+            val result = productQueryService.findAllProduct(
                 brandId = null,
                 sortBy = "latest",
                 pageCriteria = PageCriteria(1, 2),
@@ -88,7 +88,7 @@ class ProductQueryServiceIGTest(
         val brandId = 99L
 
         When("상품 목록을 조회하면") {
-            val result = productQueryService.findAllProductSummary(
+            val result = productQueryService.findAllProduct(
                 brandId = brandId,
                 sortBy = "latest",
                 pageCriteria = PageCriteria(0, 20),
@@ -96,7 +96,7 @@ class ProductQueryServiceIGTest(
 
             Then("해당 브랜드의 상품이 조회된다") {
                 result shouldHaveSize 2
-                result.map { it.product }.forAll { it.brandId shouldBe brandId }
+                result.forAll { it.brandId shouldBe brandId }
             }
         }
     }

@@ -12,12 +12,22 @@ class Product(
     val description: String,
     val price: Int,
     var stock: Int,
+    var likeCount: Long = 0,
     val imageUrl: String? = null,
     id: Long = 0L,
 ) : BaseEntity(id) {
     fun deductStock(quantity: Int) {
         validateStock(quantity)
         this.stock -= quantity
+    }
+
+    fun increaseLikeCount() {
+        likeCount++
+    }
+
+    fun decreaseLikeCount() {
+        check(likeCount > 0) { "좋아요 수는 0 미만일 수 없습니다." }
+        likeCount--
     }
 
     private fun validateStock(requestedQuantity: Int) {

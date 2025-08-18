@@ -34,27 +34,26 @@ class ProductV1ApiE2ETest(
             val brand1 = brandJpaRepository.save(createBrand(name = "브랜드1", description = "브랜드1 설명"))
             val brand2 = brandJpaRepository.save(createBrand(name = "브랜드2", description = "브랜드2 설명"))
 
-            val product1 = productJpaRepository.save(
+            productJpaRepository.save(
                 createProduct(
                     brandId = brand1.id,
                     name = "상품1",
                     description = "상품1 설명",
                     price = 10_000,
                     stock = 50,
+                    likeCount = 100,
                 ),
             )
-            val product2 = productJpaRepository.save(
+            productJpaRepository.save(
                 createProduct(
                     brandId = brand2.id,
                     name = "상품2",
                     description = "상품2 설명",
                     price = 20_000,
                     stock = 30,
+                    likeCount = 200,
                 ),
             )
-
-            productSummaryJpaRepository.save(createProductSummary(product1.id, likeCount = 100))
-            productSummaryJpaRepository.save(createProductSummary(product2.id, likeCount = 200))
 
             val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
 
@@ -142,15 +141,12 @@ class ProductV1ApiE2ETest(
             // Given
             val brand = brandJpaRepository.save(createBrand(name = "테스트 브랜드"))
 
-            val product1 = productJpaRepository.save(
-                createProduct(brandId = brand.id, name = "저렴한 상품", price = 5_000),
+            productJpaRepository.save(
+                createProduct(brandId = brand.id, name = "저렴한 상품", price = 5_000, likeCount = 10),
             )
-            val product2 = productJpaRepository.save(
-                createProduct(brandId = brand.id, name = "비싼 상품", price = 50_000),
+            productJpaRepository.save(
+                createProduct(brandId = brand.id, name = "비싼 상품", price = 50_000, likeCount = 100),
             )
-
-            productSummaryJpaRepository.save(createProductSummary(product1.id, likeCount = 10))
-            productSummaryJpaRepository.save(createProductSummary(product2.id, likeCount = 100))
 
             val responseType = object : ParameterizedTypeReference<ApiResponse<ProductListResponse>>() {}
 
