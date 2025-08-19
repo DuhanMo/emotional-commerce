@@ -1,38 +1,21 @@
-// package com.loopers.interfaces.api.like
-//
-// import com.loopers.domain.product.ProductLike
-// import com.loopers.domain.product.ProductLikeStatus
-// import com.loopers.domain.product.ProductSummary
-// import com.loopers.domain.user.LoginId
-// import com.loopers.infrastructure.brand.BrandJpaRepository
-// import com.loopers.infrastructure.product.ProductJpaRepository
-// import com.loopers.infrastructure.product.ProductLikeJpaRepository
-// import com.loopers.infrastructure.product.ProductSummaryJpaRepository
-// import com.loopers.infrastructure.user.UserJpaRepository
-// import com.loopers.interfaces.api.ApiResponse
-// import com.loopers.interfaces.api.ApiResponse.Metadata.Result.SUCCESS
-// import com.loopers.interfaces.api.product.ProductItemResponse
-// import com.loopers.support.fixture.createBrand
-// import com.loopers.support.fixture.createProduct
-// import com.loopers.support.fixture.createUser
-// import com.loopers.support.tests.E2ESpec
-// import io.kotest.matchers.collections.shouldHaveSize
-// import io.kotest.matchers.shouldBe
-// import org.springframework.boot.test.web.client.TestRestTemplate
-// import org.springframework.core.ParameterizedTypeReference
-// import org.springframework.http.HttpEntity
-// import org.springframework.http.HttpHeaders
-// import org.springframework.http.HttpMethod
-// import org.springframework.http.HttpStatus
-//
-// class LikeV1ApiE2ETest(
-//    private val userJpaRepository: UserJpaRepository,
-//    private val productJpaRepository: ProductJpaRepository,
-//    private val productLikeJpaRepository: ProductLikeJpaRepository,
-//    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
-//    private val brandJpaRepository: BrandJpaRepository,
-//    private val testRestTemplate: TestRestTemplate,
-// ) : E2ESpec({
+package com.loopers.interfaces.api.like
+
+import com.loopers.infrastructure.brand.BrandJpaRepository
+import com.loopers.infrastructure.product.ProductJpaRepository
+import com.loopers.infrastructure.product.ProductLikeJpaRepository
+import com.loopers.infrastructure.product.ProductSummaryJpaRepository
+import com.loopers.infrastructure.user.UserJpaRepository
+import com.loopers.support.tests.E2ESpec
+import org.springframework.boot.test.web.client.TestRestTemplate
+
+class LikeV1ApiE2ETest(
+    private val userJpaRepository: UserJpaRepository,
+    private val productJpaRepository: ProductJpaRepository,
+    private val productLikeJpaRepository: ProductLikeJpaRepository,
+    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
+    private val brandJpaRepository: BrandJpaRepository,
+    private val testRestTemplate: TestRestTemplate,
+) : E2ESpec({
 //    /**
 //     * @see LikeV1Controller.likeProduct
 //     */
@@ -408,4 +391,4 @@
 //            productNames.contains("user2만 좋아요") shouldBe false
 //        }
 //    }
-// })
+})

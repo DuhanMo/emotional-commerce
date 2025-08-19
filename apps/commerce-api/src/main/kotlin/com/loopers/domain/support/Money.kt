@@ -1,7 +1,7 @@
 package com.loopers.domain.support
 
 @JvmInline
-value class Money(val value: Long) {
+value class Money(val value: Long) : Comparable<Money> {
 
     init {
         require(value >= 0L) { "금액은 음수가 될 수 없습니다." }
@@ -16,7 +16,7 @@ value class Money(val value: Long) {
     operator fun times(multiplier: Long): Money =
         Money(this.value * multiplier)
 
-    operator fun compareTo(other: Money): Int =
+    override fun compareTo(other: Money): Int =
         this.value.compareTo(other.value)
 
     override fun toString(): String = value.toString()

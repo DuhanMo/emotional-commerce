@@ -1,37 +1,21 @@
-// package com.loopers.interfaces.api.order
-//
-// import com.loopers.domain.payment.PaymentMethod
-// import com.loopers.domain.point.Point
-// import com.loopers.domain.product.ProductSummary
-// import com.loopers.domain.user.LoginId
-// import com.loopers.infrastructure.order.OrderJpaRepository
-// import com.loopers.infrastructure.point.PointJpaRepository
-// import com.loopers.infrastructure.product.ProductJpaRepository
-// import com.loopers.infrastructure.product.ProductSummaryJpaRepository
-// import com.loopers.infrastructure.user.UserJpaRepository
-// import com.loopers.interfaces.api.ApiResponse
-// import com.loopers.interfaces.api.order.PlaceOrderRequest.AddressRequest
-// import com.loopers.interfaces.api.order.PlaceOrderRequest.OrderLineRequest
-// import com.loopers.support.fixture.createProduct
-// import com.loopers.support.fixture.createUser
-// import com.loopers.support.tests.E2ESpec
-// import io.kotest.matchers.shouldBe
-// import io.kotest.matchers.shouldNotBe
-// import org.springframework.boot.test.web.client.TestRestTemplate
-// import org.springframework.core.ParameterizedTypeReference
-// import org.springframework.http.HttpEntity
-// import org.springframework.http.HttpHeaders
-// import org.springframework.http.HttpMethod
-// import org.springframework.http.HttpStatus
-//
-// class OrderV1ApiE2ETest(
-//    private val userJpaRepository: UserJpaRepository,
-//    private val productJpaRepository: ProductJpaRepository,
-//    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
-//    private val orderJpaRepository: OrderJpaRepository,
-//    private val testRestTemplate: TestRestTemplate,
-//    private val pointJpaRepository: PointJpaRepository,
-// ) : E2ESpec({
+ package com.loopers.interfaces.api.order
+
+ import com.loopers.infrastructure.order.OrderJpaRepository
+ import com.loopers.infrastructure.point.PointJpaRepository
+ import com.loopers.infrastructure.product.ProductJpaRepository
+ import com.loopers.infrastructure.product.ProductSummaryJpaRepository
+ import com.loopers.infrastructure.user.UserJpaRepository
+ import com.loopers.support.tests.E2ESpec
+ import org.springframework.boot.test.web.client.TestRestTemplate
+
+ class OrderV1ApiE2ETest(
+    private val userJpaRepository: UserJpaRepository,
+    private val productJpaRepository: ProductJpaRepository,
+    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
+    private val orderJpaRepository: OrderJpaRepository,
+    private val testRestTemplate: TestRestTemplate,
+    private val pointJpaRepository: PointJpaRepository,
+ ) : E2ESpec({
 //    /**
 //     * @see OrderV1Controller.placeOrder
 //     */
@@ -234,4 +218,4 @@
 //            response.statusCode shouldBe HttpStatus.BAD_REQUEST
 //        }
 //    }
-// })
+ })

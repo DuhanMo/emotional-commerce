@@ -1,39 +1,23 @@
-// package com.loopers.domain.product
-//
-// import com.loopers.support.fixture.createProduct
-// import io.kotest.assertions.throwables.shouldThrow
-// import io.kotest.core.spec.style.StringSpec
-// import io.kotest.matchers.shouldBe
-//
-// class ProductTest : StringSpec({
-//    "재고를 초과하여 재고 차감하면 예외가 발생한다" {
-//        val product = createProduct(stock = 1)
-//
-//        shouldThrow<IllegalArgumentException> {
-//            product.deductStock(2)
-//        }
-//    }
-//
-//    "재고와 동일하게 재고 차감할 수 있다" {
-//        val product = createProduct(stock = 2)
-//
-//        product.deductStock(2)
-//
-//        product.stock shouldBe 0
-//    }
-//
-//    "상품 좋아요 수는 음수로 차감할 수 없다" {
-//        val product = createProduct(likeCount = 0)
-//        shouldThrow<IllegalStateException> {
-//            product.decreaseLikeCount()
-//        }
-//    }
-//
-//    "상품 좋아요 수 증가시 상품 좋아요 수가 증가한다" {
-//        val product = createProduct(likeCount = 0)
-//
-//        product.increaseLikeCount()
-//
-//        product.likeCount shouldBe 1
-//    }
-// })
+package com.loopers.domain.product
+
+import com.loopers.support.fixture.createProduct
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+class ProductTest : StringSpec({
+    "상품 좋아요 수는 음수로 차감할 수 없다" {
+        val product = createProduct(likeCount = 0)
+        shouldThrow<IllegalStateException> {
+            product.decreaseLikeCount()
+        }
+    }
+
+    "상품 좋아요 수 증가시 상품 좋아요 수가 증가한다" {
+        val product = createProduct(likeCount = 0)
+
+        product.increaseLikeCount()
+
+        product.likeCount shouldBe 1
+    }
+})

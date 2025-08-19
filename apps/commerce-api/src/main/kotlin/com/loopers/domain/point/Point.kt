@@ -10,7 +10,7 @@ import jakarta.persistence.Table
 class Point(
     val userId: Long,
     var amount: Money = Money.ZERO,
-    id : Long= 0L
+    id: Long = 0L,
 ) : BaseEntity(id) {
     fun charge(amount: Money) {
         require(amount > Money.ZERO) { "포인트는 0보다 큰 금액으로 충전해야 합니다. (충전 금액: $amount)" }

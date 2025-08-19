@@ -9,13 +9,13 @@ import jakarta.persistence.Table
 
 @Table(name = "point_history")
 @Entity
-class PointHistory (
+class PointHistory(
     val userId: Long,
     val pointId: Long,
     @Enumerated(EnumType.STRING)
     val type: PointHistoryType,
     val amount: Money,
-    id: Long = 0L
+    id: Long = 0L,
 ) : BaseEntity(id) {
     companion object {
         fun fromUse(

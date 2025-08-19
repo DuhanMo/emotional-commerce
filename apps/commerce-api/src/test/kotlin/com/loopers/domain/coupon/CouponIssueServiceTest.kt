@@ -5,9 +5,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 
 class CouponIssueServiceTest : BehaviorSpec({
     val couponRepository = mockk<CouponRepository>()
@@ -18,7 +16,7 @@ class CouponIssueServiceTest : BehaviorSpec({
         val coupon = createCoupon(maxIssueCount = 500L, issuedCount = 400L)
         every { couponRepository.getByIdWithLock(1L) } returns coupon
         every { couponRepository.save(any()) } returns coupon
-        every { issuedCouponRepository.save(any())} returns IssuedCoupon(1L, coupon.id)
+        every { issuedCouponRepository.save(any()) } returns IssuedCoupon(1L, coupon.id)
 
         When("쿠폰을 발급하면") {
             service.issue(1L, 1L)

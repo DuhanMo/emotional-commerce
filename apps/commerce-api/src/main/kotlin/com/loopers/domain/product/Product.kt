@@ -1,6 +1,7 @@
 package com.loopers.domain.product
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.support.Money
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -14,8 +15,7 @@ class Product(
     val description: String,
     @Enumerated(EnumType.STRING)
     val status: ProductStatus,
-    val price: Int,
-    var stock: Int,
+    val price: Money,
     var likeCount: Long = 0,
     val imageUrl: String? = null,
     id: Long = 0L,

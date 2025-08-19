@@ -10,7 +10,7 @@ class CouponUsageTest : StringSpec({
             orderId = 1L,
             couponId = 1L,
             issuedCouponId = 1L,
-            discountAmount = 1000L
+            discountAmount = 1000L,
         )
         couponUsage.commit()
         couponUsage.status shouldBe CouponUsage.CouponUsageStatus.USED

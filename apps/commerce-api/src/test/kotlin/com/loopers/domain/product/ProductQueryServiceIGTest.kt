@@ -1,5 +1,6 @@
  package com.loopers.domain.product
 
+ import com.loopers.domain.support.Money
  import com.loopers.domain.support.PageCriteria
  import com.loopers.infrastructure.product.ProductJpaRepository
  import com.loopers.infrastructure.product.ProductSummaryJpaRepository
@@ -17,11 +18,11 @@
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
  ) : IntegrationSpec({
     fun setupData() {
-        val product1 = productJpaRepository.save(createProduct(brandId = 1L, price = 10_000))
-        val product2 = productJpaRepository.save(createProduct(brandId = 1L, price = 150_000))
-        val product3 = productJpaRepository.save(createProduct(brandId = 1L, price = 5_000))
-        val product4 = productJpaRepository.save(createProduct(brandId = 99L, price = 500))
-        val product5 = productJpaRepository.save(createProduct(brandId = 99L, price = 20_000))
+        val product1 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(10_000)))
+        val product2 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(150_000)))
+        val product3 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(5_000)))
+        val product4 = productJpaRepository.save(createProduct(brandId = 99L, price = Money(500)))
+        val product5 = productJpaRepository.save(createProduct(brandId = 99L, price = Money(20_000)))
 
         productSummaryJpaRepository.save(ProductSummary(productId = product1.id, likeCount = 100L))
         productSummaryJpaRepository.save(ProductSummary(productId = product2.id, likeCount = 200L))
@@ -61,7 +62,7 @@
 
             Then("가격 오름차순으로 정렬된다") {
                 result shouldHaveSize 5
-                result.shouldBeSortedBy { it.price }
+                result.shouldBeSortedBy { it.price.value }
             }
         }
     }

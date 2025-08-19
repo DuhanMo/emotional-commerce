@@ -1,28 +1,17 @@
-// package com.loopers.interfaces.api.product
-//
-// import com.loopers.infrastructure.brand.BrandJpaRepository
-// import com.loopers.infrastructure.product.ProductJpaRepository
-// import com.loopers.infrastructure.product.ProductSummaryJpaRepository
-// import com.loopers.interfaces.api.ApiResponse
-// import com.loopers.support.fixture.createBrand
-// import com.loopers.support.fixture.createProduct
-// import com.loopers.support.fixture.createProductSummary
-// import com.loopers.support.tests.E2ESpec
-// import io.kotest.inspectors.forAll
-// import io.kotest.matchers.collections.shouldHaveSize
-// import io.kotest.matchers.shouldBe
-// import org.springframework.boot.test.web.client.TestRestTemplate
-// import org.springframework.core.ParameterizedTypeReference
-// import org.springframework.http.HttpEntity
-// import org.springframework.http.HttpMethod
-// import org.springframework.http.HttpStatus
-//
-// class ProductV1ApiE2ETest(
-//    private val brandJpaRepository: BrandJpaRepository,
-//    private val productJpaRepository: ProductJpaRepository,
-//    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
-//    private val testRestTemplate: TestRestTemplate,
-// ) : E2ESpec({
+ package com.loopers.interfaces.api.product
+
+ import com.loopers.infrastructure.brand.BrandJpaRepository
+ import com.loopers.infrastructure.product.ProductJpaRepository
+ import com.loopers.infrastructure.product.ProductSummaryJpaRepository
+ import com.loopers.support.tests.E2ESpec
+ import org.springframework.boot.test.web.client.TestRestTemplate
+
+ class ProductV1ApiE2ETest(
+    private val brandJpaRepository: BrandJpaRepository,
+    private val productJpaRepository: ProductJpaRepository,
+    private val productSummaryJpaRepository: ProductSummaryJpaRepository,
+    private val testRestTemplate: TestRestTemplate,
+ ) : E2ESpec({
 //    /**
 //     * @see ProductV1Controller.findProducts
 //     */
@@ -310,4 +299,4 @@
 //            response.statusCode shouldBe HttpStatus.NOT_FOUND
 //        }
 //    }
-// })
+ })

@@ -1,7 +1,6 @@
 package com.loopers.domain.product
 
 import com.loopers.domain.BaseEntity
-import com.loopers.domain.support.Money
 import io.hypersistence.utils.hibernate.type.json.JsonType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -22,7 +21,6 @@ class ProductSku(
     @Type(JsonType::class)
     @Column(columnDefinition = "json")
     val attributes: ProductSkuAttributes,
-    val price: Money,
     @Enumerated(EnumType.STRING)
     val status: ProductSkuStatus,
 ) : BaseEntity() {

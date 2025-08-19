@@ -1,25 +1,15 @@
-// package com.loopers.interfaces.api.point
-//
-// import com.loopers.domain.point.Point
-// import com.loopers.domain.user.LoginId
-// import com.loopers.infrastructure.point.PointJpaRepository
-// import com.loopers.infrastructure.user.UserJpaRepository
-// import com.loopers.interfaces.api.ApiResponse
-// import com.loopers.support.fixture.createUser
-// import com.loopers.support.tests.E2ESpec
-// import io.kotest.matchers.shouldBe
-// import org.springframework.boot.test.web.client.TestRestTemplate
-// import org.springframework.core.ParameterizedTypeReference
-// import org.springframework.http.HttpEntity
-// import org.springframework.http.HttpHeaders
-// import org.springframework.http.HttpMethod
-// import org.springframework.http.HttpStatus
-//
-// class PointV1ApiE2ETest(
-//    private val userJpaRepository: UserJpaRepository,
-//    private val pointJpaRepository: PointJpaRepository,
-//    private val testRestTemplate: TestRestTemplate,
-// ) : E2ESpec({
+ package com.loopers.interfaces.api.point
+
+ import com.loopers.infrastructure.point.PointJpaRepository
+ import com.loopers.infrastructure.user.UserJpaRepository
+ import com.loopers.support.tests.E2ESpec
+ import org.springframework.boot.test.web.client.TestRestTemplate
+
+ class PointV1ApiE2ETest(
+    private val userJpaRepository: UserJpaRepository,
+    private val pointJpaRepository: PointJpaRepository,
+    private val testRestTemplate: TestRestTemplate,
+ ) : E2ESpec({
 //    /**
 //     * @see PointV1Controller.charge
 //     */
@@ -90,4 +80,4 @@
 //            response.statusCode shouldBe HttpStatus.BAD_REQUEST
 //        }
 //    }
-// })
+ })

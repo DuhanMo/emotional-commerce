@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 class PaymentService(
     payProcessors: List<PayProcessor>,
 ) {
-    private val payProcessors = payProcessors.associateBy { it.support }
+    private val payProcessors by lazy { payProcessors.associateBy { it.support() } }
 
     @Transactional
     fun payRequest(command: PayRequestCommand): PayResult {

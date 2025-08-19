@@ -44,19 +44,18 @@ class Order(
         status = OrderStatus.PAID
     }
 
-    fun paymentFailed() {
+    fun payFail() {
         require(status == OrderStatus.PENDING) { "결제 대기 상태에서만 결제 실패로 변경할 수 있습니다." }
-        status = OrderStatus.FAILED
+        status = OrderStatus.PAY_FAILED
     }
 
     fun isPending(): Boolean = status == OrderStatus.PENDING
     fun isPaid(): Boolean = status == OrderStatus.PAID
-    fun isPaymentFailed(): Boolean = status == OrderStatus.FAILED
+    fun isPaymentFailed(): Boolean = status == OrderStatus.PAY_FAILED
 
     enum class OrderStatus {
         PENDING, // 초기 상태 (주문 생성)
         PAID, // 결제 완료
-        FAILED, // 결제 실패
-        CANCELLED, // 주문 취소
+        PAY_FAILED, // 결제 실패
     }
 }

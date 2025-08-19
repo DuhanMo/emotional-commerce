@@ -1,6 +1,7 @@
 package com.loopers.interfaces.api.product
 
 import com.loopers.application.product.ProductItemOutput
+import com.loopers.domain.support.Money
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "상품 정보")
@@ -18,10 +19,7 @@ data class ProductItemResponse(
     val description: String,
 
     @Schema(description = "가격", example = "36000")
-    val price: Int,
-
-    @Schema(description = "재고 수량", example = "100")
-    val stock: Int,
+    val price: Money,
 
     @Schema(description = "상품 이미지 URL", example = "/item/202506/image.png")
     val imageUrl: String?,
@@ -39,7 +37,6 @@ data class ProductItemResponse(
             name = output.name,
             description = output.description,
             price = output.price,
-            stock = output.stock,
             imageUrl = output.imageUrl,
             brand = BrandResponse.from(output.brand),
             summary = ProductSummaryResponse.from(output.summary),

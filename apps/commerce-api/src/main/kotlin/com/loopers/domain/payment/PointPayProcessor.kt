@@ -11,7 +11,7 @@ class PointPayProcessor(
     private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) : PayProcessor {
-    override val support: PaymentMethod = PaymentMethod.POINT
+    override fun support() = PaymentMethod.POINT
 
     @Transactional
     override fun process(command: PayProcessCommand) {

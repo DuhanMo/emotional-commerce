@@ -2,9 +2,7 @@ package com.loopers.domain.coupon
 
 import com.loopers.domain.BaseEntity
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.AVAILABLE
-import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.EXPIRED
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.RELEASED
-import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.USED
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.USED_PENDING
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -28,7 +26,7 @@ class IssuedCoupon(
     var version: Long = 0L
 
     fun use() {
-        check(status in listOf(AVAILABLE, RELEASED)) {"사용할 수 없는 쿠폰입니다."}
+        check(status in listOf(AVAILABLE, RELEASED)) { "사용할 수 없는 쿠폰입니다." }
 
         this.status = USED_PENDING
         this.usedAt = Instant.now()
