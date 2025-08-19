@@ -1,6 +1,7 @@
 package com.loopers.domain.order
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.support.Money
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -15,21 +16,27 @@ class Order(
     val userId: Long,
     @Enumerated(EnumType.STRING)
     var status: OrderStatus = OrderStatus.PENDING,
-    @Embedded
-    val deliveryAddress: Address? = null,
+    val totalAmount: Money,
 ) : BaseEntity() {
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
     val orderLines: MutableList<OrderLine> = mutableListOf()
 
-    val totalAmount: Long
-        get() = orderLines.sumOf { it.lineAmount }
+    @Embedded
+    val deliveryAddress: Address? = null
 
-    var discountedAmount: Long? = null
-
-    fun addOrderLines(orderLines: List<OrderLine>) {
-        require(orderLines.count() > 0) { "주문 상품이 최소 1개는 있어야 합니다." }
-        val orderLines = orderLines.map { it.setOrder(this) }
-        this.orderLines.addAll(orderLines)
+    fun addOrderLines(orderItems: List<OrderInfo.OrderLineInfo>) {
+        require(orderItems.count() > 0) { "주문 상품이 최소 1개는 있어야 합니다." }
+        orderLines.addAll(
+            orderItems.map {
+                OrderLine(
+                    productId = it.productId,
+                    skuId = it.skuId,
+                    quantity = it.quantity,
+                    unitPrice = it.unitPrice,
+                    order = this,
+                )
+            },
+        )
     }
 
     fun paid() {
@@ -39,14 +46,17 @@ class Order(
 
     fun paymentFailed() {
         require(status == OrderStatus.PENDING) { "결제 대기 상태에서만 결제 실패로 변경할 수 있습니다." }
-        status = OrderStatus.PAYMENT_FAILED
+        status = OrderStatus.FAILED
     }
 
     fun isPending(): Boolean = status == OrderStatus.PENDING
     fun isPaid(): Boolean = status == OrderStatus.PAID
-    fun isPaymentFailed(): Boolean = status == OrderStatus.PAYMENT_FAILED
+    fun isPaymentFailed(): Boolean = status == OrderStatus.FAILED
 
-    fun updateDiscountedAmount(amount: Long) {
-        this.discountedAmount = amount
+    enum class OrderStatus {
+        PENDING, // 초기 상태 (주문 생성)
+        PAID, // 결제 완료
+        FAILED, // 결제 실패
+        CANCELLED, // 주문 취소
     }
 }

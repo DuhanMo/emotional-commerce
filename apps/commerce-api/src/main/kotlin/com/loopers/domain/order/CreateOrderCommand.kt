@@ -1,6 +1,5 @@
 package com.loopers.domain.order
 
-import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
 
 data class CreateOrderCommand(

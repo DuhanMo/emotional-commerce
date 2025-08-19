@@ -3,7 +3,6 @@ package com.loopers.infrastructure.product
 import com.loopers.domain.product.ProductLike
 import com.loopers.domain.product.ProductLikeCount
 import com.loopers.domain.product.ProductLikeRepository
-import com.loopers.domain.product.ProductLikeStatus.ACTIVE
 import java.time.Instant
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -22,7 +21,7 @@ class ProductLikeRepositoryImpl(
         productLikeJpaRepository.save(productLike)
 
     override fun findAllByUserId(userId: Long): List<ProductLike> =
-        productLikeJpaRepository.findAllByUserIdAndStatusOrderByIdDesc(userId, ACTIVE)
+        productLikeJpaRepository.findAllByUserIdAndStatusOrderByIdDesc(userId, ProductLike.ProductLikeStatus.ACTIVE)
 
     override fun findAllLikeUpdatedProductId(
         from: Instant,
@@ -41,7 +40,7 @@ class ProductLikeRepositoryImpl(
                 entity(ProductLike::class),
             ).where(
                 path(ProductLike::productId).`in`(productIds)
-                    .and(path(ProductLike::status).equal(ACTIVE)),
+                    .and(path(ProductLike::status).equal(ProductLike.ProductLikeStatus.ACTIVE)),
             ).groupBy(
                 path(ProductLike::productId),
             )

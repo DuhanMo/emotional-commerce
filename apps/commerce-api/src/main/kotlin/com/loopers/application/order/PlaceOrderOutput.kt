@@ -1,26 +1,19 @@
 package com.loopers.application.order
 
 import com.loopers.domain.order.Order
-import com.loopers.domain.order.OrderStatus
+import com.loopers.domain.support.Money
 
 data class PlaceOrderOutput(
     val id: Long,
     val userId: Long,
-    val status: OrderStatus,
-    val totalAmount: Long,
+    val status: Order.OrderStatus,
+    val totalAmount: Money,
     val orderLines: List<OrderLineOutput>,
 ) {
-    data class AddressOutput(
-        val street: String,
-        val city: String,
-        val zipCode: String,
-        val detailAddress: String?,
-    )
-
     data class OrderLineOutput(
         val productId: Long,
-        val quantity: Int,
-        val unitPrice: Long,
+        val quantity: Long,
+        val unitPrice: Money,
     )
 
     companion object {

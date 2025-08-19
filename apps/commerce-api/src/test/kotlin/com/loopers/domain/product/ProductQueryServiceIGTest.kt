@@ -1,21 +1,21 @@
-package com.loopers.domain.product
+ package com.loopers.domain.product
 
-import com.loopers.domain.support.PageCriteria
-import com.loopers.infrastructure.product.ProductJpaRepository
-import com.loopers.infrastructure.product.ProductSummaryJpaRepository
-import com.loopers.support.fixture.createProduct
-import com.loopers.support.tests.IntegrationSpec
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldBeSortedBy
-import io.kotest.matchers.collections.shouldBeSortedDescendingBy
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
+ import com.loopers.domain.support.PageCriteria
+ import com.loopers.infrastructure.product.ProductJpaRepository
+ import com.loopers.infrastructure.product.ProductSummaryJpaRepository
+ import com.loopers.support.fixture.createProduct
+ import com.loopers.support.tests.IntegrationSpec
+ import io.kotest.inspectors.forAll
+ import io.kotest.matchers.collections.shouldBeSortedBy
+ import io.kotest.matchers.collections.shouldBeSortedDescendingBy
+ import io.kotest.matchers.collections.shouldHaveSize
+ import io.kotest.matchers.shouldBe
 
-class ProductQueryServiceIGTest(
+ class ProductQueryServiceIGTest(
     private val productQueryService: ProductQueryService,
     private val productJpaRepository: ProductJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
-) : IntegrationSpec({
+ ) : IntegrationSpec({
     fun setupData() {
         val product1 = productJpaRepository.save(createProduct(brandId = 1L, price = 10_000))
         val product2 = productJpaRepository.save(createProduct(brandId = 1L, price = 150_000))
@@ -100,4 +100,4 @@ class ProductQueryServiceIGTest(
             }
         }
     }
-})
+ })

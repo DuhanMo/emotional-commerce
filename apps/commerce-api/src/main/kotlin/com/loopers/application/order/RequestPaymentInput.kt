@@ -1,7 +1,12 @@
 package com.loopers.application.order
 
+import com.loopers.domain.order.Address
 import com.loopers.domain.order.CaptureOrderInfoCommand
+import com.loopers.domain.payment.CardType
 import com.loopers.domain.payment.PayRequestCommand
+import com.loopers.domain.payment.PaymentMethod
+import com.loopers.domain.support.Money
+import com.loopers.domain.user.LoginId
 
 data class RequestPaymentInput(
     val loginId: LoginId,

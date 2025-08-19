@@ -2,6 +2,7 @@ package com.loopers.interfaces.api.order
 
 import com.loopers.application.order.PlaceOrderInput
 import com.loopers.domain.payment.PaymentMethod
+import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
@@ -54,10 +55,15 @@ data class PlaceOrderRequest(
         @field:Positive(message = "상품 ID는 양수여야 합니다.")
         val productId: Long?,
 
+        @Schema(description = "상품 식별자", example = "1", required = true)
+        @field:NotNull(message = "상품 ID는 필수입니다.")
+        @field:Positive(message = "상품 ID는 양수여야 합니다.")
+        val skuId: Long?,
+
         @Schema(description = "수량", example = "2", required = true)
         @field:NotNull(message = "수량은 필수입니다.")
         @field:Positive(message = "수량은 양수여야 합니다.")
-        val quantity: Int?,
+        val quantity: Long?,
 
         @Schema(description = "단가", example = "10000", required = true)
         @field:NotNull(message = "단가는 필수입니다.")
@@ -70,8 +76,9 @@ data class PlaceOrderRequest(
         orderItems = orderItems.map { item ->
             PlaceOrderInput.OrderLineInput(
                 productId = item.productId!!,
+                skuId = item.skuId!!,
                 quantity = item.quantity!!,
-                unitPrice = item.unitPrice!!,
+                unitPrice = Money(item.unitPrice!!),
             )
         },
     )

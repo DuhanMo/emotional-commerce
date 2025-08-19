@@ -1,9 +1,7 @@
 package com.loopers.domain.point
 
 import com.loopers.domain.BaseEntity
-import com.loopers.domain.payment.Money
-import com.loopers.domain.point.PointHistoryType.CHARGE
-import com.loopers.domain.point.PointHistoryType.USE
+import com.loopers.domain.support.Money
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -11,24 +9,30 @@ import jakarta.persistence.Table
 
 @Table(name = "point_history")
 @Entity
-class PointHistory private constructor(
+class PointHistory (
     val userId: Long,
     val pointId: Long,
     @Enumerated(EnumType.STRING)
     val type: PointHistoryType,
     val amount: Money,
-) : BaseEntity() {
+    id: Long = 0L
+) : BaseEntity(id) {
     companion object {
         fun fromUse(
             userId: Long,
             pointId: Long,
             amount: Money,
-        ): PointHistory = PointHistory(userId, pointId, USE, amount)
+        ): PointHistory = PointHistory(userId, pointId, PointHistoryType.USE, amount)
 
         fun fromCharge(
             userId: Long,
             pointId: Long,
             amount: Money,
-        ): PointHistory = PointHistory(userId, pointId, CHARGE, amount)
+        ): PointHistory = PointHistory(userId, pointId, PointHistoryType.CHARGE, amount)
+    }
+
+    enum class PointHistoryType {
+        USE,
+        CHARGE,
     }
 }

@@ -6,6 +6,6 @@ data class PointResponse(
     val point: Long,
 ) {
     companion object {
-        fun from(output: PointOutput): PointResponse = PointResponse(output.point)
+        fun from(output: PointOutput): PointResponse = PointResponse(output.point.value)
     }
 }

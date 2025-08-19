@@ -1,7 +1,7 @@
 package com.loopers.interfaces.api.order
 
 import com.loopers.application.order.PlaceOrderOutput
-import com.loopers.domain.order.OrderStatus
+import com.loopers.domain.order.Order
 import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "주문 생성 응답")
@@ -13,7 +13,7 @@ data class PlaceOrderResponse(
     val userId: Long,
 
     @Schema(description = "주문 상태", example = "PENDING")
-    val status: OrderStatus,
+    val status: Order.OrderStatus,
 
     @Schema(description = "총 주문 금액", example = "25000")
     val totalAmount: Long,
@@ -42,7 +42,7 @@ data class PlaceOrderResponse(
         val productId: Long,
 
         @Schema(description = "수량", example = "2")
-        val quantity: Int,
+        val quantity: Long,
 
         @Schema(description = "단가", example = "10000")
         val unitPrice: Long,
@@ -53,12 +53,12 @@ data class PlaceOrderResponse(
             id = output.id,
             userId = output.userId,
             status = output.status,
-            totalAmount = output.totalAmount,
+            totalAmount = output.totalAmount.value,
             orderLines = output.orderLines.map { orderLine ->
                 OrderLineResponse(
                     productId = orderLine.productId,
                     quantity = orderLine.quantity,
-                    unitPrice = orderLine.unitPrice,
+                    unitPrice = orderLine.unitPrice.value,
                 )
             },
         )

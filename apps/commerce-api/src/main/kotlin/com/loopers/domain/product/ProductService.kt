@@ -13,8 +13,6 @@ class ProductService(
         order.orderLines.forEach { orderLine ->
             val product = productRepository.getByIdWithLock(orderLine.productId)
 
-            product.deductStock(orderLine.quantity)
-
             productRepository.save(product)
         }
     }
