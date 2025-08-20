@@ -1,7 +1,7 @@
 package com.loopers.interfaces.api.order
 
 import com.loopers.application.order.PlaceOrderInput
-import com.loopers.domain.payment.PaymentMethod
+import com.loopers.domain.order.Address
 import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
 import io.swagger.v3.oas.annotations.media.Schema
@@ -18,9 +18,9 @@ data class PlaceOrderRequest(
     @field:NotNull(message = "배송 주소는 필수입니다.")
     val address: AddressRequest,
 
-    @Schema(description = "결제 방법", example = "POINT", required = true, allowableValues = ["POINT", "CARD"])
-    @field:NotNull(message = "결제 방법은 필수입니다.")
-    val paymentMethod: PaymentMethod?,
+    @Schema(description = "결제 금액")
+    @field:NotNull(message = "결제 금액은 필수입니다.")
+    val totalAmount: Long?,
 
     @Schema(description = "주문 상품 목록", required = true)
     @field:Valid
@@ -81,5 +81,13 @@ data class PlaceOrderRequest(
                 unitPrice = Money(item.unitPrice!!),
             )
         },
+        deliveryAddress = Address(
+            street = address.street,
+            city = address.city,
+            zipCode = address.zipCode,
+            detailAddress = address.detailAddress,
+        ),
+        totalAmount = Money(totalAmount!!),
+        issuedCouponId = issuedCouponId,
     )
 }

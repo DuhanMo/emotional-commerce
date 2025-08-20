@@ -8,11 +8,11 @@ class IssuedCouponService(
     private val issuedCouponRepository: IssuedCouponRepository,
 ) {
     @Transactional
-    fun useCoupon(userId: Long, issuedCouponId: Long) {
+    fun pendingCoupon(userId: Long, issuedCouponId: Long) {
         val issuedCoupon = issuedCouponRepository.getById(issuedCouponId)
         require(issuedCoupon.userId == userId) { "쿠폰을 사용할 수 없습니다." }
 
-        issuedCoupon.use()
+        issuedCoupon.pending()
 
         issuedCouponRepository.save(issuedCoupon)
     }

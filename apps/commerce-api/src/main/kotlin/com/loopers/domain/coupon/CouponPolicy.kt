@@ -1,15 +1,21 @@
 package com.loopers.domain.coupon
 
+import com.loopers.domain.support.Money
+
 enum class CouponPolicy {
     FIXED_AMOUNT {
-        override fun calculateDiscountedAmount(orderAmount: Long, discountValue: Long): Long =
-            orderAmount - minOf(orderAmount, discountValue)
+        override fun calculateDiscountPrice(orderAmount: Money, discountValue: Long): Money =
+            if (Money(discountValue) > orderAmount) {
+                orderAmount
+            } else {
+                Money(discountValue)
+            }
     },
     PERCENTAGE {
-        override fun calculateDiscountedAmount(orderAmount: Long, discountValue: Long): Long =
-            orderAmount - (orderAmount * discountValue / 100)
+        override fun calculateDiscountPrice(orderAmount: Money, discountValue: Long): Money =
+            orderAmount * discountValue / 100
     },
     ;
 
-    abstract fun calculateDiscountedAmount(orderAmount: Long, discountValue: Long): Long
+    abstract fun calculateDiscountPrice(orderAmount: Money, discountValue: Long): Money
 }

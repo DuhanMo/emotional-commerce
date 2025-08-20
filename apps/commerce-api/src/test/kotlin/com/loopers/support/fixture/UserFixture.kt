@@ -6,7 +6,7 @@ import com.loopers.domain.user.Gender
 import com.loopers.domain.user.LoginId
 import com.loopers.domain.user.User
 
-private val TEST_USER_ID = LoginId("test123")
+val TEST_USER_ID = LoginId("test123")
 private val TEST_USER_EMAIL = Email("test@test.com")
 private val TEST_USER_BIRTH_DATE = BirthDate("1990-01-01")
 

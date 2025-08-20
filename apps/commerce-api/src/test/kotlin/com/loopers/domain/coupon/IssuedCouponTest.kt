@@ -13,7 +13,7 @@ class IssuedCouponTest : StringSpec({
             couponId = 1L,
             status = IssuedCouponStatus.USED_PENDING,
         )
-        val exception = assertThrows<IllegalStateException> { issuedCoupon.use() }
+        val exception = assertThrows<IllegalStateException> { issuedCoupon.pending() }
         exception.message shouldContain "사용할 수 없는 쿠폰입니다."
     }
 
@@ -23,7 +23,7 @@ class IssuedCouponTest : StringSpec({
             couponId = 1L,
             status = IssuedCouponStatus.AVAILABLE,
         )
-        issuedCoupon.use()
+        issuedCoupon.pending()
         issuedCoupon.status shouldBe IssuedCouponStatus.USED_PENDING
     }
 })

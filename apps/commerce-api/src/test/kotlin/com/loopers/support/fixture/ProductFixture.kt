@@ -33,7 +33,6 @@ fun createInventory(
     soldQty: Long = 0L,
     id: Long = 0L,
 ): Inventory = Inventory(
-    productId = productId,
     skuId = skuId,
     availableQty = availableQty,
     reservedQty = reservedQty,

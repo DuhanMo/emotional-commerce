@@ -15,7 +15,7 @@ class InventoryReservation(
     val quantity: Long,
     @Enumerated(EnumType.STRING)
     val status: InventoryReservationStatus,
-    val expiredAt: Instant,
+    val expiresAt: Instant = Instant.now().plusSeconds(3600),
 ) : BaseEntity() {
 
     enum class InventoryReservationStatus {

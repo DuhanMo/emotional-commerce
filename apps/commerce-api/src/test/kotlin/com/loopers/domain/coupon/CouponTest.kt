@@ -1,5 +1,6 @@
 package com.loopers.domain.coupon
 
+import com.loopers.domain.support.Money
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.assertThrows
@@ -45,8 +46,8 @@ class CouponTest : StringSpec({
         result shouldBe 99L
     }
 
-    "정액제 정책은 고정금액을 차감하여 최종금액을 반환한다" {
-        val orderAmount = 10_000L
+    "정액제 정책은 고정할인금액이 주문금액보다 큰 경우 주문금액을 반환한다" {
+        val orderAmount = Money(10_000L)
         val fixedAmountPolicy = CouponPolicy.FIXED_AMOUNT
         val coupon = Coupon(
             name = "테스트 쿠폰",
@@ -57,10 +58,26 @@ class CouponTest : StringSpec({
             id = 99L,
         )
 
-        coupon.calculateDiscountedAmount(orderAmount) shouldBe 8_000L
+        coupon.calculateDiscountPrice(orderAmount) shouldBe Money(2_000L)
     }
-    "정률제 정책은 퍼센티지 금액을 차감하여 최종금액을 반환한다" {
-        val orderAmount = 10_000L
+
+    "정액제 정책은 고정할인금액이 주문금액보다 작거나 같은 경우 주문금액을 반환한다" {
+        val orderAmount = Money(10_000L)
+        val fixedAmountPolicy = CouponPolicy.FIXED_AMOUNT
+        val coupon = Coupon(
+            name = "테스트 쿠폰",
+            maxIssueCount = 10L,
+            policy = fixedAmountPolicy,
+            discountValue = 12_000L,
+            issuedCount = 0L,
+            id = 99L,
+        )
+
+        coupon.calculateDiscountPrice(orderAmount) shouldBe Money(10_000L)
+    }
+
+    "정률제 정책은 주문금액에 퍼센티지를 적용하여 할인가격을 반환한다" {
+        val orderAmount = Money(10_000L)
         val percentagePolicy = CouponPolicy.PERCENTAGE
         val coupon = Coupon(
             name = "테스트 쿠폰",
@@ -70,6 +87,6 @@ class CouponTest : StringSpec({
             issuedCount = 0L,
             id = 99L,
         )
-        coupon.calculateDiscountedAmount(orderAmount) shouldBe 9_500L
+        coupon.calculateDiscountPrice(orderAmount) shouldBe Money(500L)
     }
 })

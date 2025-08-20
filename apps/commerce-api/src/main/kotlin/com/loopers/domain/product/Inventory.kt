@@ -7,7 +7,6 @@ import jakarta.persistence.Table
 @Table(name = "inventory")
 @Entity
 class Inventory(
-    val productId: Long,
     val skuId: Long,
     var availableQty: Long,
     var reservedQty: Long,

@@ -16,6 +16,9 @@ value class Money(val value: Long) : Comparable<Money> {
     operator fun times(multiplier: Long): Money =
         Money(this.value * multiplier)
 
+    operator fun div(divisor: Long): Money =
+        Money(this.value / divisor)
+
     override fun compareTo(other: Money): Int =
         this.value.compareTo(other.value)
 
@@ -25,3 +28,6 @@ value class Money(val value: Long) : Comparable<Money> {
         val ZERO: Money = Money(0)
     }
 }
+
+fun Iterable<Money>.sumOfMoney(): Money =
+    this.fold(Money.ZERO) { acc, money -> acc + money }

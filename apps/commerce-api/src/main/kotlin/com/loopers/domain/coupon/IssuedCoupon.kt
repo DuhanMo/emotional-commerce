@@ -25,7 +25,7 @@ class IssuedCoupon(
     @Version
     var version: Long = 0L
 
-    fun use() {
+    fun pending() {
         check(status in listOf(AVAILABLE, RELEASED)) { "사용할 수 없는 쿠폰입니다." }
 
         this.status = USED_PENDING

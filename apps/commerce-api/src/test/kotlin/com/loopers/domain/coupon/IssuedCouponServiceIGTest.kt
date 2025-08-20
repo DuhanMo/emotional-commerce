@@ -19,7 +19,7 @@ class IssuedCouponServiceIGTest(
             val results = (0 until 2).map { coroutineIndex ->
                 async(Dispatchers.IO) {
                     runCatching {
-                        issuedCouponService.useCoupon(1L, issuedCoupon.id)
+                        issuedCouponService.pendingCoupon(1L, issuedCoupon.id)
                     }
                 }
             }.awaitAll()

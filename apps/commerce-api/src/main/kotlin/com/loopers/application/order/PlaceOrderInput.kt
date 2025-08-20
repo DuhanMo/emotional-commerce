@@ -1,19 +1,24 @@
 package com.loopers.application.order
 
+import com.loopers.domain.coupon.Coupon
+import com.loopers.domain.order.Address
 import com.loopers.domain.order.CreateOrderCommand
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
 import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
-import com.loopers.domain.user.User
 
 data class PlaceOrderInput(
     val loginId: LoginId,
     val orderItems: List<OrderLineInput>,
+    val totalAmount: Money,
+    val deliveryAddress: Address,
+    val issuedCouponId: Long?,
 ) {
     fun toCreateOrderCommand(
-        user: User,
+        userId: Long,
+        coupon: Coupon?,
     ): CreateOrderCommand = CreateOrderCommand(
-        userId = user.id,
+        userId = userId,
         orderLines = orderItems.map {
             OrderLineInfo(
                 productId = it.productId,
@@ -22,6 +27,9 @@ data class PlaceOrderInput(
                 unitPrice = it.unitPrice,
             )
         },
+        totalAmount = totalAmount,
+        deliveryAddress = deliveryAddress,
+        coupon = coupon,
     )
 
     data class OrderLineInput(
