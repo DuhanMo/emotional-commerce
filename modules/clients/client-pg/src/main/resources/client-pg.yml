@@ -1,0 +1,3 @@
+pg:
+  api:
+    url: http://localhost:8082/

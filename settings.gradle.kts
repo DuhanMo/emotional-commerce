@@ -5,6 +5,7 @@ include(
     ":apps:pg-simulator",
     ":modules:jpa",
     ":modules:redis",
+    ":modules:clients:client-pg",
     ":supports:jackson",
     ":supports:logging",
     ":supports:monitoring",
