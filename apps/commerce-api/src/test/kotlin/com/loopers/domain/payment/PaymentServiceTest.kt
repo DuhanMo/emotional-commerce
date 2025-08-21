@@ -9,21 +9,25 @@ import io.mockk.mockk
 import org.junit.jupiter.api.assertThrows
 
 class PaymentServiceTest : BehaviorSpec({
+    val paymentRepository = mockk<PaymentRepository>()
     val payProcessor = mockk<PayProcessor>()
-    val service = PaymentService(listOf(payProcessor))
+    val service = PaymentService(paymentRepository, listOf(payProcessor))
 
     Given("지원하지 않는 결제방법인 경우") {
-        val command = PayRequestCommand(
+        val command = RequestPaymentCommand(
             userId = 1L,
-            orderId = 1L,
             paymentMethod = PaymentMethod.CARD,
-            amount = Money(5_000),
+            orderId = 1L,
+            orderNumber = "ordernumber-123",
+            cardType = null,
+            cardNumber = null,
+            amount = Money(10_000),
         )
         every { payProcessor.support() } returns PaymentMethod.POINT
 
         When("결제를 시도하면") {
             Then("예외가 발생한다") {
-                val exception = assertThrows<IllegalArgumentException> { service.payRequest(command) }
+                val exception = assertThrows<IllegalArgumentException> { service.requestPayment(command) }
                 exception.message shouldContain "지원하지 않는 결제 방법입니다"
             }
         }

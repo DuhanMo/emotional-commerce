@@ -20,6 +20,7 @@ spring:
     import:
       - jpa.yml
       - redis.yml
+      - client-pg.yml
       - logging.yml
       - monitoring.yml
 
@@ -27,7 +28,6 @@ springdoc:
   use-fqn: true
   swagger-ui:
     path: /swagger-ui.html
-
 ---
 spring:
   config:

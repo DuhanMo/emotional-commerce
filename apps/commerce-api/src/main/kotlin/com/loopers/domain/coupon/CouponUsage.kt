@@ -22,6 +22,10 @@ class CouponUsage(
         status = CouponUsageStatus.USED
     }
 
+    fun release() {
+        status = CouponUsageStatus.RELEASED
+    }
+
     enum class CouponUsageStatus {
         USED_PENDING,
         USED,

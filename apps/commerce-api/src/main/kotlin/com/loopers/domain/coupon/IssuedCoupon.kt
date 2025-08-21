@@ -3,6 +3,7 @@ package com.loopers.domain.coupon
 import com.loopers.domain.BaseEntity
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.AVAILABLE
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.RELEASED
+import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.USED
 import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus.USED_PENDING
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -30,6 +31,15 @@ class IssuedCoupon(
 
         this.status = USED_PENDING
         this.usedAt = Instant.now()
+    }
+
+    fun commit() {
+        this.status = USED
+        this.usedAt = Instant.now()
+    }
+
+    fun release() {
+        this.status = RELEASED
     }
 
     enum class IssuedCouponStatus {

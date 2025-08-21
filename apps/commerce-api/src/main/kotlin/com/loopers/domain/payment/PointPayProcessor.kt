@@ -14,11 +14,16 @@ class PointPayProcessor(
     override fun support() = PaymentMethod.POINT
 
     @Transactional
-    override fun process(command: PayProcessCommand) {
+    override fun process(command: RequestPaymentCommand): Transaction {
         val point = pointRepository.getByUserIdWithLock(command.userId)
         point.use(command.amount)
 
         pointRepository.save(point)
         pointHistoryRepository.save(PointHistory.fromUse(command.userId, point.id, command.amount))
+        return Transaction(
+            transactionKey = "point-transaction-order-${command.orderNumber}",
+            status = TransactionStatus.SUCCESS,
+            reason = "포인트 결제",
+        )
     }
 }

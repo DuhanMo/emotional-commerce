@@ -7,4 +7,6 @@ class OrderQueryService(
     private val orderRepository: OrderRepository,
 ) {
     fun getById(id: Long): Order = orderRepository.getById(id)
+
+    fun getByOrderNumber(orderNumber: String): Order = orderRepository.getByOrderNumber(orderNumber)
 }

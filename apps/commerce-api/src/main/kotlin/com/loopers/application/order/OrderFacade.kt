@@ -25,6 +25,7 @@ class OrderFacade(
         val order = orderService.createOrder(input.toCreateOrderCommand(user.id, coupon))
         inventoryService.reserveAll(order)
         useCouponIfUsingCoupon(input.issuedCouponId, user)
+        // todo: 주문정보 응답 (결제요청 실행시 필요 정보를 위해)
     }
 
     private fun findCouponIfUsingCoupon(issuedCouponId: Long?): Coupon? =

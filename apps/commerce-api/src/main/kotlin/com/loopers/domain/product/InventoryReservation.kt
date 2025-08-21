@@ -14,9 +14,17 @@ class InventoryReservation(
     val skuId: Long,
     val quantity: Long,
     @Enumerated(EnumType.STRING)
-    val status: InventoryReservationStatus,
+    var status: InventoryReservationStatus,
     val expiresAt: Instant = Instant.now().plusSeconds(3600),
 ) : BaseEntity() {
+
+    fun commit() {
+        this.status = InventoryReservationStatus.COMMITTED
+    }
+
+    fun release() {
+        this.status = InventoryReservationStatus.RELEASED
+    }
 
     enum class InventoryReservationStatus {
         RESERVED,

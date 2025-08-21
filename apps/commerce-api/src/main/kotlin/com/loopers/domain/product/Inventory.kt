@@ -24,4 +24,10 @@ class Inventory(
         reservedQty -= quantity
         soldQty += quantity
     }
+
+    fun release(quantity: Long) {
+        require(quantity <= reservedQty) { "릴리즈 재고는 예약재고보다 작아야합니다." }
+        reservedQty -= quantity
+        availableQty += quantity
+    }
 }

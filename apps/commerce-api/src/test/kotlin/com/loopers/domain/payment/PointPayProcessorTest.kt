@@ -28,7 +28,17 @@ class PointPayProcessorTest(
             val results = (1..2).map {
                 async(Dispatchers.IO) {
                     runCatching {
-                        pointPayProcessor.process(PayProcessCommand(user.id, order.id, Money(10_000)))
+                        pointPayProcessor.process(
+                            RequestPaymentCommand(
+                                userId = user.id,
+                                paymentMethod = PaymentMethod.POINT,
+                                orderId = order.id,
+                                orderNumber = order.orderNumber,
+                                cardType = null,
+                                cardNumber = null,
+                                amount = Money(10_000),
+                            ),
+                        )
                     }
                 }
             }.awaitAll()
@@ -53,7 +63,17 @@ class PointPayProcessorTest(
         When("포인트 차감하면") {
             Then("예외발생한다") {
                 assertThrows<IllegalArgumentException> {
-                    pointPayProcessor.process(PayProcessCommand(user.id, order.id, Money(20_000)))
+                    pointPayProcessor.process(
+                        RequestPaymentCommand(
+                            userId = user.id,
+                            paymentMethod = PaymentMethod.POINT,
+                            orderId = order.id,
+                            orderNumber = order.orderNumber,
+                            cardType = null,
+                            cardNumber = null,
+                            amount = Money(10_000),
+                        ),
+                    )
                 }
             }
         }

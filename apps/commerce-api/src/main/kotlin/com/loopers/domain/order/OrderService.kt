@@ -21,4 +21,14 @@ class OrderService(
 
         return orderRepository.save(order)
     }
+
+    fun paid(order: Order) {
+        order.paid()
+        orderRepository.save(order)
+    }
+
+    fun payFail(order: Order) {
+        order.payFail()
+        orderRepository.save(order)
+    }
 }

@@ -11,4 +11,7 @@ class InventoryReservationRepositoryImpl(
 
     override fun saveAll(inventoryReservations: List<InventoryReservation>): List<InventoryReservation> =
         jpaRepository.saveAll(inventoryReservations)
+
+    override fun findAllByOrderId(orderId: Long): List<InventoryReservation> =
+        jpaRepository.findAllByOrderId(orderId)
 }
