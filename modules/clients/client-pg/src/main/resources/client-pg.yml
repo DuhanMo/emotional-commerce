@@ -20,8 +20,8 @@ resilience4j:
   retry:
     instances:
       paymentClient:
-        max-attempts: 3
-        wait-duration: 1s
+        max-attempts: 2
+        wait-duration: 500ms
         enable-exponential-backoff: true
         exponential-backoff-multiplier: 2
         retry-exceptions:
@@ -36,14 +36,19 @@ resilience4j:
           - org.springframework.web.client.ResourceAccessException
         ignore-exceptions:
           - java.lang.IllegalArgumentException
+          - feign.FeignException$BadRequest
+          - feign.FeignException$Unauthorized
+          - feign.FeignException$Forbidden
+          - feign.FeignException$NotFound
+          - feign.FeignException$Conflict
   circuitbreaker:
     instances:
       paymentClient:
-        failure-rate-threshold: 50
+        failure-rate-threshold: 30
         wait-duration-in-open-state: 30s
         sliding-window-size: 10
-        minimum-number-of-calls: 5
-        permitted-number-of-calls-in-half-open-state: 3
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
 
 ---
 spring.config.activate.on-profile: local
