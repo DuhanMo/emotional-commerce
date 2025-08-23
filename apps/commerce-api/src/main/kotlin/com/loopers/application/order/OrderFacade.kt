@@ -19,13 +19,13 @@ class OrderFacade(
     private val issuedCouponService: IssuedCouponService,
 ) {
     @Transactional
-    fun placeOrder(input: PlaceOrderInput) {
+    fun placeOrder(input: PlaceOrderInput): PlaceOrderOutput {
         val user = userQueryService.getByLoginId(input.loginId)
         val coupon = findCouponIfUsingCoupon(input.issuedCouponId)
         val order = orderService.createOrder(input.toCreateOrderCommand(user.id, coupon))
         inventoryService.reserveAll(order)
         useCouponIfUsingCoupon(input.issuedCouponId, user)
-        // todo: 주문정보 응답 (결제요청 실행시 필요 정보를 위해)
+        return PlaceOrderOutput.from(order)
     }
 
     private fun findCouponIfUsingCoupon(issuedCouponId: Long?): Coupon? =

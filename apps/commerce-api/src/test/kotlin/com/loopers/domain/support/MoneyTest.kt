@@ -81,5 +81,4 @@ class MoneyTest : StringSpec({
         val sum = emptyList.sumOfMoney()
         sum shouldBe Money.ZERO
     }
-
 })

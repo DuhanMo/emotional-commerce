@@ -14,7 +14,7 @@ class PaymentTest : StringSpec({
             transactionKey = "TRANSACTION-001",
             method = PaymentMethod.CARD,
             amount = Money(10000),
-            status = TransactionStatus.PENDING
+            status = TransactionStatus.PENDING,
         )
 
         payment.success()
@@ -25,12 +25,12 @@ class PaymentTest : StringSpec({
     "결제 실패 처리 시 상태가 FAILED로 변경되고 실패 사유가 설정된다" {
         val payment = Payment(
             orderId = 1L,
-            orderNumber = "ORDER-001", 
+            orderNumber = "ORDER-001",
             idempotentKey = "IDEMPOTENT-001",
             transactionKey = "TRANSACTION-001",
             method = PaymentMethod.POINT,
             amount = Money(5000),
-            status = TransactionStatus.PENDING
+            status = TransactionStatus.PENDING,
         )
 
         val failureReason = "카드 한도 초과"
@@ -44,12 +44,12 @@ class PaymentTest : StringSpec({
         val payment = Payment(
             orderId = 1L,
             orderNumber = "ORDER-001",
-            idempotentKey = "IDEMPOTENT-001", 
+            idempotentKey = "IDEMPOTENT-001",
             transactionKey = "TRANSACTION-001",
             method = PaymentMethod.CARD,
             amount = Money(15000),
             status = TransactionStatus.PENDING,
-            reason = null
+            reason = null,
         )
 
         payment.fail(null)
@@ -63,10 +63,10 @@ class PaymentTest : StringSpec({
             orderId = 100L,
             orderNumber = "ORDER-100",
             idempotentKey = "IDEMPOTENT-100",
-            transactionKey = "TRANSACTION-100", 
+            transactionKey = "TRANSACTION-100",
             method = PaymentMethod.POINT,
             amount = Money(25000),
-            status = TransactionStatus.PENDING
+            status = TransactionStatus.PENDING,
         )
 
         payment.orderId shouldBe 100L
@@ -77,5 +77,4 @@ class PaymentTest : StringSpec({
         payment.amount shouldBe Money(25000)
         payment.status shouldBe TransactionStatus.PENDING
     }
-
 })

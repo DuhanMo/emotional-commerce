@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "상품 요약 정보")
 data class ProductSummaryResponse(
-    @Schema(description = "좋아요 수", example = "13999")
+    @field:Schema(description = "좋아요 수", example = "13999")
     val likeCount: Long,
 ) {
     companion object {

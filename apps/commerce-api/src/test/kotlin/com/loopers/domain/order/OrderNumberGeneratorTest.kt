@@ -23,7 +23,7 @@ class OrderNumberGeneratorTest : StringSpec({
         val orderNumber1 = OrderNumberGenerator.generate()
         val orderNumber2 = OrderNumberGenerator.generate()
         val orderNumber3 = OrderNumberGenerator.generate()
-        
+
         orderNumber1 shouldNotBe orderNumber2
         orderNumber2 shouldNotBe orderNumber3
         orderNumber1 shouldNotBe orderNumber3
@@ -41,5 +41,4 @@ class OrderNumberGeneratorTest : StringSpec({
             orderNumber shouldHaveLength 20
         }
     }
-
 })

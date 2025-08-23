@@ -6,28 +6,28 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "상품 정보")
 data class ProductItemResponse(
-    @Schema(description = "상품 식별자", example = "1")
+    @field:Schema(description = "상품 식별자", example = "1")
     val id: Long,
 
-    @Schema(description = "브랜드 식별자", example = "14703")
+    @field:Schema(description = "브랜드 식별자", example = "14703")
     val brandId: Long,
 
-    @Schema(description = "상품명", example = "시티워커 나일론스판 쇼츠")
+    @field:Schema(description = "상품명", example = "시티워커 나일론스판 쇼츠")
     val name: String,
 
-    @Schema(description = "상품 설명", example = "편안한 착용감의 쇼츠입니다.")
+    @field:Schema(description = "상품 설명", example = "편안한 착용감의 쇼츠입니다.")
     val description: String,
 
-    @Schema(description = "가격", example = "36000")
+    @field:Schema(description = "가격", example = "36000")
     val price: Money,
 
-    @Schema(description = "상품 이미지 URL", example = "/item/202506/image.png")
+    @field:Schema(description = "상품 이미지 URL", example = "/item/202506/image.png")
     val imageUrl: String?,
 
-    @Schema(description = "브랜드 정보")
+    @field:Schema(description = "브랜드 정보")
     val brand: BrandResponse,
 
-    @Schema(description = "상품 요약 정보")
+    @field:Schema(description = "상품 요약 정보")
     val summary: ProductSummaryResponse,
 ) {
     companion object {
