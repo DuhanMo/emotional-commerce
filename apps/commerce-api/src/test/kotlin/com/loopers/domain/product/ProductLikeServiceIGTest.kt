@@ -1,16 +1,15 @@
-package com.loopers.domain.product
+ package com.loopers.domain.product
 
-import com.loopers.domain.product.ProductLikeStatus.ACTIVE
-import com.loopers.domain.product.ProductLikeStatus.DELETED
-import com.loopers.infrastructure.product.ProductLikeJpaRepository
-import com.loopers.support.tests.IntegrationSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+ import com.loopers.domain.product.ProductLike.ProductLikeStatus
+ import com.loopers.infrastructure.product.ProductLikeJpaRepository
+ import com.loopers.support.tests.IntegrationSpec
+ import io.kotest.matchers.shouldBe
+ import io.kotest.matchers.shouldNotBe
 
-class ProductLikeServiceIGTest(
+ class ProductLikeServiceIGTest(
     private val productLikeService: ProductLikeService,
     private val productLikeJpaRepository: ProductLikeJpaRepository,
-) : IntegrationSpec({
+ ) : IntegrationSpec({
     Given("상품 좋아요 등록하는 경우") {
         productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L))
 
@@ -21,7 +20,7 @@ class ProductLikeServiceIGTest(
                 val foundProductLike =
                     productLikeJpaRepository.findAll().first { it.productId == 1L && it.userId == 99L }
 
-                foundProductLike.status shouldBe ACTIVE
+                foundProductLike.status shouldBe ProductLikeStatus.ACTIVE
             }
         }
     }
@@ -36,13 +35,13 @@ class ProductLikeServiceIGTest(
                 val foundProductLike =
                     productLikeJpaRepository.findAll().first { it.productId == 1L && it.userId == 99L }
 
-                foundProductLike.status shouldBe DELETED
+                foundProductLike.status shouldBe ProductLikeStatus.DELETED
             }
         }
     }
 
     Given("상품 좋아요가 이미 활성 상태인 경우") {
-        productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L, status = ACTIVE))
+        productLikeJpaRepository.save(ProductLike(productId = 1L, userId = 99L, status = ProductLikeStatus.ACTIVE))
 
         When("좋아요를 등록하면") {
             productLikeService.likeProduct(productId = 1L, userId = 99L)
@@ -51,7 +50,7 @@ class ProductLikeServiceIGTest(
                 val foundProductLike =
                     productLikeJpaRepository.findAll().first { it.productId == 1L && it.userId == 99L }
 
-                foundProductLike.status shouldBe ACTIVE
+                foundProductLike.status shouldBe ProductLikeStatus.ACTIVE
             }
         }
     }
@@ -64,8 +63,8 @@ class ProductLikeServiceIGTest(
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .firstOrNull { it.productId == 1L && it.userId == 99L }
                 foundProductLike shouldNotBe null
-                foundProductLike!!.status shouldBe ACTIVE
+                foundProductLike!!.status shouldBe ProductLikeStatus.ACTIVE
             }
         }
     }
-})
+ })

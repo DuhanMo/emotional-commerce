@@ -1,10 +1,10 @@
 package com.loopers.domain.payment
 
 import com.loopers.domain.point.Point
+import com.loopers.domain.support.Money
 import com.loopers.infrastructure.point.PointHistoryJpaRepository
 import com.loopers.infrastructure.point.PointJpaRepository
 import com.loopers.support.fixture.createOrder
-import com.loopers.support.fixture.createOrderLine
 import com.loopers.support.fixture.createUser
 import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
@@ -22,14 +22,23 @@ class PointPayProcessorTest(
     Given("유저가 동시에 포인트 차감하는 경우") {
         val user = createUser(id = 1L)
         val order = createOrder(userId = user.id)
-        order.addOrderLines(listOf(createOrderLine(quantity = 1, unitPrice = 10_000L)))
-        val point = pointJpaRepository.save(Point(user.id, amount = 50_000L))
+        val point = pointJpaRepository.save(Point(user.id, amount = Money(50_000)))
 
         When("포인트 차감하면") {
             val results = (1..2).map {
                 async(Dispatchers.IO) {
                     runCatching {
-                        pointPayProcessor.process(user, order)
+                        pointPayProcessor.process(
+                            RequestPaymentCommand(
+                                userId = user.id,
+                                paymentMethod = PaymentMethod.POINT,
+                                orderId = order.id,
+                                orderNumber = order.orderNumber,
+                                cardType = null,
+                                cardNumber = null,
+                                amount = Money(10_000),
+                            ),
+                        )
                     }
                 }
             }.awaitAll()
@@ -37,7 +46,7 @@ class PointPayProcessorTest(
             Then("포인트가 모두 정상 차감되어야 한다") {
                 val foundPoint = pointJpaRepository.findByIdOrNull(point.id)!!
 
-                foundPoint.amount shouldBe 30_000L
+                foundPoint.amount shouldBe Money(30_000)
                 pointHistoryJpaRepository.findAll().count() shouldBe 2
 
                 results.count { it.isSuccess } shouldBe 2
@@ -49,13 +58,22 @@ class PointPayProcessorTest(
     Given("유저 포인트를 초과하는 경우") {
         val user = createUser(id = 1L)
         val order = createOrder(userId = user.id)
-        order.addOrderLines(listOf(createOrderLine(quantity = 1, unitPrice = 10_000L)))
-        pointJpaRepository.save(Point(user.id, amount = 1_500L))
+        pointJpaRepository.save(Point(user.id, amount = Money(1_500)))
 
         When("포인트 차감하면") {
             Then("예외발생한다") {
                 assertThrows<IllegalArgumentException> {
-                    pointPayProcessor.process(user, order)
+                    pointPayProcessor.process(
+                        RequestPaymentCommand(
+                            userId = user.id,
+                            paymentMethod = PaymentMethod.POINT,
+                            orderId = order.id,
+                            orderNumber = order.orderNumber,
+                            cardType = null,
+                            cardNumber = null,
+                            amount = Money(10_000),
+                        ),
+                    )
                 }
             }
         }

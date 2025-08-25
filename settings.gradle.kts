@@ -2,8 +2,10 @@ rootProject.name = "emotional-commerce"
 
 include(
     ":apps:commerce-api",
+    ":apps:pg-simulator",
     ":modules:jpa",
     ":modules:redis",
+    ":modules:clients:client-pg",
     ":supports:jackson",
     ":supports:logging",
     ":supports:monitoring",

@@ -1,25 +1,41 @@
 package com.loopers.application.order
 
-import com.loopers.domain.order.PayMethod
+import com.loopers.domain.coupon.Coupon
+import com.loopers.domain.order.Address
+import com.loopers.domain.order.CreateOrderCommand
+import com.loopers.domain.order.OrderInfo.OrderLineInfo
+import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
 
 data class PlaceOrderInput(
     val loginId: LoginId,
-    val address: AddressInput,
-    val payMethod: PayMethod,
     val orderItems: List<OrderLineInput>,
+    val totalAmount: Money,
+    val deliveryAddress: Address,
     val issuedCouponId: Long?,
 ) {
-    data class AddressInput(
-        val street: String,
-        val city: String,
-        val zipCode: String,
-        val detailAddress: String?,
+    fun toCreateOrderCommand(
+        userId: Long,
+        coupon: Coupon?,
+    ): CreateOrderCommand = CreateOrderCommand(
+        userId = userId,
+        orderLines = orderItems.map {
+            OrderLineInfo(
+                productId = it.productId,
+                skuId = it.skuId,
+                quantity = it.quantity,
+                unitPrice = it.unitPrice,
+            )
+        },
+        totalAmount = totalAmount,
+        deliveryAddress = deliveryAddress,
+        coupon = coupon,
     )
 
     data class OrderLineInput(
         val productId: Long,
-        val quantity: Int,
-        val unitPrice: Long,
+        val skuId: Long,
+        val quantity: Long,
+        val unitPrice: Money,
     )
 }

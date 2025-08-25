@@ -1,0 +1,63 @@
+pg:
+  api:
+    url: http://localhost:8082
+
+spring.cloud.openfeign:
+  client:
+    config:
+      example-api:
+        connectTimeout: 1000
+        readTimeout: 3000
+        loggerLevel: full
+  compression:
+    response:
+      enabled: false
+  httpclient:
+    max-connections: 2000
+    max-connections-per-route: 500
+
+resilience4j:
+  retry:
+    instances:
+      paymentClient:
+        max-attempts: 2
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          retry-exceptions:
+          - feign.FeignException$InternalServerError   # 500
+          - feign.FeignException$BadGateway            # 502
+          - feign.FeignException$ServiceUnavailable    # 503
+          - feign.FeignException$GatewayTimeout        # 504
+          - feign.RetryableException                   # 네트워크/타임아웃
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+          - org.springframework.web.client.ResourceAccessException
+        ignore-exceptions:
+          - java.lang.IllegalArgumentException
+          - feign.FeignException$BadRequest
+          - feign.FeignException$Unauthorized
+          - feign.FeignException$Forbidden
+          - feign.FeignException$NotFound
+          - feign.FeignException$Conflict
+  circuitbreaker:
+    instances:
+      paymentClient:
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+        minimum-number-of-calls: 3
+        permitted-number-of-calls-in-half-open-state: 2
+
+---
+spring.config.activate.on-profile: local
+
+---
+spring.config.activate.on-profile: dev
+
+---
+spring.config.activate.on-profile: qa
+
+---
+spring.config.activate.on-profile: prd

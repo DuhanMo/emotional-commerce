@@ -1,11 +1,8 @@
 package com.loopers.domain.payment
 
-import com.loopers.domain.order.Order
-import com.loopers.domain.order.PayMethod
 import com.loopers.domain.point.PointHistory
 import com.loopers.domain.point.PointHistoryRepository
 import com.loopers.domain.point.PointRepository
-import com.loopers.domain.user.User
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,15 +11,19 @@ class PointPayProcessor(
     private val pointRepository: PointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) : PayProcessor {
-    override val support: PayMethod = PayMethod.POINT
+    override fun support() = PaymentMethod.POINT
 
     @Transactional
-    override fun process(user: User, order: Order) {
-        val point = pointRepository.getByUserIdWithLock(user.id)
+    override fun process(command: RequestPaymentCommand): Transaction {
+        val point = pointRepository.getByUserIdWithLock(command.userId)
+        point.use(command.amount)
 
-        point.use(order.totalAmount)
-
-        pointHistoryRepository.save(PointHistory.fromUse(user.id, point.id, order.totalAmount))
         pointRepository.save(point)
+        pointHistoryRepository.save(PointHistory.fromUse(command.userId, point.id, command.amount))
+        return Transaction(
+            transactionKey = "point-transaction-order-${command.orderNumber}",
+            status = TransactionStatus.SUCCESS,
+            reason = "포인트 결제",
+        )
     }
 }

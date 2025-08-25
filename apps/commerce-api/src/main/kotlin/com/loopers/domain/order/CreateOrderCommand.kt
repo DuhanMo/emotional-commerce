@@ -2,12 +2,13 @@ package com.loopers.domain.order
 
 import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
+import com.loopers.domain.support.Money
 
 data class CreateOrderCommand(
     val userId: Long,
-    val deliveryAddress: Address,
-    val payMethod: PayMethod,
     val orderLines: List<OrderLineInfo>,
+    val totalAmount: Money,
+    val deliveryAddress: Address,
     val coupon: Coupon?,
 ) {
     init {

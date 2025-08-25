@@ -1,0 +1,5 @@
+dependencies {
+    api("org.springframework.cloud:spring-cloud-starter-openfeign")
+    api("io.github.openfeign:feign-hc5")
+    api("io.github.openfeign:feign-micrometer")
+}

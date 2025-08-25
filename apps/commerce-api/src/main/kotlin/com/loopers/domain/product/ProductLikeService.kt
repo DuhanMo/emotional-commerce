@@ -1,5 +1,6 @@
 package com.loopers.domain.product
 
+import com.loopers.domain.product.ProductLike.ProductLikeStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

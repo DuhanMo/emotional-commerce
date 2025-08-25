@@ -9,12 +9,15 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class OrderRepositoryImpl(
-    private val orderJpaRepository: OrderJpaRepository,
+    private val jpaRepository: OrderJpaRepository,
 ) : OrderRepository {
-    override fun save(order: Order): Order = orderJpaRepository.save(order)
+    override fun save(order: Order): Order = jpaRepository.save(order)
 
-    override fun getById(orderId: Long): Order = orderJpaRepository.findByIdOrNull(orderId)
-        ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 주문입니다.")
+    override fun getById(id: Long): Order = jpaRepository.findByIdOrNull(id)
+        ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 주문입니다.(orderId: $id)")
 
-    override fun findByUserId(userId: Long): List<Order> = orderJpaRepository.findByUserId(userId)
+    override fun findByUserId(userId: Long): List<Order> = jpaRepository.findByUserId(userId)
+
+    override fun getByOrderNumber(orderNumber: String): Order = jpaRepository.findByOrderNumber(orderNumber)
+        ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 주문입니다.(orderNumber: $orderNumber)")
 }

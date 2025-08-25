@@ -1,6 +1,7 @@
 package com.loopers.domain.coupon
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.support.Money
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -23,8 +24,8 @@ class Coupon(
         return id
     }
 
-    fun calculateDiscountedAmount(orderAmount: Long): Long =
-        policy.calculateDiscountedAmount(orderAmount, discountValue)
+    fun calculateDiscountPrice(orderAmount: Money): Money =
+        policy.calculateDiscountPrice(orderAmount, discountValue)
 
     private fun canIssue(): Boolean = remainCount > 0
 

@@ -1,5 +1,6 @@
 package com.loopers.domain.coupon
 
+import com.loopers.domain.coupon.IssuedCoupon.IssuedCouponStatus
 import com.loopers.infrastructure.coupon.IssuedCouponJpaRepository
 import com.loopers.support.tests.IntegrationSpec
 import io.kotest.matchers.shouldBe
@@ -18,14 +19,14 @@ class IssuedCouponServiceIGTest(
             val results = (0 until 2).map { coroutineIndex ->
                 async(Dispatchers.IO) {
                     runCatching {
-                        issuedCouponService.useCoupon(1L, issuedCoupon.id)
+                        issuedCouponService.pendingCoupon(1L, issuedCoupon.id)
                     }
                 }
             }.awaitAll()
 
             Then("하나의 요청은 실패한다") {
                 val foundIssuedCoupon = issuedCouponJpaRepository.findAll().first()
-                foundIssuedCoupon.status shouldBe IssuedCouponStatus.USED
+                foundIssuedCoupon.status shouldBe IssuedCouponStatus.USED_PENDING
                 results.count { it.isSuccess } shouldBe 1
                 results.count { it.isFailure } shouldBe 1
             }

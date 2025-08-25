@@ -1,7 +1,10 @@
 package com.loopers.domain.product
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.support.Money
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 
 @Table(name = "product")
@@ -10,16 +13,13 @@ class Product(
     val brandId: Long,
     val name: String,
     val description: String,
-    val price: Int,
-    var stock: Int,
+    @Enumerated(EnumType.STRING)
+    val status: ProductStatus,
+    val price: Money,
     var likeCount: Long = 0,
     val imageUrl: String? = null,
     id: Long = 0L,
 ) : BaseEntity(id) {
-    fun deductStock(quantity: Int) {
-        validateStock(quantity)
-        this.stock -= quantity
-    }
 
     fun increaseLikeCount() {
         likeCount++
@@ -30,10 +30,8 @@ class Product(
         likeCount--
     }
 
-    private fun validateStock(requestedQuantity: Int) {
-        require(requestedQuantity > 0) { "요청 수량은 0보다 커야 합니다." }
-        require(stock >= requestedQuantity) {
-            "상품 '$name'의 재고가 부족합니다. (요청: $requestedQuantity, 재고: $stock)"
-        }
+    enum class ProductStatus {
+        ACTIVE,
+        INACTIVE,
     }
 }

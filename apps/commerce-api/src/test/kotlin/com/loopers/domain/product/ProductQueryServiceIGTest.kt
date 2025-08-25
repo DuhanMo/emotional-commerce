@@ -1,27 +1,28 @@
-package com.loopers.domain.product
+ package com.loopers.domain.product
 
-import com.loopers.domain.support.PageCriteria
-import com.loopers.infrastructure.product.ProductJpaRepository
-import com.loopers.infrastructure.product.ProductSummaryJpaRepository
-import com.loopers.support.fixture.createProduct
-import com.loopers.support.tests.IntegrationSpec
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldBeSortedBy
-import io.kotest.matchers.collections.shouldBeSortedDescendingBy
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
+ import com.loopers.domain.support.Money
+ import com.loopers.domain.support.PageCriteria
+ import com.loopers.infrastructure.product.ProductJpaRepository
+ import com.loopers.infrastructure.product.ProductSummaryJpaRepository
+ import com.loopers.support.fixture.createProduct
+ import com.loopers.support.tests.IntegrationSpec
+ import io.kotest.inspectors.forAll
+ import io.kotest.matchers.collections.shouldBeSortedBy
+ import io.kotest.matchers.collections.shouldBeSortedDescendingBy
+ import io.kotest.matchers.collections.shouldHaveSize
+ import io.kotest.matchers.shouldBe
 
-class ProductQueryServiceIGTest(
+ class ProductQueryServiceIGTest(
     private val productQueryService: ProductQueryService,
     private val productJpaRepository: ProductJpaRepository,
     private val productSummaryJpaRepository: ProductSummaryJpaRepository,
-) : IntegrationSpec({
+ ) : IntegrationSpec({
     fun setupData() {
-        val product1 = productJpaRepository.save(createProduct(brandId = 1L, price = 10_000))
-        val product2 = productJpaRepository.save(createProduct(brandId = 1L, price = 150_000))
-        val product3 = productJpaRepository.save(createProduct(brandId = 1L, price = 5_000))
-        val product4 = productJpaRepository.save(createProduct(brandId = 99L, price = 500))
-        val product5 = productJpaRepository.save(createProduct(brandId = 99L, price = 20_000))
+        val product1 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(10_000)))
+        val product2 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(150_000)))
+        val product3 = productJpaRepository.save(createProduct(brandId = 1L, price = Money(5_000)))
+        val product4 = productJpaRepository.save(createProduct(brandId = 99L, price = Money(500)))
+        val product5 = productJpaRepository.save(createProduct(brandId = 99L, price = Money(20_000)))
 
         productSummaryJpaRepository.save(ProductSummary(productId = product1.id, likeCount = 100L))
         productSummaryJpaRepository.save(ProductSummary(productId = product2.id, likeCount = 200L))
@@ -61,7 +62,7 @@ class ProductQueryServiceIGTest(
 
             Then("가격 오름차순으로 정렬된다") {
                 result shouldHaveSize 5
-                result.shouldBeSortedBy { it.price }
+                result.shouldBeSortedBy { it.price.value }
             }
         }
     }
@@ -100,4 +101,4 @@ class ProductQueryServiceIGTest(
             }
         }
     }
-})
+ })

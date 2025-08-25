@@ -10,4 +10,6 @@ interface OrderJpaRepository : JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o JOIN FETCH o.orderLines WHERE o.id = :id")
     fun findByIdWithOrderLines(@Param("id") id: Long): Order?
+
+    fun findByOrderNumber(orderNumber: String): Order?
 }

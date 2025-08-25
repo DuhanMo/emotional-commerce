@@ -19,9 +19,8 @@ class OrderV1Controller(
     fun placeOrder(
         @RequestHeader("X-USER-ID") loginId: String,
         @Valid @RequestBody request: PlaceOrderRequest,
-    ): ApiResponse<PlaceOrderResponse> {
-        val output = orderFacade.placeOrder(request.toInput(LoginId(loginId)))
-        val response = PlaceOrderResponse.from(output)
-        return ApiResponse.success(response)
+    ): ApiResponse<Any> {
+        orderFacade.placeOrder(request.toInput(LoginId(loginId)))
+        return ApiResponse.success()
     }
 }

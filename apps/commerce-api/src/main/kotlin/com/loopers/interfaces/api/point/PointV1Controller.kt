@@ -2,6 +2,7 @@ package com.loopers.interfaces.api.point
 
 import com.loopers.application.point.ChargePointInput
 import com.loopers.application.point.PointFacade
+import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
 import com.loopers.interfaces.api.ApiResponse
 import jakarta.validation.Valid
@@ -26,7 +27,7 @@ class PointV1Controller(
             pointFacade.charge(
                 ChargePointInput(
                     loginId = LoginId(loginId),
-                    point = request.point!!,
+                    point = Money(request.point!!),
                 ),
             ),
         )

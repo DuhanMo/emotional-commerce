@@ -1,6 +1,7 @@
 package com.loopers.domain.order
 
 import com.loopers.domain.BaseEntity
+import com.loopers.domain.support.Money
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -11,22 +12,17 @@ import jakarta.persistence.Table
 @Entity
 class OrderLine(
     val productId: Long,
-    val quantity: Int,
-    val unitPrice: Long,
+    val skuId: Long,
+    val quantity: Long,
+    val unitPrice: Money,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    var order: Order? = null,
+    val order: Order,
 ) : BaseEntity() {
-    val lineAmount: Long
-        get() = quantity * unitPrice
+    val lineAmount: Money
+        get() = unitPrice * quantity
 
     init {
         require(quantity > 0) { "수량은 0보다 커야 합니다." }
-        require(unitPrice >= 0) { "단가는 0 이상이어야 합니다." }
-    }
-
-    fun setOrder(order: Order): OrderLine {
-        this.order = order
-        return this
     }
 }

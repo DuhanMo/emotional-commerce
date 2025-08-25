@@ -6,4 +6,6 @@ interface OrderRepository {
     fun getById(orderId: Long): Order
 
     fun findByUserId(userId: Long): List<Order>
+
+    fun getByOrderNumber(orderNumber: String): Order
 }

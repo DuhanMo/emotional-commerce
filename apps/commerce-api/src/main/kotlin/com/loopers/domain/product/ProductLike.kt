@@ -23,4 +23,9 @@ class ProductLike(
         this.status = ProductLikeStatus.DELETED
         delete()
     }
+
+    enum class ProductLikeStatus {
+        ACTIVE,
+        DELETED,
+    }
 }

@@ -1,34 +1,32 @@
 package com.loopers.domain.order
 
+import com.loopers.domain.support.Money
+
 data class OrderInfo(
     val id: Long,
     val userId: Long,
-    val deliveryAddress: Address,
-    val payMethod: PayMethod,
-    val status: OrderStatus,
-    val totalAmount: Long,
+    val status: Order.OrderStatus,
+    val totalAmount: Money,
     val orderLineInfos: List<OrderLineInfo>,
 ) {
     data class OrderLineInfo(
         val productId: Long,
-        val quantity: Int,
-        val unitPrice: Long,
-    ) {
-        val lineAmount: Long get() = quantity * unitPrice
-    }
+        val skuId: Long,
+        val quantity: Long,
+        val unitPrice: Money,
+    )
 
     companion object {
         fun from(order: Order): OrderInfo {
             return OrderInfo(
                 id = order.id,
                 userId = order.userId,
-                deliveryAddress = order.deliveryAddress,
-                payMethod = order.payMethod,
                 status = order.status,
                 totalAmount = order.totalAmount,
                 orderLineInfos = order.orderLines.map { orderLine ->
                     OrderLineInfo(
                         productId = orderLine.productId,
+                        skuId = orderLine.skuId,
                         quantity = orderLine.quantity,
                         unitPrice = orderLine.unitPrice,
                     )

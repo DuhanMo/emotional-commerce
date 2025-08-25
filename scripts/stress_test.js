@@ -7,7 +7,7 @@ export let options = {
 };
 
 export default function () {
-    const res = http.get('http://127.0.0.1:8080/api/v1/products?brandId=55&sortBy=likes_desc');
+    const res = http.get('http://127.0.0.1:8080/api/v1/payments');
 
     check(res, {
         'status is 200': (r) => r.status === 200,

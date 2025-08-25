@@ -5,13 +5,13 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 @Schema(description = "상품 목록 응답")
 data class ProductListResponse(
-    @Schema(description = "상품 목록")
+    @field:Schema(description = "상품 목록")
     val products: List<ProductItemResponse>,
 
-    @Schema(description = "전체 상품 수", example = "193518")
+    @field:Schema(description = "전체 상품 수", example = "193518")
     val totalCount: Long,
 
-    @Schema(description = "다음 페이지 존재 여부", example = "true")
+    @field:Schema(description = "다음 페이지 존재 여부", example = "true")
     val hasMore: Boolean,
 ) {
     companion object {

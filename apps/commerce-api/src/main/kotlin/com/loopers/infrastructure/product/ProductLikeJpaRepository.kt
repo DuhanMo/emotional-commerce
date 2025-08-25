@@ -2,7 +2,6 @@ package com.loopers.infrastructure.product
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import com.loopers.domain.product.ProductLike
-import com.loopers.domain.product.ProductLikeStatus
 import java.time.Instant
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,7 +17,7 @@ interface ProductLikeJpaRepository : JpaRepository<ProductLike, Long>, KotlinJds
 
     fun findAllByUserIdAndStatusOrderByIdDesc(
         userId: Long,
-        status: ProductLikeStatus,
+        status: ProductLike.ProductLikeStatus,
     ): List<ProductLike>
 
     @Query(

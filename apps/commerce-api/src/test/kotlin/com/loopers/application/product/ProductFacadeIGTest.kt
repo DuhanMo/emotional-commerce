@@ -1,8 +1,7 @@
 package com.loopers.application.product
 
 import com.loopers.domain.product.ProductLike
-import com.loopers.domain.product.ProductLikeStatus.ACTIVE
-import com.loopers.domain.product.ProductLikeStatus.DELETED
+import com.loopers.domain.product.ProductLike.ProductLikeStatus
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.user.LoginId
 import com.loopers.infrastructure.product.ProductJpaRepository
@@ -33,7 +32,7 @@ class ProductFacadeIGTest(
             Then("상품 좋아요 데이터가 생성되고 상품 집계 좋아요 수가 증가한다") {
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user.id }
-                foundProductLike.status shouldBe ACTIVE
+                foundProductLike.status shouldBe ProductLikeStatus.ACTIVE
 
                 val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
                 foundProduct.likeCount shouldBe 1
@@ -71,7 +70,7 @@ class ProductFacadeIGTest(
         val user = userJpaRepository.save(createUser(loginId = LoginId("user456")))
         val product = productJpaRepository.save(createProduct(likeCount = 10L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 10L))
-        productLikeJpaRepository.save(ProductLike(product.id, user.id, DELETED))
+        productLikeJpaRepository.save(ProductLike(product.id, user.id, ProductLikeStatus.DELETED))
 
         When("좋아요 등록 하면") {
             productFacade.likeProduct(LikeProductInput(product.id, LoginId("user456")))
@@ -79,7 +78,7 @@ class ProductFacadeIGTest(
             Then("상품 좋아요 상태가 활성화 되고 상품 집계 좋아요 수가 증가한다") {
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user.id }
-                foundProductLike.status shouldBe ACTIVE
+                foundProductLike.status shouldBe ProductLikeStatus.ACTIVE
 
                 val foundProduct = productJpaRepository.findByIdOrNull(product.id)!!
                 foundProduct.likeCount shouldBe 11L
@@ -94,7 +93,7 @@ class ProductFacadeIGTest(
         val user1 = userJpaRepository.save(createUser(LoginId("user111")))
         val product = productJpaRepository.save(createProduct(likeCount = 5L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
-        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
+        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ProductLikeStatus.ACTIVE))
 
         val user2 = userJpaRepository.save(createUser(LoginId("user222")))
 
@@ -109,7 +108,7 @@ class ProductFacadeIGTest(
 
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user2.id }
-                foundProductLike.status shouldBe ACTIVE
+                foundProductLike.status shouldBe ProductLikeStatus.ACTIVE
             }
         }
     }
@@ -118,10 +117,10 @@ class ProductFacadeIGTest(
         val user1 = userJpaRepository.save(createUser(LoginId("user111")))
         val product = productJpaRepository.save(createProduct(likeCount = 5L))
         productSummaryJpaRepository.save(ProductSummary(productId = product.id, likeCount = 5L))
-        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ACTIVE))
+        productLikeJpaRepository.save(ProductLike(product.id, user1.id, ProductLikeStatus.ACTIVE))
 
         val user2 = userJpaRepository.save(createUser(LoginId("user222")))
-        productLikeJpaRepository.save(ProductLike(product.id, user2.id, ACTIVE))
+        productLikeJpaRepository.save(ProductLike(product.id, user2.id, ProductLikeStatus.ACTIVE))
 
         When("다른 사용자가 좋아요 취소하면") {
             productFacade.unlikeProduct(UnlikeProductInput(product.id, LoginId("user222")))
@@ -135,7 +134,7 @@ class ProductFacadeIGTest(
 
                 val foundProductLike = productLikeJpaRepository.findAll()
                     .first { it.productId == product.id && it.userId == user2.id }
-                foundProductLike.status shouldBe DELETED
+                foundProductLike.status shouldBe ProductLikeStatus.DELETED
             }
         }
     }
