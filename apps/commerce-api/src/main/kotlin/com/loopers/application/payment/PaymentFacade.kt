@@ -6,6 +6,7 @@ import com.loopers.domain.order.OrderService
 import com.loopers.domain.payment.PaymentMethod.POINT
 import com.loopers.domain.payment.PaymentService
 import com.loopers.domain.payment.RequestPaymentCommand
+import com.loopers.domain.payment.TransactionStatus
 import com.loopers.domain.payment.TransactionStatus.FAILED
 import com.loopers.domain.payment.TransactionStatus.SUCCESS
 import com.loopers.domain.product.InventoryService
@@ -36,6 +37,9 @@ class PaymentFacade(
                 amount = input.amount,
             ),
         )
+        if (payment.status == TransactionStatus.INTERNAL_ERROR) {
+            orderService.error(order)
+        }
         if (input.paymentMethod == POINT && payment.status == SUCCESS) {
             orderService.paid(order)
             inventoryService.commitAll(order.id)

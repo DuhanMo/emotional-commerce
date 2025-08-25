@@ -55,9 +55,14 @@ class Order(
         status = OrderStatus.PAY_FAILED
     }
 
+    fun error() {
+        status = OrderStatus.ERROR
+    }
+
     enum class OrderStatus {
         PENDING, // 초기 상태 (주문 생성)
         PAID, // 결제 완료
         PAY_FAILED, // 결제 실패
+        ERROR, // 시스템 오류
     }
 }

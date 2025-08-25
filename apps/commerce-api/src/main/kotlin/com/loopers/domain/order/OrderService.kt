@@ -31,4 +31,9 @@ class OrderService(
         order.payFail()
         orderRepository.save(order)
     }
+
+    fun error(order: Order) {
+        order.error()
+        orderRepository.save(order)
+    }
 }
