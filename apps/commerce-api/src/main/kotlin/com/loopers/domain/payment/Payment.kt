@@ -13,7 +13,7 @@ class Payment(
     val orderId: Long,
     val orderNumber: String,
     val idempotentKey: String,
-    val transactionKey: String,
+    val transactionKey: String?,
     @Enumerated(EnumType.STRING)
     val method: PaymentMethod,
     val amount: Money,

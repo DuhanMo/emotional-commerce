@@ -26,6 +26,9 @@ class PaymentFacade(
     fun requestPayment(input: RequestPaymentInput): RequestPaymentOutput {
         val user = userQueryService.getByLoginId(input.loginId)
         val order = orderQueryService.getById(input.orderId)
+
+        orderService.payRequest(order)
+
         val payment = paymentService.requestPayment(
             RequestPaymentCommand(
                 userId = user.id,

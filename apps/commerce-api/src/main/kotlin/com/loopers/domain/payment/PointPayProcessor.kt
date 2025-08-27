@@ -21,7 +21,7 @@ class PointPayProcessor(
         pointRepository.save(point)
         pointHistoryRepository.save(PointHistory.fromUse(command.userId, point.id, command.amount))
         return Transaction(
-            transactionKey = "point-transaction-order-${command.orderNumber}",
+            transactionKey = null,
             status = TransactionStatus.SUCCESS,
             reason = "포인트 결제",
         )
