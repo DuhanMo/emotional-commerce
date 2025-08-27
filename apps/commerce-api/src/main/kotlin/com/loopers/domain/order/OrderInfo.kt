@@ -14,7 +14,16 @@ data class OrderInfo(
         val skuId: Long,
         val quantity: Long,
         val unitPrice: Money,
-    )
+    ) {
+        companion object {
+            fun from(orderLine: OrderLine) = OrderLineInfo(
+                productId = orderLine.productId,
+                skuId = orderLine.skuId,
+                quantity = orderLine.quantity,
+                unitPrice = orderLine.unitPrice,
+            )
+        }
+    }
 
     companion object {
         fun from(order: Order): OrderInfo {

@@ -25,7 +25,7 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
     val orderLines: MutableList<OrderLine> = mutableListOf()
 
-    var couponId: Long? = null
+    var issuedCouponId: Long? = null
 
     val originAmount: Money
             get() = orderLines.map { it.lineAmount }.sumOfMoney()

@@ -16,7 +16,7 @@ class IssuedCouponServiceIGTest(
         val issuedCoupon = issuedCouponJpaRepository.save(IssuedCoupon(userId = 1L, couponId = 1L))
 
         When("사용 요청하면") {
-            val results = (0 until 2).map { coroutineIndex ->
+            val results = (0 until 2).map {
                 async(Dispatchers.IO) {
                     runCatching {
                         issuedCouponService.pendingCoupon(1L, issuedCoupon.id)

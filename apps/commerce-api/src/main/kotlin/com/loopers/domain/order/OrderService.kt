@@ -15,8 +15,9 @@ class OrderService(
         ).apply {
             addOrderLines(command.orderLines)
         }
-        command.coupon?.let {
-            order.couponId = it.id
+
+        command.issuedCouponId?.let {
+            order.issuedCouponId = it
         }
 
         return orderRepository.save(order)

@@ -1,6 +1,5 @@
 package com.loopers.application.order
 
-import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.order.Address
 import com.loopers.domain.order.CreateOrderCommand
 import com.loopers.domain.order.OrderInfo.OrderLineInfo
@@ -16,7 +15,6 @@ data class PlaceOrderInput(
 ) {
     fun toCreateOrderCommand(
         userId: Long,
-        coupon: Coupon?,
     ): CreateOrderCommand = CreateOrderCommand(
         userId = userId,
         orderLines = orderItems.map {
@@ -29,7 +27,7 @@ data class PlaceOrderInput(
         },
         totalAmount = totalAmount,
         deliveryAddress = deliveryAddress,
-        coupon = coupon,
+        issuedCouponId = issuedCouponId,
     )
 
     data class OrderLineInput(
