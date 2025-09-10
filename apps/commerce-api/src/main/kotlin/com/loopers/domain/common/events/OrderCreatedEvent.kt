@@ -17,16 +17,14 @@ data class OrderCreatedEvent(
     override val eventType: String = "ORDER_CREATED"
 
     companion object {
-        fun from(order: Order): OrderCreatedEvent {
-            return OrderCreatedEvent(
-                orderId = order.id,
-                userId = order.userId,
-                orderNumber = order.orderNumber,
-                totalAmount = order.totalAmount,
-                orderLines = order.orderLines.map { OrderInfo.OrderLineInfo.from(it) },
-                deliveryAddress = order.deliveryAddress,
-                issuedCouponId = order.issuedCouponId,
-            )
-        }
+        fun from(order: Order): OrderCreatedEvent = OrderCreatedEvent(
+            orderId = order.id,
+            userId = order.userId,
+            orderNumber = order.orderNumber,
+            totalAmount = order.totalAmount,
+            orderLines = order.orderLines.map { OrderInfo.OrderLineInfo.from(it) },
+            deliveryAddress = order.deliveryAddress,
+            issuedCouponId = order.issuedCouponId,
+        )
     }
 }

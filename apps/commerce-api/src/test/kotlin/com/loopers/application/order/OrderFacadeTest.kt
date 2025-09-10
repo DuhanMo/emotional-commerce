@@ -3,7 +3,9 @@ package com.loopers.application.order
 import com.loopers.domain.common.events.DomainEventPublisher
 import com.loopers.domain.common.events.OrderCreatedEvent
 import com.loopers.domain.coupon.CouponQueryService
+import com.loopers.domain.coupon.IssuedCouponService
 import com.loopers.domain.order.OrderService
+import com.loopers.domain.product.InventoryService
 import com.loopers.domain.support.Money
 import com.loopers.domain.user.UserQueryService
 import com.loopers.support.error.CoreException
@@ -21,50 +23,56 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 
-class OrderFacadeTest : BehaviorSpec({
-    val userQueryService = mockk<UserQueryService>()
-    val couponQueryService = mockk<CouponQueryService>()
-    val orderService = mockk<OrderService>()
-    val eventPublisher = mockk<DomainEventPublisher>()
+class OrderFacadeTest : BehaviorSpec(
+    {
+        val userQueryService = mockk<UserQueryService>()
+        val couponQueryService = mockk<CouponQueryService>()
+        val orderService = mockk<OrderService>()
+        val inventoryService = mockk<InventoryService>()
+        val issuedCouponService = mockk<IssuedCouponService>()
+        val eventPublisher = mockk<DomainEventPublisher>()
 
-    val facade = OrderFacade(
-        userQueryService,
-        couponQueryService,
-        orderService,
-        eventPublisher,
-    )
-
-    Given("유저가 존재하지 않는 경우") {
-        every { userQueryService.getByLoginId(baseInput.loginId) } throws CoreException(
-            ErrorType.NOT_FOUND,
-            "존재하지 않는 회원입니다",
+        val facade = OrderFacade(
+            userQueryService,
+            couponQueryService,
+            orderService,
+            inventoryService,
+            issuedCouponService,
+            eventPublisher,
         )
 
-        When("주문을 생성하면") {
-            Then("예외 발생한다") {
-                shouldThrow<CoreException> { facade.placeOrder(baseInput) }
+        Given("유저가 존재하지 않는 경우") {
+            every { userQueryService.getByLoginId(baseInput.loginId) } throws CoreException(
+                ErrorType.NOT_FOUND,
+                "존재하지 않는 회원입니다",
+            )
+
+            When("주문을 생성하면") {
+                Then("예외 발생한다") {
+                    shouldThrow<CoreException> { facade.placeOrder(baseInput) }
+                }
             }
         }
-    }
 
-    Given("주문이 정상 생성되는 경우") {
-        every { userQueryService.getByLoginId(baseInput.loginId) } returns createUser()
-        every { orderService.createOrder(any()) } returns createOrder()
-        every { eventPublisher.publish(any()) } just runs
+        Given("주문이 정상 생성되는 경우") {
+            every { userQueryService.getByLoginId(baseInput.loginId) } returns createUser()
+            every { orderService.createOrder(any()) } returns createOrder()
+            every { eventPublisher.publish(any()) } just runs
 
-        When("주문을 생성하면") {
-            facade.placeOrder(baseInput)
+            When("주문을 생성하면") {
+                facade.placeOrder(baseInput)
 
-            Then("주문 생성 이벤트를 발행한다") {
-                verify(exactly = 1) { eventPublisher.publish(any<OrderCreatedEvent>()) }
+                Then("주문 생성 이벤트를 발행한다") {
+                    verify(exactly = 1) { eventPublisher.publish(any<OrderCreatedEvent>()) }
+                }
             }
         }
-    }
 
-    afterTest {
-        clearAllMocks()
-    }
-})
+        afterTest {
+            clearAllMocks()
+        }
+    },
+)
 
 private val baseInput = PlaceOrderInput(
     loginId = TEST_USER_ID,

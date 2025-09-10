@@ -1,6 +1,5 @@
 package com.loopers.domain.product
 
-import com.loopers.domain.order.OrderInfo
 import com.loopers.domain.product.InventoryReservation.InventoryReservationStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -11,19 +10,19 @@ class InventoryService(
     private val inventoryReservationRepository: InventoryReservationRepository,
 ) {
     @Transactional
-    fun reserveAll(orderId: Long, orderLines: List<OrderInfo.OrderLineInfo>) {
-        val skuIds = orderLines.map { it.skuId }
+    fun reserveAll(command: InventoryReservationCommand) {
+        val skuIds = command.items.map { it.skuId }
         val inventories = inventoryRepository.findAllBySkuIds(skuIds).associateBy { it.skuId }
 
-        orderLines.forEach {
+        command.items.forEach {
             val inventory = inventories[it.skuId]
             requireNotNull(inventory)
             inventory.reserve(it.quantity)
         }
 
-        val inventoryReservations = orderLines.map {
+        val inventoryReservations = command.items.map {
             InventoryReservation(
-                orderId = orderId,
+                orderId = command.orderId,
                 skuId = it.skuId,
                 quantity = it.quantity,
                 status = InventoryReservationStatus.RESERVED,
