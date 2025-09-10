@@ -19,7 +19,6 @@ class OrderFacade(
     private val orderService: OrderService,
     private val inventoryService: InventoryService,
     private val issuedCouponService: IssuedCouponService,
-    private val eventPublisher: DomainEventPublisher,
 ) {
     @Transactional
     fun placeOrder(input: PlaceOrderInput): PlaceOrderOutput {
@@ -30,8 +29,6 @@ class OrderFacade(
 
         inventoryService.reserveAll(InventoryReservationCommand.from(order))
         input.issuedCouponId?.let { issuedCouponService.pendingCoupon(user.id, it) }
-
-        eventPublisher.publish(OrderCreatedEvent.from(order))
         return PlaceOrderOutput.from(order)
     }
 

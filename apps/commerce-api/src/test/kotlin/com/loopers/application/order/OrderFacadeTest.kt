@@ -1,7 +1,5 @@
 package com.loopers.application.order
 
-import com.loopers.domain.common.events.DomainEventPublisher
-import com.loopers.domain.common.events.OrderCreatedEvent
 import com.loopers.domain.coupon.CouponQueryService
 import com.loopers.domain.coupon.IssuedCouponService
 import com.loopers.domain.order.OrderService
@@ -12,16 +10,11 @@ import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import com.loopers.support.fixture.TEST_ADDRESS
 import com.loopers.support.fixture.TEST_USER_ID
-import com.loopers.support.fixture.createOrder
-import com.loopers.support.fixture.createUser
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
 
 class OrderFacadeTest : BehaviorSpec(
     {
@@ -30,7 +23,6 @@ class OrderFacadeTest : BehaviorSpec(
         val orderService = mockk<OrderService>()
         val inventoryService = mockk<InventoryService>()
         val issuedCouponService = mockk<IssuedCouponService>()
-        val eventPublisher = mockk<DomainEventPublisher>()
 
         val facade = OrderFacade(
             userQueryService,
@@ -38,7 +30,6 @@ class OrderFacadeTest : BehaviorSpec(
             orderService,
             inventoryService,
             issuedCouponService,
-            eventPublisher,
         )
 
         Given("유저가 존재하지 않는 경우") {
@@ -50,20 +41,6 @@ class OrderFacadeTest : BehaviorSpec(
             When("주문을 생성하면") {
                 Then("예외 발생한다") {
                     shouldThrow<CoreException> { facade.placeOrder(baseInput) }
-                }
-            }
-        }
-
-        Given("주문이 정상 생성되는 경우") {
-            every { userQueryService.getByLoginId(baseInput.loginId) } returns createUser()
-            every { orderService.createOrder(any()) } returns createOrder()
-            every { eventPublisher.publish(any()) } just runs
-
-            When("주문을 생성하면") {
-                facade.placeOrder(baseInput)
-
-                Then("주문 생성 이벤트를 발행한다") {
-                    verify(exactly = 1) { eventPublisher.publish(any<OrderCreatedEvent>()) }
                 }
             }
         }
