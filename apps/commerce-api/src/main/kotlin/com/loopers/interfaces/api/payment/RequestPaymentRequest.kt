@@ -7,6 +7,7 @@ import com.loopers.domain.support.Money
 import com.loopers.domain.user.LoginId
 
 data class RequestPaymentRequest(
+    val idempotencyKey: String,
     val paymentMethod: PaymentMethod,
     val orderId: Long,
     val orderNumber: String,
@@ -15,6 +16,7 @@ data class RequestPaymentRequest(
     val amount: Money,
 ) {
     fun toInput(loginId: LoginId): RequestPaymentInput = RequestPaymentInput(
+        idempotencyKey = idempotencyKey,
         loginId = loginId,
         paymentMethod = paymentMethod,
         orderId = orderId,

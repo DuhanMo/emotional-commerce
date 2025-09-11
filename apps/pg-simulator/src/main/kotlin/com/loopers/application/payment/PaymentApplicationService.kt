@@ -7,8 +7,6 @@ import com.loopers.domain.payment.PaymentRelay
 import com.loopers.domain.payment.PaymentRepository
 import com.loopers.domain.payment.TransactionKeyGenerator
 import com.loopers.domain.user.UserInfo
-import com.loopers.support.error.CoreException
-import com.loopers.support.error.ErrorType
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -49,7 +47,7 @@ class PaymentApplicationService(
     @Transactional(readOnly = true)
     fun getTransactionDetailInfo(userInfo: UserInfo, transactionKey: String): TransactionInfo {
         val payment = paymentRepository.findByTransactionKey(userId = userInfo.userId, transactionKey = transactionKey)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
+            ?: throw NoSuchElementException("(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
         return TransactionInfo.from(payment)
     }
 
@@ -57,7 +55,7 @@ class PaymentApplicationService(
     fun findTransactionsByOrderId(userInfo: UserInfo, orderId: String): OrderInfo {
         val payments = paymentRepository.findByOrderId(userId = userInfo.userId, orderId = orderId)
         if (payments.isEmpty()) {
-            throw CoreException(ErrorType.NOT_FOUND, "(orderId: $orderId) 에 해당하는 결제건이 존재하지 않습니다.")
+            throw NoSuchElementException("(orderId: $orderId) 에 해당하는 결제건이 존재하지 않습니다.")
         }
 
         return OrderInfo(
@@ -69,7 +67,7 @@ class PaymentApplicationService(
     @Transactional
     fun handle(transactionKey: String) {
         val payment = paymentRepository.findByTransactionKey(transactionKey)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
+            ?: throw NoSuchElementException("(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
 
         val rate = (1..100).random()
         when (rate) {
@@ -82,7 +80,7 @@ class PaymentApplicationService(
 
     fun notifyTransactionResult(transactionKey: String) {
         val payment = paymentRepository.findByTransactionKey(transactionKey)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
+            ?: throw NoSuchElementException("(transactionKey: $transactionKey) 결제건이 존재하지 않습니다.")
         paymentRelay.notify(callbackUrl = payment.callbackUrl, transactionInfo = TransactionInfo.from(payment))
     }
 }

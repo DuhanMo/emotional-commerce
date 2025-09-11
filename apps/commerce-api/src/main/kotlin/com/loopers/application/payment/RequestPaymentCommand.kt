@@ -3,15 +3,13 @@ package com.loopers.application.payment
 import com.loopers.domain.payment.CardType
 import com.loopers.domain.payment.PaymentMethod
 import com.loopers.domain.support.Money
-import com.loopers.domain.user.LoginId
 
-data class RequestPaymentInput(
-    val idempotencyKey: String,
-    val loginId: LoginId,
+data class RequestPaymentCommand(
+    val userId: Long,
     val orderId: Long,
+    val idempotencyKey: String,
     val paymentMethod: PaymentMethod,
-    val orderNumber: String,
-    val cardType: CardType,
-    val cardNumber: String,
     val amount: Money,
+    val cardType: CardType?,
+    val cardNumber: String?,
 )

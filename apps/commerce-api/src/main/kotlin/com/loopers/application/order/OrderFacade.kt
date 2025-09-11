@@ -1,7 +1,5 @@
 package com.loopers.application.order
 
-import com.loopers.domain.common.events.DomainEventPublisher
-import com.loopers.domain.common.events.OrderCreatedEvent
 import com.loopers.domain.coupon.Coupon
 import com.loopers.domain.coupon.CouponQueryService
 import com.loopers.domain.coupon.IssuedCouponService

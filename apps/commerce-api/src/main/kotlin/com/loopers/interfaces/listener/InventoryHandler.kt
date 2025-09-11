@@ -9,5 +9,4 @@ class InventoryHandler(
     private val inventoryService: InventoryService,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
-
 }

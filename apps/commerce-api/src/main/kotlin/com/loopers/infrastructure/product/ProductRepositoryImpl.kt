@@ -7,8 +7,6 @@ import com.loopers.domain.product.Product
 import com.loopers.domain.product.ProductRepository
 import com.loopers.domain.product.ProductSummary
 import com.loopers.domain.product.ProductWithSummaryInfo
-import com.loopers.support.error.CoreException
-import com.loopers.support.error.ErrorType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -52,9 +50,9 @@ class ProductRepositoryImpl(
 
     override fun getByIdWithSummary(id: Long): ProductWithSummaryInfo {
         val product = productJpaRepository.findByIdOrNull(id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+            ?: throw NoSuchElementException("상품을 찾을 수 없습니다.(productId: $id)")
         val summary = productSummaryJpaRepository.findByProductId(product.id)
-            ?: throw CoreException(ErrorType.NOT_FOUND, "상품집계를 찾을 수 없습니다.(productId: $id)")
+            ?: throw NoSuchElementException("상품집계를 찾을 수 없습니다.(productId: $id)")
 
         return ProductWithSummaryInfo(product, summary)
     }
@@ -77,8 +75,8 @@ class ProductRepositoryImpl(
     override fun save(product: Product): Product = productJpaRepository.save(product)
 
     override fun getByIdWithLock(id: Long): Product = productJpaRepository.findByIdWithLock(id)
-        ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+        ?: throw NoSuchElementException("상품을 찾을 수 없습니다.(productId: $id)")
 
     override fun getById(id: Long): Product = productJpaRepository.findByIdOrNull(id)
-        ?: throw CoreException(ErrorType.NOT_FOUND, "상품을 찾을 수 없습니다.(productId: $id)")
+        ?: throw NoSuchElementException("상품을 찾을 수 없습니다.(productId: $id)")
 }

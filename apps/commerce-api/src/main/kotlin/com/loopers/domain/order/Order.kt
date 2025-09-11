@@ -2,7 +2,6 @@ package com.loopers.domain.order
 
 import com.loopers.domain.BaseEntity
 import com.loopers.domain.support.Money
-import com.loopers.domain.support.sumOfMoney
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
@@ -27,9 +26,6 @@ class Order(
 
     var issuedCouponId: Long? = null
 
-    val originAmount: Money
-            get() = orderLines.map { it.lineAmount }.sumOfMoney()
-
     fun addOrderLines(orderItems: List<OrderInfo.OrderLineInfo>) {
         require(orderItems.count() > 0) { "주문 상품이 최소 1개는 있어야 합니다." }
         orderLines.addAll(
@@ -45,29 +41,17 @@ class Order(
         )
     }
 
-    fun paid() {
-        require(status == OrderStatus.PENDING) { "결제 대기 상태에서만 결제 완료로 변경할 수 있습니다." }
+    fun markPaid() {
         status = OrderStatus.PAID
     }
 
-    fun payFail() {
-        require(status == OrderStatus.PENDING) { "결제 대기 상태에서만 결제 실패로 변경할 수 있습니다." }
+    fun markPayFailed() {
         status = OrderStatus.PAY_FAILED
-    }
-
-    fun error() {
-        status = OrderStatus.ERROR
-    }
-
-    fun payRequest() {
-        status = OrderStatus.PAY_REQUEST
     }
 
     enum class OrderStatus {
         PENDING, // 초기 상태 (주문 생성)
         PAID, // 결제 완료
         PAY_FAILED, // 결제 실패
-        ERROR, // 시스템 오류
-        PAY_REQUEST,
     }
 }

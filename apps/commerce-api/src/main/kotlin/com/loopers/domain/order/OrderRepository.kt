@@ -3,7 +3,7 @@ package com.loopers.domain.order
 interface OrderRepository {
     fun save(order: Order): Order
 
-    fun getById(orderId: Long): Order
+    fun getById(id: Long): Order
 
     fun findByUserId(userId: Long): List<Order>
 
