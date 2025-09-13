@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":supports:monitoring"))
 
     testImplementation(testFixtures(project(":commerce-core")))
+
     // test-fixtures
-    // infra 모듈의 testFixtrues 주입
+    testImplementation(testFixtures(project(":commerce-infrastructure:db")))
 }
