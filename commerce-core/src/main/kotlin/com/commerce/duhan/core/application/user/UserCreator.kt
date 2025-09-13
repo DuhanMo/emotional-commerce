@@ -1,12 +1,13 @@
 package com.commerce.duhan.core.application.user
 
-import com.commerce.duhan.core.domain.user.*
+import com.commerce.duhan.core.domain.user.User
+import com.commerce.duhan.core.domain.user.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UserCreator(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
     @Transactional
     fun create(command: CreateUserCommand): Long {
@@ -18,7 +19,7 @@ class UserCreator(
                 email = command.email,
                 birthDate = command.birthDate,
                 gender = command.gender,
-            )
+            ),
         ).id
     }
 }

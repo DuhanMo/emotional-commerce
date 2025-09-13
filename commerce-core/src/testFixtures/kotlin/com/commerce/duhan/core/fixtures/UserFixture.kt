@@ -1,11 +1,14 @@
 package com.commerce.duhan.core.fixtures
 
-import com.commerce.duhan.core.domain.user.*
+import com.commerce.duhan.core.domain.user.BirthDate
+import com.commerce.duhan.core.domain.user.Email
+import com.commerce.duhan.core.domain.user.Gender
+import com.commerce.duhan.core.domain.user.LoginId
+import com.commerce.duhan.core.domain.user.User
 
 val TEST_LOGIN_ID = LoginId("user123")
 val TEST_EMAIL = Email("test@test.com")
 val TEST_BIRTH_DATE = BirthDate("1990-01-01")
-
 
 fun createUser(
     loginId: LoginId = TEST_LOGIN_ID,

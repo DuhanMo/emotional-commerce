@@ -33,7 +33,7 @@ class UserWriterTest : DescribeSpec({
                             email = TEST_EMAIL,
                             birthDate = TEST_BIRTH_DATE,
                             gender = Gender.MALE,
-                        )
+                        ),
                     )
                 }
             }
@@ -52,7 +52,7 @@ class UserWriterTest : DescribeSpec({
                         email = TEST_EMAIL,
                         birthDate = TEST_BIRTH_DATE,
                         gender = Gender.MALE,
-                    )
+                    ),
                 )
 
                 // then
