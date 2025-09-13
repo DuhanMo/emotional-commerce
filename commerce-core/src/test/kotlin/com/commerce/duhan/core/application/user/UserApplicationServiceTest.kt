@@ -5,6 +5,7 @@ import com.commerce.duhan.core.domain.user.Gender
 import com.commerce.duhan.core.fixtures.TEST_BIRTH_DATE
 import com.commerce.duhan.core.fixtures.TEST_EMAIL
 import com.commerce.duhan.core.fixtures.TEST_LOGIN_ID
+import com.commerce.duhan.core.fixtures.createUser
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -44,7 +45,7 @@ class UserApplicationServiceTest : DescribeSpec({
         context("유저 생성에 성공하는 경우") {
             it("포인트 생성이 호출된다") {
                 // given
-                every { userCreator.create(any()) } returns 1L
+                every { userCreator.create(any()) } returns createUser()
                 every { pointWriter.create(any()) } just runs
 
                 // when

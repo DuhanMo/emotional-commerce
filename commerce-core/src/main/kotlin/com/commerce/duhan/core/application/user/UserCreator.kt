@@ -10,7 +10,7 @@ class UserCreator(
     private val userRepository: UserRepository,
 ) {
     @Transactional
-    fun create(command: CreateUserCommand): Long {
+    fun create(command: CreateUserCommand): User {
         require(!userRepository.existByLoginId(command.loginId)) { "이미 존재하는 로그인 아이디입니다." }
 
         return userRepository.save(
@@ -20,6 +20,6 @@ class UserCreator(
                 birthDate = command.birthDate,
                 gender = command.gender,
             ),
-        ).id
+        )
     }
 }

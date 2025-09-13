@@ -7,6 +7,7 @@ import org.springframework.boot.runApplication
 @ConfigurationPropertiesScan
 @SpringBootApplication
 class CommerceApplication
+
 fun main(args: Array<String>) {
     runApplication<CommerceApplication>(*args)
 }
