@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import org.springframework.web.server.ServerWebInputException
+import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @RestControllerAdvice
 class ApiControllerAdvice {
@@ -114,8 +115,8 @@ class ApiControllerAdvice {
         }
     }
 
-    @ExceptionHandler
-    fun handleNotFound(e: NoSuchElementException): ResponseEntity<ApiResponse<*>> {
+    @ExceptionHandler(NoResourceFoundException::class, NoSuchElementException::class)
+    fun handleNotFound(e: Throwable): ResponseEntity<ApiResponse<*>> {
         logger.error("Exception : {}", e.message, e)
         return failureResponse(errorType = ErrorType.NOT_FOUND, errorMessage = e.message)
     }
