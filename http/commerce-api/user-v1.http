@@ -8,3 +8,8 @@ Content-Type: application/json
   "birthDate": "1900-01-01",
   "gender": "MALE"
 }
+
+### 내 정보 조회
+GET {{commerce-api}}/api/v1/users/me
+X-USER-ID: 1
+Content-Type: application/json
