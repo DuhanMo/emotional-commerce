@@ -1,4 +1,4 @@
-package com.commerce.duhan.api.support
+package com.commerce.duhan.support
 
 import com.commerce.duhan.db.utils.DatabaseCleanUp
 import io.kotest.core.spec.style.DescribeSpec
@@ -7,8 +7,8 @@ import io.kotest.core.test.TestResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-abstract class E2ESpec(
+@SpringBootTest
+abstract class IntegrationSpec(
     body: DescribeSpec.() -> Unit = {},
 ) : DescribeSpec(body) {
     @Autowired

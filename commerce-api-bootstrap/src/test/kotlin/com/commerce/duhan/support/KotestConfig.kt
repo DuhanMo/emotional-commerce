@@ -1,4 +1,4 @@
-package com.commerce.duhan.api.support
+package com.commerce.duhan.support
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.extensions.Extension

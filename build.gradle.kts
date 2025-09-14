@@ -15,6 +15,7 @@ plugins {
     kotlin("jvm")
     kotlin("kapt")
     kotlin("plugin.spring") apply false
+    id("org.jetbrains.kotlin.plugin.jpa") apply false
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management")
     id("org.jlleitschuh.gradle.ktlint") apply false
@@ -47,6 +48,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "jacoco")

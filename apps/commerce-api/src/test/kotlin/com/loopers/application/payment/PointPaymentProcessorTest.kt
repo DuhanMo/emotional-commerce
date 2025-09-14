@@ -24,7 +24,7 @@ class PointPaymentProcessorTest : DescribeSpec({
     val paymentRepository = mockk<PaymentRepository>()
     val underTest = PointPaymentProcessor(pointRepository, pointHistoryRepository, paymentRepository)
 
-    describe("포인트 결제 프로세서") {
+    describe("포인트 결제") {
         context("유저의 포인트가 존재하지 않는 경우") {
             it("예외 발생한다") {
                 // given
