@@ -1,9 +1,9 @@
 package com.commerce.duhan.api.user
 
+import com.commerce.duhan.api.point.PointResponse
 import com.commerce.duhan.application.user.CreateUserCommand
 import com.commerce.duhan.application.user.GetMeResult
 import com.commerce.duhan.application.user.UserResult
-import com.commerce.duhan.domain.common.Money
 import com.commerce.duhan.domain.user.BirthDate
 import com.commerce.duhan.domain.user.Email
 import com.commerce.duhan.domain.user.Gender
@@ -55,8 +55,3 @@ data class GetMeResponse(
         )
     }
 }
-
-data class PointResponse(
-    val id: Long,
-    val amount: Money,
-)

@@ -1,6 +1,6 @@
 package com.commerce.duhan.application.user
 
-import com.commerce.duhan.domain.common.Money
+import com.commerce.duhan.application.point.PointResult
 import com.commerce.duhan.domain.point.Point
 import com.commerce.duhan.domain.user.BirthDate
 import com.commerce.duhan.domain.user.Email
@@ -47,8 +47,3 @@ data class GetMeResult(
         )
     }
 }
-
-data class PointResult(
-    val id: Long,
-    val amount: Money,
-)

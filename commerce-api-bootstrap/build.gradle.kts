@@ -16,6 +16,10 @@ dependencies {
 
     runtimeOnly(project(":commerce-infrastructure:db"))
 
+    // web
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // test-fixtures
     testImplementation(testFixtures(project(":commerce-domain")))
     testImplementation(testFixtures(project(":commerce-infrastructure:db")))

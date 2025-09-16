@@ -7,7 +7,7 @@ import com.commerce.duhan.domain.point.PointHistory
 fun createPoint(
     userId: Long = 1L,
     amount: Money = 0,
-    id: Long = 1L,
+    id: Long = 0L,
 ): Point = Point(
     userId = userId,
     amount = amount,
