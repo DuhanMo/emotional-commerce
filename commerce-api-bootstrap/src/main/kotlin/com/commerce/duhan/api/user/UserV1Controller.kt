@@ -1,7 +1,7 @@
 package com.commerce.duhan.api.user
 
 import com.commerce.duhan.api.support.ApiResponse
-import com.commerce.duhan.core.application.user.UserApplicationService
+import com.commerce.duhan.application.user.UserApplicationService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

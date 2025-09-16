@@ -1,0 +1,25 @@
+package com.commerce.duhan.application.user
+
+import com.commerce.duhan.domain.user.User
+import com.commerce.duhan.domain.user.UserRepository
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
+
+@Component
+class UserCreator(
+    private val userRepository: UserRepository,
+) {
+    @Transactional
+    fun create(command: CreateUserCommand): User {
+        require(!userRepository.existByLoginId(command.loginId)) { "이미 존재하는 로그인 아이디입니다." }
+
+        return userRepository.save(
+            User(
+                loginId = command.loginId,
+                email = command.email,
+                birthDate = command.birthDate,
+                gender = command.gender,
+            ),
+        )
+    }
+}

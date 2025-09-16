@@ -1,13 +1,13 @@
 package com.commerce.duhan.api.user
 
-import com.commerce.duhan.core.application.user.CreateUserCommand
-import com.commerce.duhan.core.application.user.GetMeResult
-import com.commerce.duhan.core.application.user.UserResult
-import com.commerce.duhan.core.domain.common.Money
-import com.commerce.duhan.core.domain.user.BirthDate
-import com.commerce.duhan.core.domain.user.Email
-import com.commerce.duhan.core.domain.user.Gender
-import com.commerce.duhan.core.domain.user.LoginId
+import com.commerce.duhan.application.user.CreateUserCommand
+import com.commerce.duhan.application.user.GetMeResult
+import com.commerce.duhan.application.user.UserResult
+import com.commerce.duhan.domain.common.Money
+import com.commerce.duhan.domain.user.BirthDate
+import com.commerce.duhan.domain.user.Email
+import com.commerce.duhan.domain.user.Gender
+import com.commerce.duhan.domain.user.LoginId
 
 data class CreateUserRequest(
     val loginId: String,

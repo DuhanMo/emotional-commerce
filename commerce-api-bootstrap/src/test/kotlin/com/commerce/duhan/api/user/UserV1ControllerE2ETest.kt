@@ -1,9 +1,9 @@
 package com.commerce.duhan.api.user
 
 import com.commerce.duhan.api.support.ApiResponse
-import com.commerce.duhan.core.domain.user.Gender
-import com.commerce.duhan.core.domain.user.LoginId
-import com.commerce.duhan.core.fixtures.createUser
+import com.commerce.duhan.domain.user.Gender
+import com.commerce.duhan.domain.user.LoginId
+import com.commerce.duhan.domain.fixtures.createUser
 import com.commerce.duhan.db.user.UserJpaRepository
 import com.commerce.duhan.support.E2ESpec
 import io.kotest.matchers.shouldBe

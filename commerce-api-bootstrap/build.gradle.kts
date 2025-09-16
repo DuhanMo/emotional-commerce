@@ -7,7 +7,8 @@ tasks.getByName("jar") {
 }
 
 dependencies {
-    implementation(project(":commerce-core"))
+    implementation(project(":commerce-application"))
+    implementation(project(":commerce-domain"))
 
     implementation(project(":supports:jackson"))
     implementation(project(":supports:logging"))
@@ -16,6 +17,6 @@ dependencies {
     runtimeOnly(project(":commerce-infrastructure:db"))
 
     // test-fixtures
-    testImplementation(testFixtures(project(":commerce-core")))
+    testImplementation(testFixtures(project(":commerce-domain")))
     testImplementation(testFixtures(project(":commerce-infrastructure:db")))
 }

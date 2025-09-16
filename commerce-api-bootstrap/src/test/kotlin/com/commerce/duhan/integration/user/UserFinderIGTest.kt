@@ -1,11 +1,11 @@
 package com.commerce.duhan.integration.user
 
-import com.commerce.duhan.core.application.user.UserFinder
-import com.commerce.duhan.core.domain.user.BirthDate
-import com.commerce.duhan.core.domain.user.Email
-import com.commerce.duhan.core.domain.user.Gender
-import com.commerce.duhan.core.domain.user.LoginId
-import com.commerce.duhan.core.domain.user.User
+import com.commerce.duhan.application.user.UserFinder
+import com.commerce.duhan.domain.user.BirthDate
+import com.commerce.duhan.domain.user.Email
+import com.commerce.duhan.domain.user.Gender
+import com.commerce.duhan.domain.user.LoginId
+import com.commerce.duhan.domain.user.User
 import com.commerce.duhan.db.user.UserJpaRepository
 import com.commerce.duhan.support.IntegrationSpec
 import io.kotest.assertions.throwables.shouldThrow

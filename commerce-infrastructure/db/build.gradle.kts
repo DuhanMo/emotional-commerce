@@ -11,8 +11,8 @@ tasks.getByName("jar") {
 }
 
 dependencies {
-    implementation(project(":commerce-core"))
-    testImplementation(testFixtures(project(":commerce-core")))
+    implementation(project(":commerce-domain"))
+    testImplementation(testFixtures(project(":commerce-domain")))
 
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
