@@ -30,9 +30,4 @@ class PointHistory(
             amount: Money,
         ): PointHistory = PointHistory(userId, pointId, PointHistoryType.CHARGE, amount)
     }
-
-    enum class PointHistoryType {
-        USE,
-        CHARGE,
-    }
 }
