@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 class PointHistoryRepositoryImpl(
     private val jpaRepository: PointHistoryJpaRepository,
-): PointHistoryRepository {
+) : PointHistoryRepository {
     override fun save(pointHistory: PointHistory): PointHistory = jpaRepository.save(pointHistory)
 }

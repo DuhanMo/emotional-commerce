@@ -22,7 +22,7 @@ class PointCharger(
                 userId = userId,
                 pointId = point.id,
                 amount = amount,
-            )
+            ),
         )
         return point
     }
